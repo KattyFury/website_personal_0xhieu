@@ -27,7 +27,7 @@ highlights.txt + highlights/   — ảnh + caption mục Highlights ở CV
 icon.png              — favicon + nút mèo + logo navbar
 pfp.png · og.png      — avatar hero · ảnh preview khi share link (1200×630)
 camera.svg · plus.svg — 2 icon tô bằng CSS mask (nút chụp ảnh, nút thêm dự án)
-html2canvas.min.js    — DOM→PNG cho nút camera. Để trong repo, không CDN, lazy-load khi bấm
+html2canvas-pro.min.js — DOM→PNG cho nút camera (fork html2canvas, đọc được color-mix/color(); bản gốc 1.4.1 lỗi). Để trong repo, không CDN, lazy-load khi bấm. Mobile → bảng chia sẻ (Lưu vào Ảnh), desktop → hộp thoại lưu mở ở Desktop
 ```
 
 Secret: `ADMIN_PASS` đặt ở Cloudflare Dashboard; bot dùng `bot/.env` (gitignore). **Không có secret nào trong repo.**

@@ -661,6 +661,9 @@
     .wl-modal-title { font-size: 18px; font-weight: 700; line-height: 1.4; letter-spacing: .01em; color: var(--ink); }
     #ptask-modal .wl-modal-title { text-align: center; }
     .info-modal-body { font-size: 15px; line-height: 24px; color: var(--sub2); white-space: pre-line; }
+    .shot-modal { align-items: center; text-align: center; }
+    #shot-modal-img { display: block; width: 100%; max-height: 56vh; object-fit: contain; border: 1px solid var(--line2); border-radius: 8px; }
+    .shot-modal-hint { font-size: 14px; color: var(--sub2); }
     .info-modal-link { font-weight: 700; color: var(--ink); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
     .info-modal-link:hover { opacity: .8; }
     .admin-msg { font-size: 12px; font-weight: 500; color: var(--ink); }
@@ -1239,6 +1242,16 @@
   </div>
 
   <!-- Info popup: Danger Zone -->
+  <!-- Mobile: hiện khi trình duyệt không cho mở bảng chia sẻ ngay sau lúc vẽ ảnh -->
+  <div class="wl-modal-backdrop" id="shot-modal">
+    <div class="wl-modal shot-modal">
+      <div class="wl-modal-title" id="shot-modal-title">Lưu ảnh</div>
+      <img id="shot-modal-img" alt="Valuation dashboard">
+      <button type="button" class="predict-link" id="shot-modal-save">Lưu vào Ảnh</button>
+      <div class="shot-modal-hint" id="shot-modal-hint">Hoặc nhấn giữ ảnh → Lưu vào Ảnh</div>
+    </div>
+  </div>
+
   <div class="wl-modal-backdrop" id="info-danger-modal">
     <div class="wl-modal">
       <div class="wl-modal-title" id="info-danger-modal-title">Danger Zone</div>
@@ -1672,43 +1685,102 @@ ${line}
     valLangEnBtn.addEventListener('click', () => switchValLang('EN'));
 
     /* ── Chụp ảnh dashboard Valuation (nút camera cạnh toggle EN|VI) ────────────────
-       html2canvas nạp TỪ CHÍNH DOMAIN (html2canvas.min.js nằm trong repo, không CDN
+       html2canvas nạp TỪ CHÍNH DOMAIN (html2canvas-pro.min.js nằm trong repo, không CDN
        bên thứ 3) và chỉ nạp lúc bấm lần đầu — người vào đọc bình thường không phải
        tải ~195KB lib. Không backend, không key: vẽ ảnh hoàn toàn trong máy user. */
+    // LIB: html2canvas-pro (fork của html2canvas). Bản gốc 1.4.1 ném lỗi
+    // "unsupported color function color" vì CSS dùng color-mix() → Chrome trả màu
+    // dạng color(srgb …) mà lib cũ không đọc được → nút chụp hỏng hoàn toàn (2026-10-05).
     const shotBtn = document.getElementById('val-shot-btn');
     let h2cLoading = null;
+    const h2cFn = g => typeof g === 'function' ? g : g?.default;
     function loadHtml2Canvas() {
-      if (window.html2canvas) return Promise.resolve(window.html2canvas);
+      if (h2cFn(window.html2canvas)) return Promise.resolve(h2cFn(window.html2canvas));
       if (!h2cLoading) h2cLoading = new Promise((resolve, reject) => {
         const s = document.createElement('script');
-        s.src = 'html2canvas.min.js';
-        s.onload  = () => resolve(window.html2canvas);
-        s.onerror = () => { h2cLoading = null; reject(new Error('Không nạp được html2canvas.min.js')); };
+        s.src = 'html2canvas-pro.min.js';
+        s.onload  = () => resolve(h2cFn(window.html2canvas));
+        s.onerror = () => { h2cLoading = null; reject(new Error('Không nạp được html2canvas-pro.min.js')); };
         document.head.appendChild(s);
       });
       return h2cLoading;
     }
 
+    async function renderValuationPng() {
+      const html2canvas = await loadHtml2Canvas();
+      const canvas = await html2canvas(document.querySelector('#valuation-view .val-wrap'), {
+        scale: 2,                                                          // nét trên màn retina
+        backgroundColor: getComputedStyle(document.body).backgroundColor,   // .val-wrap trong suốt
+        logging: false,
+        // Loại khỏi ảnh cụm nút (Admin · VI/EN · camera): điều khiển, không phải nội dung.
+        ignoreElements: el => el.classList?.contains('val-head-ctrl'),
+      });
+      return new Promise((res, rej) => canvas.toBlob(b => b ? res(b) : rej(new Error('toBlob rỗng')), 'image/png'));
+    }
+
+    // NƠI LƯU: mobile → bảng chia sẻ của máy (chọn "Lưu hình ảnh" → vào app Ảnh, cách
+    // DUY NHẤT web lưu được vào thư viện ảnh). Desktop → hộp thoại lưu mở sẵn ở thư mục
+    // Desktop (Chrome/Edge); trình duyệt không có hộp thoại đó → tải về như thường.
+    const isTouchPhone = matchMedia('(pointer: coarse)').matches;
+    const shotModal = document.getElementById('shot-modal');
+    let shotFile = null, shotUrl = null;
+    const closeShotModal = () => {
+      shotModal.classList.remove('open');
+      if (shotUrl) { URL.revokeObjectURL(shotUrl); shotUrl = null; }
+    };
+    shotModal.addEventListener('click', e => { if (e.target === shotModal) closeShotModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeShotModal(); });
+    document.getElementById('shot-modal-save').addEventListener('click', async () => {
+      try { await navigator.share({ files: [shotFile] }); closeShotModal(); }
+      catch (err) { if (err.name !== 'AbortError') console.error(err); }
+    });
+
+    function downloadBlob(blob, name) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = name; a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);   // revoke ngay lập tức có thể huỷ download
+    }
+
     shotBtn.addEventListener('click', async () => {
+      const name = `0xhieu-valuation-${new Date().toISOString().slice(0, 10)}.png`;
+      // Desktop: mở hộp thoại lưu NGAY lúc bấm (trước khi vẽ) — để lâu sau cú bấm
+      // trình duyệt sẽ chặn vì hết "user gesture".
+      let handle = null;
+      if (!isTouchPhone && window.showSaveFilePicker) {
+        try {
+          handle = await showSaveFilePicker({
+            suggestedName: name, startIn: 'desktop',
+            types: [{ description: 'PNG', accept: { 'image/png': ['.png'] } }],
+          });
+        } catch (err) {
+          if (err.name === 'AbortError') return;              // user bấm Huỷ
+          handle = null;                                      // lỗi khác → tải về như thường
+        }
+      }
       shotBtn.disabled = true;
       try {
-        const html2canvas = await loadHtml2Canvas();
-        const canvas = await html2canvas(document.querySelector('#valuation-view .val-wrap'), {
-          scale: 2,                                                          // nét trên màn retina
-          backgroundColor: getComputedStyle(document.body).backgroundColor,   // .val-wrap trong suốt
-          logging: false,
-          // Loại khỏi ảnh cụm nút (Admin · VI/EN · camera): điều khiển, không phải nội dung.
-          // Cụm này cũng là chỗ DUY NHẤT dùng CSS mask — html2canvas không vẽ được mask.
-          ignoreElements: el => el.classList?.contains('val-head-ctrl'),
-        });
-        canvas.toBlob(blob => {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `0xhieu-valuation-${new Date().toISOString().slice(0, 10)}.png`;
-          a.click();
-          setTimeout(() => URL.revokeObjectURL(url), 1000);   // revoke ngay lập tức có thể huỷ download
-        }, 'image/png');
+        const blob = await renderValuationPng();
+        if (handle) {
+          const w = await handle.createWritable(); await w.write(blob); await w.close();
+        } else if (isTouchPhone && navigator.canShare?.({ files: [new File([blob], name, { type: 'image/png' })] })) {
+          shotFile = new File([blob], name, { type: 'image/png' });
+          try {
+            await navigator.share({ files: [shotFile] });
+          } catch (err) {
+            if (err.name === 'AbortError') return;            // user đóng bảng chia sẻ
+            // Vẽ ảnh lâu quá → mất "user gesture" → mở popup, bấm thêm 1 lần để chia sẻ
+            const vi = valLang === 'VI';
+            document.getElementById('shot-modal-title').textContent = vi ? 'Lưu ảnh' : 'Save image';
+            document.getElementById('shot-modal-save').textContent  = vi ? 'Lưu vào Ảnh' : 'Save to Photos';
+            document.getElementById('shot-modal-hint').textContent  = vi ? 'Hoặc nhấn giữ ảnh → Lưu vào Ảnh' : 'Or long-press the image → Save to Photos';
+            shotUrl = URL.createObjectURL(blob);
+            document.getElementById('shot-modal-img').src = shotUrl;
+            shotModal.classList.add('open');
+          }
+        } else {
+          downloadBlob(blob, name);
+        }
       } catch (err) {
         console.error(err);
         alert(valLang === 'VI'
