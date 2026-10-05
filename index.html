@@ -187,6 +187,12 @@
       cursor: pointer; white-space: nowrap; transition: border-color .15s, color .15s;
     }
     .lang-dd-btn:hover { border-color: var(--ink); }
+    /* Đã mở khoá admin → nút Admin thành [+]: icon plus.svg 24×24 (thay chữ "+" thô) */
+    .lang-dd-btn.is-plus { position: relative; font-size: 0; }
+    .lang-dd-btn.is-plus::before {
+      content: ''; width: 24px; height: 24px; background: var(--ink);
+      -webkit-mask: url(plus.svg) center / contain no-repeat; mask: url(plus.svg) center / contain no-repeat;
+    }
 
     /* Toggle VI/EN — máng chip, viên đang chọn trắng */
     .lang-toggle {
@@ -371,19 +377,15 @@
 
     /* ══ VALUATION ════════════════════════════════════════════════ */
     /* Icon 32×32 cạnh Admin. Mask đặt ở ::before (Chromium hit-test theo vùng mask). */
-    .camera-btn, .add-btn {
+    .camera-btn {
       position: relative; flex-shrink: 0; width: 32px; height: 32px; padding: 0;
       border: none; background: transparent; cursor: pointer;
     }
     .camera-btn { appearance: none; color: #525252; transition: color .15s, opacity .15s; }
-    .add-btn { flex-shrink: 1; }
-    .camera-btn::before, .add-btn::before { content: ''; position: absolute; inset: 4px; background: var(--ink); }
+    .camera-btn::before { content: ''; position: absolute; inset: 4px; background: var(--ink); }
     .camera-btn::before { -webkit-mask: url(camera.svg) center / contain no-repeat; mask: url(camera.svg) center / contain no-repeat; }
-    .add-btn::before    { -webkit-mask: url(plus.svg) center / contain no-repeat;   mask: url(plus.svg) center / contain no-repeat; }
     .camera-btn:hover::before { background: var(--w-mute); }
     .camera-btn[disabled] { opacity: .4; cursor: default; }
-    .add-btn:disabled { cursor: not-allowed; }
-    .add-btn:disabled::before { opacity: .35; }
 
     /* ── Bảng altcoin: font hẹp (--font-c), header cố định tách khỏi vùng cuộn ──
        7 cột 176 + khe 16 nhét trong padding ô: 184 · 192×5 · 184 = 1328. */
@@ -821,7 +823,7 @@
       .lang-dd-btn { width: auto; padding: 0 12px; font-size: 14px; }
       .lang-toggle { width: auto; }
       .lang-btn { min-width: 32px; padding: 0 6px; font-size: 14px; }
-      .camera-btn, .add-btn { width: 24px; height: 24px; }
+      .camera-btn { width: 24px; height: 24px; }
       .vc-q1, .wte-name, .wl-modal-title { font-size: 16px; }
 
       /* Valuation */
@@ -1007,7 +1009,6 @@
       <div class="panel-head">
         <div class="val-intro val-intro-clickable" id="tge-intro" title="Mở rộng"><span id="val-headline-text">Tracking altcoins to read the market</span></div>
         <div class="val-head-ctrl">
-          <button class="add-btn" id="val-add-btn" title="Thêm dự án" aria-label="Thêm dự án" disabled></button>
           <button class="camera-btn" id="val-shot-btn" title="Chụp ảnh dashboard" aria-label="Chụp ảnh dashboard"></button>
           <button class="lang-dd-btn" id="val-admin-btn" title="Đăng nhập admin">Admin</button>
           <div class="lang-toggle">
@@ -2695,24 +2696,19 @@ ${line}
 
     function setAdminUnlocked(on) {
       adminUnlocked = on;
-      adminBtn.textContent = on ? '+' : 'admin';
+      adminBtn.classList.toggle('is-plus', on);
       adminBtn.title       = on ? 'Thêm task cá nhân' : 'Task cá nhân';
       syncAiAdminBtn();    // 1 mật khẩu mở khoá cả 2 tab → nút Admin bên AI đổi theo
       syncValAdminBtn();   // ... và tab Valuation
     }
 
-    // Valuation: mở khoá xong thì hiện icon "+" cạnh camera (đúng Figma), nút Admin
-    // đổi nhãn. Icon + còn disabled vì form thêm dự án phải chờ kho KV.
+    // Valuation: giống AI/Work — mở khoá xong nút Admin thành [+] (mở danh sách dự án)
     function syncValAdminBtn() {
-      const add = document.getElementById('val-add-btn');
       const btn = document.getElementById('val-admin-btn');
-      if (!add || !btn) return;
-      add.disabled = !adminUnlocked;
-      add.title = adminUnlocked ? 'Danh sách dự án' : 'Cần mở khoá admin';
+      if (!btn) return;
       if (typeof renderTable === 'function' && publicData.length) renderTable();
-      add.title = 'Thêm dự án — cần kho KV (chưa dựng)';
-      btn.textContent = adminUnlocked ? 'Đã mở' : 'Admin';
-      btn.title = adminUnlocked ? 'Đã mở khoá admin' : 'Đăng nhập admin';
+      btn.classList.toggle('is-plus', adminUnlocked);
+      btn.title = adminUnlocked ? 'Danh sách dự án' : 'Đăng nhập admin';
     }
 
     function showMsg(el, text) { el.textContent = text; el.style.display = ''; }
@@ -2759,7 +2755,7 @@ ${line}
     // Valuation dùng CHUNG mật khẩu với AI + Work (1 ADMIN_PASS duy nhất).
     // Mở khoá ở tab nào thì cả 3 tab cùng mở — xem setAdminUnlocked().
     $('val-admin-btn').addEventListener('click', () => {
-      if (adminUnlocked) return;           // đã mở khoá → icon + đã hiện, không làm gì thêm
+      if (adminUnlocked) { openValList(); return; }
       adminInput.value = '';
       adminError.style.display = 'none';
       adminModal.classList.add('open');
@@ -3109,7 +3105,7 @@ ${line}
 
     // Gọi từ setAdminUnlocked() ở khối admin Airdrop — mở khoá ở tab nào thì cả 2 tab cùng đổi
     function syncAiAdminBtn() {
-      $('ai-admin-btn').textContent = adminUnlocked ? '+' : 'Admin';
+      $('ai-admin-btn').classList.toggle('is-plus', adminUnlocked);
       $('ai-admin-btn').title       = adminUnlocked ? 'Thêm bài viết' : 'Đăng nhập admin';
       if (aiLoaded) renderAI();      // hiện/ẩn nút + và ⋮ ngay, không phải tải lại trang
     }
@@ -3280,11 +3276,10 @@ ${line}
       renderAll(); renderValList();
     }
 
-    document.getElementById('val-add-btn').addEventListener('click', () => {
-      if (!adminUnlocked) return;
+    function openValList() {
       renderValList();
       document.getElementById('val-list-modal').classList.add('open');
-    });
+    }
     document.getElementById('val-list-close').addEventListener('click',
       () => document.getElementById('val-list-modal').classList.remove('open'));
     document.getElementById('val-new-btn').addEventListener('click', () => openValForm(null));

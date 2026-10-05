@@ -53,7 +53,7 @@ Cloudflare KV `WORK` (namespace b8fab2f8a83f45f0a023d2ba3ce78cde)
   └─ ai-posts        ← admin tab AI
 ```
 
-- Cả 4 endpoint dùng **chung KV `WORK`** và **chung 1 mật khẩu `ADMIN_PASS`**, kiểm tra ở server. Mở khoá ở tab nào thì cả 3 tab cùng mở; mật khẩu giữ trong `sessionStorage`.
+- Cả 4 endpoint dùng **chung KV `WORK`** và **chung 1 mật khẩu `ADMIN_PASS`**, kiểm tra ở server. Mở khoá ở tab nào thì cả 3 tab cùng mở; mật khẩu giữ trong `sessionStorage`. Mở khoá xong, nút Admin ở cả 3 tab đổi thành nút [+] (class `is-plus`, icon `plus.svg`) — Valuation: mở danh sách dự án · AI: thêm bài · Work: thêm task.
 - **Không còn đọc Google Sheet ở đâu cả** (từ 2026-09-22).
 - Nguồn ngoài còn lại, gọi thẳng từ client, không key: **Google Translate gtx** (dịch VI→EN tab Work + AI) · **unavatar.io** (logo card Work).
 
@@ -90,7 +90,7 @@ vcFDV = fundraising / (vcAlloc/100)
 - **Vùng nguy hiểm:** ×ATM ≥ 15, TGE mới nhất lên đầu; TGE < 30 ngày → badge "⚠ FAKE PUMP".
 - **Narrative đang hot:** mọi narrative có data từ 02/2025, xếp theo **median ×TGE** (không dùng ×ATH — 1 coin pump muộn kéo cả nhóm), kèm `SL:nn` số deal.
 - Mỗi box luôn vẽ đủ 3 chip (`pad3()`). Tiêu đề box kiêm nút mở popup giải thích.
-- **Admin:** icon `+` mở danh sách dự án (chỉ data nguồn); bấm dòng danh sách hoặc dòng bảng → form sửa. `ticker` khoá khi sửa. Ô vốn/supply nhận viết tắt `6.8M` / `10B` (`parseSupply()`). Xoá hỏi lại 1 nhịp ("Chắc chưa?" 4 giây).
+- **Admin:** nút Admin (đã mở khoá = [+]) mở danh sách dự án (chỉ data nguồn); bấm dòng danh sách hoặc dòng bảng → form sửa. `ticker` khoá khi sửa. Ô vốn/supply nhận viết tắt `6.8M` / `10B` (`parseSupply()`). Xoá hỏi lại 1 nhịp ("Chắc chưa?" 4 giây).
 
 ## 5. Work — luật rank
 
@@ -142,6 +142,7 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 - 2026-10-05: **Tiêu đề Valuation trên mobile** hết bị cắt "…" — thu nhỏ chữ cho vừa 2 dòng (375px ≈ 13px; 320px chạm sàn 10px và xuống 3 dòng).
 - 2026-10-05: CV Experience 2026: "Community Builder" → "Community Builder & Builder". Repo GitHub + thư mục local đổi tên `cv` → `website_personal_0xhieu`.
 - 2026-10-02: **Hover tên website + chữ navbar → cam `--amber`** (trước: logo đen→xám, nav xám→đen). Tab đang chọn vẫn đen + gạch dưới khi không hover.
+- 2026-10-05: **Đồng bộ nút Admin 3 tab.** Trước: Valuation có icon + riêng cạnh camera và nút Admin đổi chữ "Đã mở"; AI/Work đổi chữ nút thành ký tự "+" thô. Nay cả 3: mở khoá → nút Admin thành [+] dùng icon `plus.svg` 24px (class `.lang-dd-btn.is-plus`); bỏ `#val-add-btn` + CSS `.add-btn`.
 - 2026-10-02: **Cam thương hiệu đổi sang cam sẫm `#B35C00`** (bỏ cam sáng `#FFA111`). `--amber` = `#B35C00`, `--amber-ink` giờ = `var(--amber)` → cả site 1 màu cam, dùng được làm nền solid + chữ trắng (tương phản 4.7:1). Rank `$` (badge + nút lọc) đổi chữ đen → trắng. Tint `--head-bg`/`--amber-soft` tự đi theo → nền header thành be ngả nâu.
 - 2026-10-02: **CV timeline bỏ hết chữ đậm** trong bullet (Ambassador/Top Yapper/OG Contributor, tên brand, link) — user thấy bold vô duyên. Link vẫn phân biệt bằng màu cam + gạch chân. Gỡ luôn CSS `.tl-bullets strong`.
 - 2026-10-02: **Tab AI:** tiêu đề bài dài xuống tối đa 2 dòng (quá 2 dòng mới "…"), hàng cao theo. 4 hub giữ 2 cột tới mobile (≤ 640) mới 1 cột — trước đây ≤ 1024 đã 1 cột, thu nhỏ cửa sổ chút đã xấu.
