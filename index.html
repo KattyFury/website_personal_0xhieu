@@ -428,6 +428,7 @@
     .val-table .ck { display: inline-block; text-align: left; }
     #tge-section .ath-pre { font-weight: 500; color: var(--w-dim); }
     #tge-section .ath-arrow { margin: 0 2px; font-weight: 400; color: var(--line2); }
+    #tge-section .ath-early { color: var(--amber-ink); }  /* ATH trong tuần đầu lên sàn */
     .val-table .m-hot, .narrative-med.m-hot { color: var(--amber-ink); }
     .val-table .m-low { font-weight: 500; color: var(--w-dim); }
     .val-table .m-danger { padding: 2px 6px; border-radius: 6px; background: var(--amber-soft); color: var(--amber-ink); }
@@ -810,7 +811,9 @@
       /* Khung chung */
       .val-wrap, .ai-wrap, .ard-wrap { padding: 0 16px 32px; }
       .panel-head { gap: 8px; padding: 16px 0 12px; }
-      .val-intro { font-size: 16px; text-overflow: ellipsis; white-space: nowrap; }
+      /* Tiêu đề dài không cắt "…" nữa: fitIntroTitles() thu nhỏ chữ cho vừa 2 dòng */
+      .val-intro { font-size: 16px; height: auto; min-height: 32px; }
+      .val-intro > span { display: block; -webkit-line-clamp: unset; }
       .val-head-ctrl { gap: 8px; }
       .lang-dd-btn { width: auto; padding: 0 12px; font-size: 14px; }
       .lang-toggle { width: auto; }
@@ -1522,7 +1525,28 @@
         el.title = labels[valLang];
         el.setAttribute('aria-label', labels[valLang]);
       }
+      fitIntroTitles();
     }
+
+    // Tiêu đề panel (.val-intro) dài quá chỗ (mobile, VI) → thu nhỏ chữ từng nấc 1px
+    // cho tới khi vừa tối đa 2 dòng, thay vì cắt mất chữ. Chạy lại khi đổi ngôn ngữ
+    // và khi khung đổi kích thước (kể cả lúc tab đang ẩn được mở ra).
+    function fitIntroTitles() {
+      document.querySelectorAll('.val-intro > span').forEach(span => {
+        span.style.fontSize = '';
+        if (!span.offsetWidth) return;                       // tab đang ẩn, đo sau
+        let size = parseFloat(getComputedStyle(span).fontSize);
+        const tooBig = () => span.scrollHeight > 2 * size * 1.25 + 1 || span.scrollWidth > span.clientWidth;
+        while (tooBig() && size > 10) { size -= 1; span.style.fontSize = size + 'px'; }
+      });
+    }
+    // Chỉ đo lại khi BỀ NGANG đổi — chiều cao đổi là do chính fitIntroTitles gây ra
+    const introWidths = new WeakMap();
+    const introObserver = new ResizeObserver(entries => {
+      if (entries.some(en => introWidths.get(en.target) !== en.contentRect.width)) fitIntroTitles();
+      entries.forEach(en => introWidths.set(en.target, en.contentRect.width));
+    });
+    document.querySelectorAll('.val-intro').forEach(el => introObserver.observe(el));
     applyValHeadLabels();
 
     /* ── Nội dung info popup (icon "i" cạnh tiêu đề mỗi box) ──────────────────────
@@ -1955,9 +1979,15 @@ ${line}
         const xPre = e.preAth ? xMult(e.preAth, e) : null;         // đáy trước khi lập ATH
         // Ô ×ATH mang 2 con số: đáy-trước-đỉnh → đỉnh. Đọc thành "chiều xuống bao nhiêu
         // rồi mới bật lên bấy nhiêu" (OP: 1,62 → 19,80). Không có số trước thì hiện mình đỉnh.
+        // Ca ĐẶC BIỆT (2026-10-05): ATH rơi trong tuần đầu lên sàn → không phải đỉnh thường,
+        // nhưng vẫn hiện để biết token vọt bao nhiêu ngay lúc list: ×TGE → ×ATH, tô CAM
+        // cả 2 số để tách khỏi ca thường (ca thường đứng trước là đáy-trước-đỉnh).
+        const athEarly = athTooEarly && e.ath > 0 && (e.athWick || (e.athDate && e.tgeDate));
         const athCell = xATH > 0
           ? (xPre > 0 ? `<span class="ath-pre">${fmtMult(xPre)}</span> <span class="ath-arrow">→</span> ${fmtMult(xATH)}` : fmtMult(xATH))
-          : '—';
+          : athEarly
+            ? `<span class="ath-early">${fmtMult(xTGE)}</span> <span class="ath-arrow">→</span> <span class="ath-early">${fmtMult(xMult(e.ath, e))}</span>`
+            : '—';
         // Cam chỉ ở chỗ mang nghĩa (ngưỡng trùng Market condition ≥13 và Danger Zone ≥15)
         const tgeCls = xTGE >= 13 ? 'm-hot' : '';
         const atmCls = xATM >= 15 ? 'm-danger' : (xATM > 0 && xATM < 1 ? 'm-low' : '');
