@@ -39,7 +39,7 @@ I'm a **Vietnamese vibecoder** — I have ideas, not a programming background. I
 - **Data nằm trong Cloudflare KV**, sửa qua popup Admin trên site. **Không còn đọc Google Sheet** (từ 2026-09-22).
 - Nguồn ngoài gọi từ client, không key: **Google Translate** (gtx, dịch VI→EN) · **unavatar.io** (logo card Work).
 - **Logic tính toán** (bội số, Market Condition, Predict FDV…) nằm trong JS của `index.html`. KV chỉ giữ data gốc, **không lưu số tính sẵn**.
-- **Local:** `D:\Files\Claude_0xhieu` · **GitHub:** `KattyFury/cv`
+- **Local:** `D:FilesClaudeBig projects` · **GitHub:** `KattyFury/website_personal_0xhieu` (đổi tên từ `cv` 2026-10-05)
 - Trạng thái chi tiết: **`HANDOFF.md`**. Luật thiết kế: **`DESIGN_SYSTEM.md`**.
 
 > ⚠️ Cần thêm API key / backend mới cho phần **công khai** → gần như chắc chắn là hiểu sai. Mọi thứ khách xem đều đọc qua 4 Function có sẵn.
