@@ -1,7 +1,7 @@
-# HANDOFF — 0xhieu.xyz (repo `cv`)
+# HANDOFF — 0xhieu.xyz (repo `website_personal_0xhieu`, tên cũ `cv`)
 
-**Chốt trạng thái:** 2026-10-02
-**Repo:** https://github.com/KattyFury/website_personal_0xhieu · **Local:** `D:\Files\Claude\Big projects\cv`
+**Chốt trạng thái:** 2026-10-05
+**Repo:** https://github.com/KattyFury/website_personal_0xhieu · **Local:** `D:\Files\Claude\Big projects\website_personal_0xhieu` (thư mục đổi tên từ `cv` 10-05; máy khác còn tên cũ thì đổi theo)
 **Live:** Cloudflare Pages, project **`0xhieu-xyz`** (khác tên repo) — auto-deploy từ `main`.
 
 > File này chỉ ghi **sự thật hiện tại** + **luật/bẫy còn hiệu lực**. Lịch sử cũ (log quyết định từ 06/2026) nằm trong git history của file này, trước commit dọn repo 2026-09-24.
@@ -76,7 +76,8 @@ Chạy 1 lượt lúc khởi động, rồi mỗi ngày lúc `RUN_AT_HOUR` (mặ
 ```
 vcPrice = fundraising / (vcAlloc/100) / totalSupply
 ×TGE = priceTGE / vcPrice      ×ATM = atm / vcPrice
-×ATH = ath / vcPrice           → "—" nếu ATH trong vòng 7 ngày sau TGE, hoặc bot đặt cờ athWick
+×ATH = ath / vcPrice           → ATH trong vòng 7 ngày sau TGE (hoặc bot đặt cờ athWick) = ca ĐẶC BIỆT:
+                                 hiện "×TGE → ×ATH", 2 số tô cam (.ath-early). Thiếu ngày/ath → "—"
 ×ATL = atl / vcPrice           (đáy trước ATH, hiện trong ô ×ATH dạng "đáy → đỉnh")
 vcFDV = fundraising / (vcAlloc/100)
 ```
@@ -104,9 +105,10 @@ vcFDV = fundraising / (vcAlloc/100)
 - **Châm ngôn, nguyên văn mọi nơi:** `Sharing POVs on Crypto and AI`. Câu niềm tin có **2 bản cố ý**: bản dài 3 vế ở hero CV, bản ngắn *"AI is the future. Crypto is the money of the future."* ở meta/og/JSON-LD/`og.png`. `jobTitle` JSON-LD giữ "Builder + Contributor".
 - **Đổi `og.png` phải bump `?v=`** (đang `?v=6`) — X/Telegram cache theo URL. Nguồn vẽ ngoài repo: `C:\tmp\cvshot\og-gen-a.html`.
 - **Client ↔ server phải khớp:** `AI_HUBS` ↔ `CATS` (`ai.js`) · `WTE_RANKS` ↔ `RANKS` (`private.js`). Lệch là server âm thầm ép về mặc định.
-- **Hàng đầu mỗi tab:** tiêu đề TRÁI, nút PHẢI (flex). Không quay lại kiểu tiêu đề canh giữa + nút absolute. Tiêu đề dài thì cho xuống 2 dòng (line-clamp), đừng rút ngắn câu.
+- **Hàng đầu mỗi tab:** tiêu đề TRÁI, nút PHẢI (flex). Không quay lại kiểu tiêu đề canh giữa + nút absolute. Tiêu đề dài thì cho xuống 2 dòng, đừng rút ngắn câu. **Mobile: KHÔNG cắt "…"** — `fitIntroTitles()` thu nhỏ chữ từng 1px (sàn 10px) cho vừa 2 dòng; chạy lại khi đổi ngôn ngữ + khi bề ngang `.val-intro` đổi (ResizeObserver).
 - **Thanh cuộn:** mọi vùng cuộn dùng `.thin-scroll`. **Không set `scrollbar-width`/`scrollbar-color` cho Chromium** — từ bản 121 chúng tắt hết `::-webkit-scrollbar`.
 - **Icon tô bằng CSS mask → mask đặt ở `::before`**, không trên nút (Chromium hit-test theo vùng mask). Icon mới thì dùng SVG inline (`wteIcon()`), không dùng mask.
+- **Nút camera dùng `html2canvas-pro`, ĐỪNG quay về html2canvas gốc** — bản 1.4.1 ném "unsupported color function color" vì CSS có `color-mix()` (nút hỏng hẳn tới 10-05). Lưu ảnh: mobile (`pointer: coarse`) → `navigator.share` (Lưu vào Ảnh); mất user-gesture → popup `#shot-modal` bấm thêm 1 lần. Desktop → `showSaveFilePicker({startIn:'desktop'})` mở NGAY lúc bấm, trước khi vẽ; không có API đó → tải về.
 - **html2canvas không vẽ được CSS mask.** Nút camera chụp `.val-wrap` và bỏ qua `.val-head-ctrl` (chỗ duy nhất có mask). Thêm mask vào vùng chụp là ra ô đặc.
 - **Không dùng `wrangler.toml`** — nó khoá dashboard thành chỉ-đọc, rủi ro mất `ADMIN_PASS`.
 
@@ -120,7 +122,7 @@ vcFDV = fundraising / (vcAlloc/100)
 
 ## 8. Cloudflare
 
-Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API token (Pages · KV · DNS · Cache) ở `C:\Users\MR VAN\.claude\secrets.env`. Env var + binding chỉ ăn từ **lần deploy kế tiếp**.
+Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API token (Pages · KV · DNS · Cache) = `CF_API_TOKEN` trong file secret chung `D:\Files\Claude\.secrets\keys.env` (không in ra). Env var + binding chỉ ăn từ **lần deploy kế tiếp**.
 
 ## 9. Việc còn treo
 
@@ -135,6 +137,10 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 
 ## Nhật ký
 
+- 2026-10-05: **Nút chụp ảnh Valuation sửa xong** (trước đó lỗi 100%): đổi `html2canvas.min.js` → `html2canvas-pro.min.js` 2.5.1 (npm, MIT). Mobile lưu vào Ảnh qua bảng chia sẻ, desktop mở hộp thoại lưu ở Desktop. Đã test headless (vẽ OK, nhánh tải về + popup mobile OK); CHƯA test trên điện thoại thật + hộp thoại lưu thật.
+- 2026-10-05: **×ATH ca list sàn tạo ATH trong 1 tuần**: trước hiện "—", giờ hiện `×TGE → ×ATH` tô cam (VD ACE 69,56 → 83,84). Sửa ở cả `index.html` lẫn `functions/valuation.js`.
+- 2026-10-05: **Tiêu đề Valuation trên mobile** hết bị cắt "…" — thu nhỏ chữ cho vừa 2 dòng (375px ≈ 13px; 320px chạm sàn 10px và xuống 3 dòng).
+- 2026-10-05: CV Experience 2026: "Community Builder" → "Community Builder & Builder". Repo GitHub + thư mục local đổi tên `cv` → `website_personal_0xhieu`.
 - 2026-10-02: **Hover tên website + chữ navbar → cam `--amber`** (trước: logo đen→xám, nav xám→đen). Tab đang chọn vẫn đen + gạch dưới khi không hover.
 - 2026-10-02: **Cam thương hiệu đổi sang cam sẫm `#B35C00`** (bỏ cam sáng `#FFA111`). `--amber` = `#B35C00`, `--amber-ink` giờ = `var(--amber)` → cả site 1 màu cam, dùng được làm nền solid + chữ trắng (tương phản 4.7:1). Rank `$` (badge + nút lọc) đổi chữ đen → trắng. Tint `--head-bg`/`--amber-soft` tự đi theo → nền header thành be ngả nâu.
 - 2026-10-02: **CV timeline bỏ hết chữ đậm** trong bullet (Ambassador/Top Yapper/OG Contributor, tên brand, link) — user thấy bold vô duyên. Link vẫn phân biệt bằng màu cam + gạch chân. Gỡ luôn CSS `.tl-bullets strong`.

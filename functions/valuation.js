@@ -62,8 +62,12 @@ function compute(projects, prices) {
       (new Date(e.athDate) - new Date(e.tgeDate)) <= 7 * 86400000;
     const xATH = athTooEarly ? 0 : xMult(e.ath, e);
     const xPre = e.preAth ? xMult(e.preAth, e) : null;
-    const athCell = xATH > 0 ? (xPre > 0 ? `<span class="ath-pre">${fmtMult(xPre)}</span> <span class="ath-arrow">→</span> ${fmtMult(xATH)}` : fmtMult(xATH)) : '—';
     const xTGE = multiple(e), xATM = xMult(e.currentPrice, e);
+    // ATH trong tuần đầu lên sàn → "×TGE → ×ATH" tô cam (khớp index.html)
+    const athEarly = athTooEarly && e.ath > 0 && (e.athWick || (e.athDate && e.tgeDate));
+    const athCell = xATH > 0 ? (xPre > 0 ? `<span class="ath-pre">${fmtMult(xPre)}</span> <span class="ath-arrow">→</span> ${fmtMult(xATH)}` : fmtMult(xATH))
+      : athEarly ? `<span class="ath-early">${fmtMult(xTGE)}</span> <span class="ath-arrow">→</span> <span class="ath-early">${fmtMult(xMult(e.ath, e))}</span>`
+      : '—';
     const tgeCls = xTGE >= 13 ? 'm-hot' : '';
     const atmCls = xATM >= 15 ? 'm-danger' : (xATM > 0 && xATM < 1 ? 'm-low' : '');
     const wrap = (cls, txt) => cls ? `<span class="${cls}">${txt}</span>` : txt;
