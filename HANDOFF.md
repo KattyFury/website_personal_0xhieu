@@ -1,7 +1,7 @@
 # HANDOFF — 0xhieu.xyz (repo `cv`)
 
 **Chốt trạng thái:** 2026-10-02
-**Repo:** https://github.com/KattyFury/cv · **Local:** `D:\Files\Claude\Big projects\cv`
+**Repo:** https://github.com/KattyFury/website_personal_0xhieu · **Local:** `D:\Files\Claude\Big projects\cv`
 **Live:** Cloudflare Pages, project **`0xhieu-xyz`** (khác tên repo) — auto-deploy từ `main`.
 
 > File này chỉ ghi **sự thật hiện tại** + **luật/bẫy còn hiệu lực**. Lịch sử cũ (log quyết định từ 06/2026) nằm trong git history của file này, trước commit dọn repo 2026-09-24.
