@@ -37,15 +37,22 @@ const itemList = v => (Array.isArray(v) ? v : [])
 // thì sửa cả 2 chỗ, không chỉ client.
 const RANKS = ['S', 'A', 'B', 'C'];
 const cleanRank = v => RANKS.includes(v) ? v : 'C';
+// Tiềm năng 2 mức 'high' | 'low' ('' = chưa điền). Số 1-3 của thang sao cũ quy đổi
+// ≥2 = high, 1 = low — khớp potLevel trong index.html.
+const cleanPotential = v => {
+  if (v === 'high' || v === 'low') return v;
+  const n = parseInt(v, 10) || 0;
+  return n >= 2 ? 'high' : n === 1 ? 'low' : '';
+};
 const cleanVisibility = v => v === 'public' ? 'public' : 'personal';
 
 // Làm sạch các ô người dùng nhập — dùng chung cho add và update (chỉ id là không lấy từ client)
 const sanitize = t => ({
   name:       clean(t.name, 120) || 'Không tên',
   twitter:    cleanLink(t.twitter),
-  potential:  Math.max(0, Math.min(3, parseInt(t.potential, 10) || 0)),
+  potential:  cleanPotential(t.potential),
   type:       clean(t.type, 60),
-  rank:       cleanRank(t.rank),
+  rank:       t.type === 'Work-to-Earn' ? '' : cleanRank(t.rank),   // nhóm $ không có rank (WTE_INCOME_TYPE)
   visibility: cleanVisibility(t.visibility),
   getStarted: itemList(t.getStarted),
   daily:      itemList(t.daily),

@@ -687,7 +687,7 @@
     }
     .wl-modal select { cursor: pointer; }
     .wl-modal input:focus, .wl-modal select:focus { border-color: var(--ink); }
-    .wl-modal input:disabled { color: var(--sub2); background: var(--chip); cursor: default; }
+    .wl-modal input:disabled, .wl-modal select:disabled { color: var(--sub2); background: var(--chip); cursor: default; }
     .wl-modal input[type=number]::-webkit-inner-spin-button,
     .wl-modal input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
     .wl-modal input[type=number] { -moz-appearance: textfield; }
@@ -1304,9 +1304,8 @@
             <label>Tiềm năng</label>
             <select id="pt-potential">
               <option value="">—</option>
-              <option value="1">★</option>
-              <option value="2">★★</option>
-              <option value="3">★★★</option>
+              <option value="high">High</option>
+              <option value="low">Low</option>
             </select>
           </div>
           <div class="calc-field">
@@ -2478,6 +2477,15 @@ ${line}
 
     // Rank "SS" (S+) của thang cũ đọc thành S, để project trong KV chưa sửa
     // tay vẫn hiện đúng chỗ thay vì rơi khỏi mọi nhóm.
+    // Tiềm năng 2 mức 'high' | 'low' ('' = chưa điền). Project cũ trong KV còn
+    // lưu số 1-3 của thang sao cũ → quy đổi: ≥2 = high, 1 = low. Khớp
+    // cleanPotential trong functions/api/private.js.
+    const potLevel = v => {
+      if (v === 'high' || v === 'low') return v;
+      const n = parseInt(v, 10) || 0;
+      return n >= 2 ? 'high' : n === 1 ? 'low' : '';
+    };
+
     const groupOf = p => {
       if (p.type === WTE_INCOME_TYPE) return 'INCOME';
       return p.rank === 'SS' ? 'S' : p.rank;
@@ -2610,9 +2618,8 @@ ${line}
         const cardId = personal
           ? 'wte-personal-' + p.id
           : 'wte-card-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-        // Figma: dòng giữa header là "high-potential / narrative". Kho đang lưu
-        // potential dạng số 1-3 (chưa migrate sang 2 mức) nên quy đổi: ≥2 = high.
-        const potLv = p.potential > 0 ? (p.potential >= 2 ? 'high' : 'low') : '';
+        // Figma: dòng giữa header là "high-potential / narrative".
+        const potLv = potLevel(p.potential);
         const headline = (potLv ? `<span class="wte-pot wte-pot--${potLv}">${wteIcon(potLv)}${potLv}-potential</span>` : '')
           + (p.type ? `<span class="wte-narr">${p.type}</span>` : '');
         const g = groupOf(p);
@@ -2679,6 +2686,25 @@ ${line}
       WTE_TYPES.map(t => `<option value="${t}">${t}</option>`).join('');
     $('pt-rank').innerHTML = '<option value="">—</option>' +
       WTE_RANKS.map(r => `<option value="${r}">${RANK_LABEL[r]}</option>`).join('');
+
+    // Phân loại Work-to-Earn → nhóm $ (INCOME), rank không áp dụng: ô Rank khoá,
+    // hiện "$" thay vì bắt chọn S/A/B/C. Đổi sang thẻ khác thì mở lại, giữ rank cũ.
+    let ptRankKept = '';
+    function ptSyncRank() {
+      const sel = $('pt-rank');
+      const income = $('pt-type').value === WTE_INCOME_TYPE;
+      if (income && !sel.disabled) {
+        ptRankKept = sel.value;
+        sel.insertAdjacentHTML('beforeend', `<option value="INCOME">${RANK_LABEL.INCOME}</option>`);
+        sel.value = 'INCOME';
+        sel.disabled = true;
+      } else if (!income && sel.disabled) {
+        sel.querySelector('option[value="INCOME"]')?.remove();
+        sel.disabled = false;
+        sel.value = ptRankKept;
+      }
+    }
+    $('pt-type').addEventListener('change', ptSyncRank);
 
     async function apiPrivate(action, extra = {}) {
       try {
@@ -2818,9 +2844,12 @@ ${line}
       ptEditId = task ? task.id : null;
       $('pt-name').value      = task?.name || '';
       $('pt-twitter').value   = task?.twitter || '';
-      $('pt-potential').value = task?.potential ? String(task.potential) : '';
-      $('pt-type').value      = task?.type || '';
+      $('pt-potential').value = potLevel(task?.potential);
+      $('pt-type').value      = '';
+      ptSyncRank();                                  // mở khoá ô Rank nếu lần mở trước đang khoá
       $('pt-rank').value       = task?.rank || '';
+      $('pt-type').value      = task?.type || '';
+      ptSyncRank();
       $('pt-visibility').value = task?.visibility || 'personal';
       ptFillRows('gs',     task?.getStarted);
       ptFillRows('daily',  task?.daily);
@@ -2837,13 +2866,14 @@ ${line}
     }
 
     async function submitPtask() {
-      if (!$('pt-rank').value) { showMsg(ptError, 'Chọn rank trước khi lưu'); return; }
+      const income = $('pt-type').value === WTE_INCOME_TYPE;
+      if (!income && !$('pt-rank').value) { showMsg(ptError, 'Chọn rank trước khi lưu'); return; }
       const task = {
         name:       $('pt-name').value,
         twitter:    $('pt-twitter').value,
         potential:  $('pt-potential').value,
         type:       $('pt-type').value,
-        rank:       $('pt-rank').value,
+        rank:       income ? '' : $('pt-rank').value,   // nhóm $ không có rank
         visibility: $('pt-visibility').value,
         getStarted: ptItems('gs'),
         daily:      ptItems('daily'),
