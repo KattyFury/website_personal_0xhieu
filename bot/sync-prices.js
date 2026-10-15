@@ -16,7 +16,7 @@
 //    qua tham số --start-time nên không lấy được lịch sử (xem HANDOFF, Failed Approaches).
 //
 // ⚠️ Binance trả HTTP 451 cho server ở một số quốc gia (Apps Script từng dính). Đó là
-//    lý do bot chạy ở máy nhà bằng Docker chứ không phải Cloudflare Worker.
+//    lý do bot chạy trên VPS bằng Docker chứ không phải Cloudflare Worker.
 //
 // Ghi kết quả theo 2 đường, tự chọn cái nào có cấu hình:
 //   1. POST /api/val  (cần ADMIN_PASS)              — đường chuẩn, đi qua whitelist của server

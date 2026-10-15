@@ -1,4 +1,4 @@
-# Chạy bot ngay trên PC này.
+# Đang chạy trên VPS tại /opt/val-price-bot (ssh vps).
 #
 #   cd bot
 #   cp .env.example .env     rồi điền secret vào .env

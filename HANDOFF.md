@@ -20,7 +20,7 @@ functions/api/        — Cloudflare Pages Functions, backend DUY NHẤT
   ai.js               — GET công khai / POST cần ADMIN_PASS: bài viết tab AI
 functions/valuation.js — route /valuation: điền sẵn Low/High ×N, Market condition + bảng altcoin vào HTML
                        (chỉ đọc KV) để AI/bot tải trang là đọc được. Công thức CHÉP từ index.html — sửa bên này phải sửa bên kia
-bot/                  — job lấy giá hằng ngày, chạy Docker trên PC nhà (xem bot/README.md)
+bot/                  — job lấy giá hằng ngày, chạy Docker trên VPS `/opt/val-price-bot` (xem bot/README.md)
 _redirects            — SPA fallback: /* → /index.html
 DESIGN_SYSTEM.md      — luật thiết kế (màu, chữ, lưới, thành phần). ĐỌC trước khi đụng giao diện
 highlights.txt + highlights/   — ảnh + caption mục Highlights ở CV
@@ -69,7 +69,7 @@ Cloudflare KV `WORK` (namespace b8fab2f8a83f45f0a023d2ba3ce78cde)
 
 ### Bot (`bot/`)
 
-Chạy 1 lượt lúc khởi động, rồi mỗi ngày lúc `RUN_AT_HOUR` (mặc định 2h VN). CoinGecko → `atm/ath/athDate`; Binance klines → `atl` = đáy thấp nhất trong **[ngày lên sàn → ngày ATH]**, đã bỏ nến ngày lên sàn. Chạy ở máy nhà vì **Binance trả HTTP 451** cho server một số nước (Apps Script/Worker đều dính).
+Chạy 1 lượt lúc khởi động, rồi mỗi ngày lúc `RUN_AT_HOUR` (mặc định 2h VN). CoinGecko → `atm/ath/athDate`; Binance klines → `atl` = đáy thấp nhất trong **[ngày lên sàn → ngày ATH]**, đã bỏ nến ngày lên sàn. Chạy trên **VPS Vietnix 103.90.224.64** (`ssh vps`), container `val-price-bot`, thư mục `/opt/val-price-bot` (từ 2026-10-15; trước đó ở PC nhà). Không chạy trên Cloudflare Worker/Apps Script vì **Binance trả HTTP 451** cho server một số nước — IP VPS VN gọi Binance spot+futures OK.
 
 ## 4. Valuation — công thức
 
@@ -137,7 +137,8 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 
 ## Nhật ký
 
-- 2026-10-15: **CT thiếu ×ATH/×ATL/×ATM — không phải lỗi logic trang.** Bot giá (Docker PC nhà) ngừng chạy từ lượt 2026-10-01; CT thêm sau đó nên `val-prices` không có key `CT` → 3 cột "—" (×TGE vẫn có vì `priceTGE` nhập tay). Đã chạy bot 1 lượt từ máy Dell (`RUN_ONCE=true node sync-prices.js`, ghi thẳng KV bằng `CF_API_TOKEN`) → 79/79 có giá. **Bot ở PC nhà vẫn cần bật lại**, không thì giá lại đứng.
+- 2026-10-15: **Dời bot giá từ PC nhà lên VPS** `/opt/val-price-bot` (chép `bot/` bằng scp, `.env` quyền 600 dùng `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` từ file secret chung, `docker compose up -d --build`). Lượt đầu 79/79 có giá. Docker bật cùng VPS + `restart: unless-stopped`. Sửa `sync-prices.js` thì phải scp lại + `docker compose up -d --build` trên VPS — **push GitHub không tự cập nhật bot**.
+- 2026-10-15: **CT thiếu ×ATH/×ATL/×ATM — không phải lỗi logic trang.** Bot giá (Docker PC nhà) ngừng chạy từ lượt 2026-10-01; CT thêm sau đó nên `val-prices` không có key `CT` → 3 cột "—" (×TGE vẫn có vì `priceTGE` nhập tay). Đã chạy bot 1 lượt từ máy Dell (`RUN_ONCE=true node sync-prices.js`, ghi thẳng KV bằng `CF_API_TOKEN`) → 79/79 có giá. Cùng ngày dời bot lên VPS (xem dòng dưới).
 - 2026-10-05: **Nút chụp ảnh Valuation sửa xong** (trước đó lỗi 100%): đổi `html2canvas.min.js` → `html2canvas-pro.min.js` 2.5.1 (npm, MIT). Mobile lưu vào Ảnh qua bảng chia sẻ, desktop mở hộp thoại lưu ở Desktop. Đã test headless (vẽ OK, nhánh tải về + popup mobile OK); CHƯA test trên điện thoại thật + hộp thoại lưu thật.
 - 2026-10-05: **×ATH ca list sàn tạo ATH trong 1 tuần**: trước hiện "—", giờ hiện `×TGE → ×ATH` tô cam (VD ACE 69,56 → 83,84). Sửa ở cả `index.html` lẫn `functions/valuation.js`.
 - 2026-10-05: **Tiêu đề Valuation trên mobile** hết bị cắt "…" — thu nhỏ chữ cho vừa 2 dòng (375px ≈ 13px; 320px chạm sàn 10px và xuống 3 dòng).

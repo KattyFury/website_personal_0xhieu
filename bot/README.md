@@ -1,6 +1,13 @@
 # bot — lấy giá hằng ngày cho tab Valuation
 
-Chạy bằng Docker ngay trên PC nhà. Không cài package nào (Node 22 có `fetch` sẵn).
+Chạy bằng Docker trên **VPS** (`ssh vps`, thư mục `/opt/val-price-bot`, container `val-price-bot`) từ 2026-10-15 — trước đó ở PC nhà. Không cài package nào (Node 22 có `fetch` sẵn).
+
+Cập nhật code: push GitHub **không** tự cập nhật bot. Phải chép lại rồi build:
+
+```bash
+scp bot/sync-prices.js bot/Dockerfile bot/docker-compose.yml vps:/opt/val-price-bot/
+ssh vps 'cd /opt/val-price-bot && docker compose up -d --build'
+```
 
 ## Chạy
 
@@ -41,7 +48,7 @@ Chỉ ghi key **`val-prices`**. Hai đường, tự chọn cái nào có cấu h
 ## Hai cái bẫy đã dính, đừng lặp lại
 
 - **`binance-cli` bỏ qua `--start-time`** → không lấy được lịch sử. Phải gọi `fetch` REST thẳng.
-- **Binance trả HTTP 451** cho server ở một số quốc gia (Apps Script từng dính). Đó là lý do bot chạy ở máy nhà chứ không phải Cloudflare Worker.
+- **Binance trả HTTP 451** cho server ở một số quốc gia (Apps Script từng dính). Đó là lý do bot chạy trên VPS bằng Docker chứ không phải Cloudflare Worker (IP VPS VN gọi Binance OK, đo 2026-10-15).
 
 ## Test nhanh
 

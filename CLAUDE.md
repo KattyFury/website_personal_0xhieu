@@ -35,7 +35,7 @@ I'm a **Vietnamese vibecoder** — I have ideas, not a programming background. I
 **Bản chất:** website cá nhân **1 file** (`index.html` — HTML + CSS + JS inline) + một ít backend Cloudflare để lưu data. **KHÔNG smart contract.** Host trên **Cloudflare Pages** (project **`0xhieu-xyz`**, auto-deploy từ `main`).
 
 - **Backend DUY NHẤT** = 4 Pages Function ở `functions/api/` (`val.js` · `wte.js` · `private.js` · `ai.js`), chung KV binding `WORK` và chung 1 mật khẩu `ADMIN_PASS` (đặt ở Cloudflare Dashboard, **không nằm trong repo**). Đọc công khai không cần mật khẩu; ghi thì cần.
-- **`bot/`** — job Node chạy Docker trên PC nhà, lấy giá hằng ngày (CoinGecko + Binance) ghi vào KV cho tab Valuation. Agent (nút mèo) sau này cũng đặt ở repo này.
+- **`bot/`** — job Node chạy Docker trên VPS (`/opt/val-price-bot`), lấy giá hằng ngày (CoinGecko + Binance) ghi vào KV cho tab Valuation. Agent (nút mèo) sau này cũng đặt ở repo này.
 - **Data nằm trong Cloudflare KV**, sửa qua popup Admin trên site. **Không còn đọc Google Sheet** (từ 2026-09-22).
 - Nguồn ngoài gọi từ client, không key: **Google Translate** (gtx, dịch VI→EN) · **unavatar.io** (logo card Work).
 - **Logic tính toán** (bội số, Market Condition, Predict FDV…) nằm trong JS của `index.html`. KV chỉ giữ data gốc, **không lưu số tính sẵn**.
