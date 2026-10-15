@@ -1,7 +1,7 @@
 # HANDOFF — 0xhieu.xyz (repo `website_personal_0xhieu`, tên cũ `cv`)
 
-**Chốt trạng thái:** 2026-10-05
-**Repo:** https://github.com/KattyFury/website_personal_0xhieu · **Local:** `D:\Files\Claude\Big projects\website_personal_0xhieu` (thư mục đổi tên từ `cv` 10-05; máy khác còn tên cũ thì đổi theo)
+**Chốt trạng thái:** 2026-10-15
+**Repo:** https://github.com/KattyFury/website_personal_0xhieu · **Local:** `D:\Files\Claude\website_personal_0xhieu` (thư mục đổi tên từ `cv` 10-05; máy khác còn tên cũ thì đổi theo)
 **Live:** Cloudflare Pages, project **`0xhieu-xyz`** (khác tên repo) — auto-deploy từ `main`.
 
 > File này chỉ ghi **sự thật hiện tại** + **luật/bẫy còn hiệu lực**. Lịch sử cũ (log quyết định từ 06/2026) nằm trong git history của file này, trước commit dọn repo 2026-09-24.
@@ -71,6 +71,10 @@ Cloudflare KV `WORK` (namespace b8fab2f8a83f45f0a023d2ba3ce78cde)
 
 Chạy 1 lượt lúc khởi động, rồi mỗi ngày lúc `RUN_AT_HOUR` (mặc định 2h VN). CoinGecko → `atm/ath/athDate`; Binance klines → `atl` = đáy thấp nhất trong **[ngày lên sàn → ngày ATH]**, đã bỏ nến ngày lên sàn. Chạy trên **VPS Vietnix 103.90.224.64** (`ssh vps`), container `val-price-bot`, thư mục `/opt/val-price-bot` (từ 2026-10-15; trước đó ở PC nhà). Không chạy trên Cloudflare Worker/Apps Script vì **Binance trả HTTP 451** cho server một số nước — IP VPS VN gọi Binance spot+futures OK.
 
+- **Ghi bằng `ADMIN_PASS`** (`/opt/val-price-bot/.env`, quyền 600; trên VPS không có token Cloudflare). Đổi mật khẩu admin trên Cloudflare → phải sửa cả file secret chung lẫn `.env` VPS rồi `docker compose up -d --force-recreate` (`restart` không nạp lại `.env`).
+- **Dự án mới thiếu ×ATH/×ATL/×ATM (hiện "—")** → xem `updatedAt` trong `/api/val` trước, đừng nghi logic trang. Bot chỉ có giá cho dự án đã tồn tại lúc nó chạy; muốn có ngay: `ssh vps 'cd /opt/val-price-bot && docker compose restart'` (khởi động là chạy 1 lượt). Log: `ssh vps docker logs --tail 20 val-price-bot`.
+- Push GitHub **không** cập nhật bot trên VPS — xem `bot/README.md`.
+
 ## 4. Valuation — công thức
 
 ```
@@ -138,7 +142,7 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 ## Nhật ký
 
 - 2026-10-15: **Dời bot giá từ PC nhà lên VPS** `/opt/val-price-bot` (chép `bot/` bằng scp, `.env` quyền 600 — ban đầu dùng token Cloudflare, cùng ngày đổi sang **`ADMIN_PASS`** (lấy từ file secret chung, đi qua whitelist của `/api/val`; trên VPS không còn token Cloudflare), `docker compose up -d --build`). Lượt đầu 79/79 có giá. Docker bật cùng VPS + `restart: unless-stopped`. Sửa `sync-prices.js` thì phải scp lại + `docker compose up -d --build` trên VPS — **push GitHub không tự cập nhật bot**.
-- 2026-10-15: **CT thiếu ×ATH/×ATL/×ATM — không phải lỗi logic trang.** Bot giá (Docker PC nhà) ngừng chạy từ lượt 2026-10-01; CT thêm sau đó nên `val-prices` không có key `CT` → 3 cột "—" (×TGE vẫn có vì `priceTGE` nhập tay). Đã chạy bot 1 lượt từ máy Dell (`RUN_ONCE=true node sync-prices.js`, ghi thẳng KV bằng `CF_API_TOKEN`) → 79/79 có giá. Cùng ngày dời bot lên VPS (xem dòng dưới).
+- 2026-10-15: **CT thiếu ×ATH/×ATL/×ATM — không phải lỗi logic trang.** Bot giá (Docker PC nhà) ngừng chạy từ lượt 2026-10-01; CT thêm sau đó nên `val-prices` không có key `CT` → 3 cột "—" (×TGE vẫn có vì `priceTGE` nhập tay). Đã chạy bot 1 lượt từ máy Dell (`RUN_ONCE=true node sync-prices.js`, ghi thẳng KV bằng `CF_API_TOKEN`) → 79/79 có giá. Cùng ngày dời bot lên VPS (xem dòng trên).
 - 2026-10-05: **Nút chụp ảnh Valuation sửa xong** (trước đó lỗi 100%): đổi `html2canvas.min.js` → `html2canvas-pro.min.js` 2.5.1 (npm, MIT). Mobile lưu vào Ảnh qua bảng chia sẻ, desktop mở hộp thoại lưu ở Desktop. Đã test headless (vẽ OK, nhánh tải về + popup mobile OK); CHƯA test trên điện thoại thật + hộp thoại lưu thật.
 - 2026-10-05: **×ATH ca list sàn tạo ATH trong 1 tuần**: trước hiện "—", giờ hiện `×TGE → ×ATH` tô cam (VD ACE 69,56 → 83,84). Sửa ở cả `index.html` lẫn `functions/valuation.js`.
 - 2026-10-05: **Tiêu đề Valuation trên mobile** hết bị cắt "…" — thu nhỏ chữ cho vừa 2 dòng (375px ≈ 13px; 320px chạm sàn 10px và xuống 3 dòng).
