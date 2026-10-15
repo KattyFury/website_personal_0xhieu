@@ -137,6 +137,7 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 
 ## Nhật ký
 
+- 2026-10-15: **CT thiếu ×ATH/×ATL/×ATM — không phải lỗi logic trang.** Bot giá (Docker PC nhà) ngừng chạy từ lượt 2026-10-01; CT thêm sau đó nên `val-prices` không có key `CT` → 3 cột "—" (×TGE vẫn có vì `priceTGE` nhập tay). Đã chạy bot 1 lượt từ máy Dell (`RUN_ONCE=true node sync-prices.js`, ghi thẳng KV bằng `CF_API_TOKEN`) → 79/79 có giá. **Bot ở PC nhà vẫn cần bật lại**, không thì giá lại đứng.
 - 2026-10-05: **Nút chụp ảnh Valuation sửa xong** (trước đó lỗi 100%): đổi `html2canvas.min.js` → `html2canvas-pro.min.js` 2.5.1 (npm, MIT). Mobile lưu vào Ảnh qua bảng chia sẻ, desktop mở hộp thoại lưu ở Desktop. Đã test headless (vẽ OK, nhánh tải về + popup mobile OK); CHƯA test trên điện thoại thật + hộp thoại lưu thật.
 - 2026-10-05: **×ATH ca list sàn tạo ATH trong 1 tuần**: trước hiện "—", giờ hiện `×TGE → ×ATH` tô cam (VD ACE 69,56 → 83,84). Sửa ở cả `index.html` lẫn `functions/valuation.js`.
 - 2026-10-05: **Tiêu đề Valuation trên mobile** hết bị cắt "…" — thu nhỏ chữ cho vừa 2 dòng (375px ≈ 13px; 320px chạm sàn 10px và xuống 3 dòng).
