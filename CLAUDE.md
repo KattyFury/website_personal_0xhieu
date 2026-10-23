@@ -14,7 +14,7 @@ Niềm tin đứng sau câu này: **AI là tương lai, crypto là tiền tệ c
 
 Mọi chỗ mô tả tôi ra bên ngoài phải dùng đúng câu trên: `.hero-tagline` của tab CV, `meta description`, `og:title` / `og:description` / `og:image:alt`, JSON-LD `description`, ảnh share `og.png`, và bất kỳ repo / profile nào khác của tôi.
 
-> ⚠️ **Tab CV là tiếng Anh, không có ngoại lệ.** Tiếng Việt chỉ được xuất hiện ở các tab có toggle VI/EN (Valuation · AI · Airdrop) và trong tài liệu nội bộ (`CLAUDE.md`, `HANDOFF.md`, comment code). Viết tagline / mô tả tiếng Việt vào phần CV hay thẻ meta = **sai**, đã xảy ra 2026-08-17 và phải sửa lại.
+> ⚠️ **Tab CV là tiếng Anh, không có ngoại lệ.** Tiếng Việt chỉ được xuất hiện ở các tab có toggle VI/EN (Valuation · Work) và trong tài liệu nội bộ (`CLAUDE.md`, `HANDOFF.md`, comment code). Viết tagline / mô tả tiếng Việt vào phần CV hay thẻ meta = **sai**, đã xảy ra 2026-08-17 và phải sửa lại.
 
 I'm a **Vietnamese vibecoder** — I have ideas, not a programming background. I build products by handing off to AI, not by writing every line myself.
 
@@ -34,7 +34,7 @@ I'm a **Vietnamese vibecoder** — I have ideas, not a programming background. I
 
 **Bản chất:** website cá nhân **1 file** (`index.html` — HTML + CSS + JS inline) + một ít backend Cloudflare để lưu data. **KHÔNG smart contract.** Host trên **Cloudflare Pages** (project **`0xhieu-xyz`**, auto-deploy từ `main`).
 
-- **Backend DUY NHẤT** = 4 Pages Function ở `functions/api/` (`val.js` · `wte.js` · `private.js` · `ai.js`), chung KV binding `WORK` và chung 1 mật khẩu `ADMIN_PASS` (đặt ở Cloudflare Dashboard, **không nằm trong repo**). Đọc công khai không cần mật khẩu; ghi thì cần.
+- **Backend DUY NHẤT** = 3 Pages Function ở `functions/api/` (`val.js` · `wte.js` · `private.js`), chung KV binding `WORK` và chung 1 mật khẩu `ADMIN_PASS` (đặt ở Cloudflare Dashboard, **không nằm trong repo**). Đọc công khai không cần mật khẩu; ghi thì cần.
 - **`bot/`** — job Node chạy Docker trên VPS (`/opt/val-price-bot`), lấy giá hằng ngày (CoinGecko + Binance) ghi vào KV cho tab Valuation. Agent (nút mèo) sau này cũng đặt ở repo này.
 - **Data nằm trong Cloudflare KV**, sửa qua popup Admin trên site. **Không còn đọc Google Sheet** (từ 2026-09-22).
 - Nguồn ngoài gọi từ client, không key: **Google Translate** (gtx, dịch VI→EN) · **unavatar.io** (logo card Work).
@@ -42,7 +42,7 @@ I'm a **Vietnamese vibecoder** — I have ideas, not a programming background. I
 - **Local:** `D:\Files\Claude\Big projects\cv` · **GitHub:** `KattyFury/website_personal_0xhieu` (đổi tên từ `cv` 2026-10-05)
 - Trạng thái chi tiết: **`HANDOFF.md`**. Luật thiết kế: **`DESIGN_SYSTEM.md`**.
 
-> ⚠️ Cần thêm API key / backend mới cho phần **công khai** → gần như chắc chắn là hiểu sai. Mọi thứ khách xem đều đọc qua 4 Function có sẵn.
+> ⚠️ Cần thêm API key / backend mới cho phần **công khai** → gần như chắc chắn là hiểu sai. Mọi thứ khách xem đều đọc qua 3 Function có sẵn.
 
 > ⚠️ **Xem data thật trước khi viết code đọc nó** (`curl https://0xhieu.xyz/api/val` …). Đừng đoán tên/định dạng trường.
 
@@ -103,7 +103,7 @@ When I'm in **planning phase**, don't rush to code. When I have a spec, don't re
 - ❌ Delete dead code unless asked
 - ❌ Push to prod, drop databases, run irreversible commands without explicit confirmation
 - ❌ Lôi asset / code / secret của dự án khác (ezwallet, bot...) vào cv
-- ❌ Thêm backend / smart contract / API key ngoài 4 Function có sẵn
+- ❌ Thêm backend / smart contract / API key ngoài 3 Function có sẵn
 - ❌ Viết code đọc data mà chưa xem data thật
 - ❌ Dump theory when I need to build
 - ❌ Assume I know technical terms

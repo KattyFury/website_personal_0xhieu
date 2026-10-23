@@ -32,7 +32,7 @@ Nhãn nhóm, tab nav, header bảng, dòng phụ header card: **VIẾT HOA + gi�
 **Đen là màu chủ đạo nhưng dùng tiết chế** — chữ, icon, nút chính, vạch tab đang chọn. **Trắng** làm nền. **Xám trung tính** (không ngả vàng) cho chữ phụ và nhấn nhá.
 
 **Chốt 2026-09-26 — đảo lại luật cũ:** nền header card + dải Daily giờ có màu (trước đó chỉ xám `--head-bg`, bị chê mờ nhạt và cả trang thiếu sức sống). Quy tắc:
-- **Valuation / AI / bảng altcoin** (không có khái niệm rank): header nhuộm **cam nhạt** — `--head-bg` giờ = `color-mix(in srgb, var(--amber) 20%, white)`.
+- **Valuation / bảng altcoin** (không có khái niệm rank): header nhuộm **cam nhạt** — `--head-bg` giờ = `color-mix(in srgb, var(--amber) 20%, white)`.
 - **Work**: mỗi card nhuộm header + Daily theo đúng **màu rank của card đó** (`.wte-card--<RANK> .wte-card-head`/`.wte-section--daily`), amber/tím/xanh dương/xanh lá/xám ở mức nhạt (12–16%) — xem bảng Màu rank bên dưới.
 
 | Token | Mã | Dùng cho |
@@ -44,7 +44,7 @@ Nhãn nhóm, tab nav, header bảng, dòng phụ header card: **VIẾT HOA + gi�
 | `--w-dim` | `#8C8C8C` | Chữ nhạt nhất (trạng thái trống, dấu bullet) |
 | `--w-line` | `#DCDCDC` | Viền card 1px · kẻ mảnh · viền avatar |
 | `--chip` | `#EBEBEB` | Nền chip chỉ-đọc · máng toggle · hover dòng bảng |
-| `--head-bg` | cam nhạt 20% | Nền header Valuation/AI/bảng altcoin (Work override theo màu rank riêng, xem dưới) |
+| `--head-bg` | cam nhạt 20% | Nền header Valuation/bảng altcoin (Work override theo màu rank riêng, xem dưới) |
 | `--amber` | `#B35C00` | **Cam thương hiệu (sẫm)** — chốt 2026-10-02 bỏ cam sáng `#FFA111`. Dùng được cả làm nền solid với chữ trắng (tương phản 4.7:1) lẫn làm chữ trên nền trắng |
 | `--amber-ink` | `= --amber` | Chữ cam — giữ tên token cũ, giờ chung 1 màu với `--amber` · hover tên website + chữ navbar (chốt 2026-10-02, thay cho đen↔xám) |
 | `--amber-soft` | cam 20% | Nền ô nhấn cam (×ATM vùng nguy hiểm) · vòng quanh chấm timeline |
@@ -72,11 +72,11 @@ Nhãn nhóm, tab nav, header bảng, dòng phụ header card: **VIẾT HOA + gi�
 | Thành phần | Spec |
 |---|---|
 | **Navbar** | trắng mờ (blur) · kẻ dưới · cao 48 · logo = ảnh mèo 24 + chữ 18 · tab chữ hoa 15, cách nhau 16, đang chọn chữ đen + vạch đen 24×2 ở đáy |
-| **Card / box** | trắng · **radius 16** · viền 1px `--w-line` · `--shadow` · hover `--lift` + nhích 2px. Áp cho: card Work · box Valuation · hub AI · bảng altcoin · ảnh Highlights · popup |
+| **Card / box** | trắng · **radius 16** · viền 1px `--w-line` · `--shadow` · hover `--lift` + nhích 2px. Áp cho: card Work · box Valuation · bảng altcoin · ảnh Highlights · popup |
 | **Header card** | cao 40 · nền `--head-bg` (Work: theo màu rank) · kẻ dưới · icon đen + tiêu đề canh TRÁI · Bold 15 đen |
 | **Header card Work** | logo+tên · badge potential + narrative (chữ **11**, thu nhỏ 2026-09-26 để đỡ chật) · rank = **chỉ 1 ô vuông màu + chữ** (đã bỏ nhãn chữ "rank" — quá nhiều yếu tố trên 1 hàng) |
 | **Chip** (chỉ đọc) | nền `--chip` · **radius 8** (lồng trong box 16) · cao 32 · chữ 12 |
-| **Hàng bấm được** (task Work, bài AI) | như chip (bài AI: tiêu đề dài xuống tối đa 2 dòng, hàng cao theo); hover: nền trắng + viền + vạch đen bên trái + ô mũi tên ↗ nền đen |
+| **Hàng bấm được** (task Work) | như chip; hover: nền trắng + viền + vạch đen bên trái + ô mũi tên ↗ nền đen |
 | **Nhãn nhóm** (Work) | cao 32 · icon đen + chữ hoa 12 xám + kẻ mảnh kéo hết ngang. **Daily** = dải nền theo màu rank tràn 2 mép card, lề trong vẫn 16 như các nhóm khác |
 | **Tiêu đề mục** (CV) | icon đen + chữ 18 + kẻ mảnh kéo hết ngang |
 | **Nút chính** | tròn radius 24 · nền đen · chữ trắng · bóng |
@@ -99,9 +99,8 @@ Mọi khoảng cách là **bội số của 8**.
 |---|---|
 | Valuation — 3 box | 3 cột × 432 + khe 16, box cao 176 |
 | Valuation — bảng | 7 cột × 176, khe 16 nhét trong padding ô (184 · 192×5 · 184) |
-| AI | 2 × 2 card 656 × 368, khe 16 |
 | Work | card cùng rank 2 cột × 656, khe 16; khác rank cách 48 (mobile 32) |
 | CV — Highlights | 3 cột × 432, ảnh 3:2 |
 | CV — timeline | 3 cột `128 / 64 / 944`, chấm đen 8px ở tâm rãnh, item cách 48 |
 
-Màn ≤ 1024: 3 cột → 2 (AI giữ 2 cột, chỉ ≤ 640 mới 1 cột), header card Work xuống 2 hàng (tên/rank hàng 1 · headline hàng 2 — tránh đè chữ khi card 2 cột co hẹp lại). Màn ≤ 640: mọi lưới → 1 cột.
+Màn ≤ 1024: 3 cột → 2, header card Work xuống 2 hàng (tên/rank hàng 1 · headline hàng 2 — tránh đè chữ khi card 2 cột co hẹp lại). Màn ≤ 640: mọi lưới → 1 cột.

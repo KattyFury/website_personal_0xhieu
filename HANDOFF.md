@@ -1,6 +1,6 @@
 # HANDOFF — 0xhieu.xyz (repo `website_personal_0xhieu`, tên cũ `cv`)
 
-**Chốt trạng thái:** 2026-10-15
+**Chốt trạng thái:** 2026-10-23
 **Repo:** https://github.com/KattyFury/website_personal_0xhieu · **Local:** `D:\Files\Claude\website_personal_0xhieu` (thư mục đổi tên từ `cv` 10-05; máy khác còn tên cũ thì đổi theo)
 **Live:** Cloudflare Pages, project **`0xhieu-xyz`** (khác tên repo) — auto-deploy từ `main`.
 
@@ -17,7 +17,6 @@ functions/api/        — Cloudflare Pages Functions, backend DUY NHẤT
   val.js              — GET công khai / POST cần ADMIN_PASS: dự án Valuation (+ giá từ bot)
   wte.js              — GET công khai: card Work to Earn đang public
   private.js          — POST cần ADMIN_PASS: CRUD card Work (cá nhân + public)
-  ai.js               — GET công khai / POST cần ADMIN_PASS: bài viết tab AI
 functions/valuation.js — route /valuation: điền sẵn Low/High ×N, Market condition + bảng altcoin vào HTML
                        (chỉ đọc KV) để AI/bot tải trang là đọc được. Công thức CHÉP từ index.html — sửa bên này phải sửa bên kia
 bot/                  — job lấy giá hằng ngày, chạy Docker trên VPS `/opt/val-price-bot` (xem bot/README.md)
@@ -32,16 +31,15 @@ html2canvas-pro.min.js — DOM→PNG cho nút camera (fork html2canvas, đọc �
 
 Secret: `ADMIN_PASS` đặt ở Cloudflare Dashboard; bot dùng `bot/.env` (gitignore). **Không có secret nào trong repo.**
 
-## 2. Bốn tab
+## 2. Ba tab
 
 | Tab (nav) | Route | Nội dung | Ngôn ngữ |
 |---|---|---|---|
 | CV | `/` | Hero · Experience (timeline) · Highlights · Available for | **Tiếng Anh cố định** |
 | Valuation | `/valuation` | Bảng altcoin 7 cột + 3 box phân tích | Toggle VI/EN, mặc định VI |
-| AI | `/ai` | 4 hub bài viết: INSIGHTS · LEARN · TOOLS · BUILD | Toggle VI/EN |
 | Work | `/airdrop` | Card Work to Earn theo rank + thanh lọc `$ S A B C` | Toggle VI/EN |
 
-Nút mèo góc dưới phải (cả 4 tab) = **Agent**, mới có vỏ ("coming soon"). Agent là dự án riêng, sẽ ở chung repo với bot.
+Nút mèo góc dưới phải (cả 3 tab) = **Agent**, mới có vỏ ("coming soon"). Agent là dự án riêng, sẽ ở chung repo với bot.
 
 ## 3. Data
 
@@ -50,12 +48,12 @@ Cloudflare KV `WORK` (namespace b8fab2f8a83f45f0a023d2ba3ce78cde)
   ├─ val-projects    ← admin (POST /api/val)      data nhập tay
   ├─ val-prices      ← bot   (chỉ trường giá)     atm · ath · athDate · atl · atlDate
   ├─ personal-tasks  ← admin tab Work
-  └─ ai-posts        ← admin tab AI
+  └─ ai-posts        ← data cũ của tab AI (đã bỏ tab 10-23, key còn nằm đó, không ai đọc)
 ```
 
-- Cả 4 endpoint dùng **chung KV `WORK`** và **chung 1 mật khẩu `ADMIN_PASS`**, kiểm tra ở server. Mở khoá ở tab nào thì cả 3 tab cùng mở; mật khẩu giữ trong `sessionStorage`. Mở khoá xong, nút Admin ở cả 3 tab đổi thành nút [+] (class `is-plus`, icon `plus.svg`) — Valuation: mở danh sách dự án · AI: thêm bài · Work: thêm task.
+- Cả 3 endpoint dùng **chung KV `WORK`** và **chung 1 mật khẩu `ADMIN_PASS`**, kiểm tra ở server. Mở khoá ở tab nào thì cả 2 tab admin (Valuation · Work) cùng mở; mật khẩu giữ trong `sessionStorage`. Mở khoá xong, nút Admin ở cả 2 tab đổi thành nút [+] (class `is-plus`, icon `plus.svg`) — Valuation: mở danh sách dự án · Work: thêm task.
 - **Không còn đọc Google Sheet ở đâu cả** (từ 2026-09-22).
-- Nguồn ngoài còn lại, gọi thẳng từ client, không key: **Google Translate gtx** (dịch VI→EN tab Work + AI) · **unavatar.io** (logo card Work).
+- Nguồn ngoài còn lại, gọi thẳng từ client, không key: **Google Translate gtx** (dịch VI→EN tab Work) · **unavatar.io** (logo card Work).
 
 ### `val-projects` — 1 dự án
 
@@ -105,10 +103,10 @@ vcFDV = fundraising / (vcAlloc/100)
 
 ## 6. Luật bắt buộc
 
-- **Ngôn ngữ:** tiếng Việt CHỈ ở tab có toggle (Valuation · AI · Work) + tài liệu nội bộ. Tab CV + mọi thẻ meta/og/JSON-LD luôn tiếng Anh. Dịch nhãn UI tĩnh (`VAL_HEAD_LABELS` · `VAL_PLACEHOLDERS` · `VAL_TITLES`), **không dịch data** (ticker, narrative, số). Ngoại lệ: tiêu đề bài AI **có** dịch; task cá nhân Work **không** dịch.
+- **Ngôn ngữ:** tiếng Việt CHỈ ở tab có toggle (Valuation · Work) + tài liệu nội bộ. Tab CV + mọi thẻ meta/og/JSON-LD luôn tiếng Anh. Dịch nhãn UI tĩnh (`VAL_HEAD_LABELS` · `VAL_PLACEHOLDERS` · `VAL_TITLES`), **không dịch data** (ticker, narrative, số). Ngoại lệ: task cá nhân Work **không** dịch.
 - **Châm ngôn, nguyên văn mọi nơi:** `Sharing POVs on Crypto and AI`. Câu niềm tin có **2 bản cố ý**: bản dài 3 vế ở hero CV, bản ngắn *"AI is the future. Crypto is the money of the future."* ở meta/og/JSON-LD/`og.png`. `jobTitle` JSON-LD giữ "Builder + Contributor".
 - **Đổi `og.png` phải bump `?v=`** (đang `?v=6`) — X/Telegram cache theo URL. Nguồn vẽ ngoài repo: `C:\tmp\cvshot\og-gen-a.html`.
-- **Client ↔ server phải khớp:** `AI_HUBS` ↔ `CATS` (`ai.js`) · `WTE_RANKS` ↔ `RANKS` (`private.js`). Lệch là server âm thầm ép về mặc định.
+- **Client ↔ server phải khớp:** `WTE_RANKS` ↔ `RANKS` (`private.js`). Lệch là server âm thầm ép về mặc định.
 - **Hàng đầu mỗi tab:** tiêu đề TRÁI, nút PHẢI (flex). Không quay lại kiểu tiêu đề canh giữa + nút absolute. Tiêu đề dài thì cho xuống 2 dòng, đừng rút ngắn câu. **Mobile: KHÔNG cắt "…"** — `fitIntroTitles()` thu nhỏ chữ từng 1px (sàn 10px) cho vừa 2 dòng; chạy lại khi đổi ngôn ngữ + khi bề ngang `.val-intro` đổi (ResizeObserver).
 - **Thanh cuộn:** mọi vùng cuộn dùng `.thin-scroll`. **Không set `scrollbar-width`/`scrollbar-color` cho Chromium** — từ bản 121 chúng tắt hết `::-webkit-scrollbar`.
 - **Icon tô bằng CSS mask → mask đặt ở `::before`**, không trên nút (Chromium hit-test theo vùng mask). Icon mới thì dùng SVG inline (`wteIcon()`), không dùng mask.
@@ -141,6 +139,7 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 
 ## Nhật ký
 
+- 2026-10-23: **Bỏ hẳn tab AI.** Nav còn CV · Valuation · Work. Xoá view/CSS/JS/2 popup admin của AI trong `index.html` + `functions/api/ai.js`. `/ai` giờ rơi về trang CV. Key KV `ai-posts` (6 bài) KHÔNG xoá — muốn dựng lại thì data vẫn còn. Meta/og đổi "Valuation · AI · Work." → "Valuation · Work." (châm ngôn giữ nguyên).
 - 2026-10-15: **Dời bot giá từ PC nhà lên VPS** `/opt/val-price-bot` (chép `bot/` bằng scp, `.env` quyền 600 — ban đầu dùng token Cloudflare, cùng ngày đổi sang **`ADMIN_PASS`** (lấy từ file secret chung, đi qua whitelist của `/api/val`; trên VPS không còn token Cloudflare), `docker compose up -d --build`). Lượt đầu 79/79 có giá. Docker bật cùng VPS + `restart: unless-stopped`. Sửa `sync-prices.js` thì phải scp lại + `docker compose up -d --build` trên VPS — **push GitHub không tự cập nhật bot**.
 - 2026-10-15: **CT thiếu ×ATH/×ATL/×ATM — không phải lỗi logic trang.** Bot giá (Docker PC nhà) ngừng chạy từ lượt 2026-10-01; CT thêm sau đó nên `val-prices` không có key `CT` → 3 cột "—" (×TGE vẫn có vì `priceTGE` nhập tay). Đã chạy bot 1 lượt từ máy Dell (`RUN_ONCE=true node sync-prices.js`, ghi thẳng KV bằng `CF_API_TOKEN`) → 79/79 có giá. Cùng ngày dời bot lên VPS (xem dòng trên).
 - 2026-10-05: **Nút chụp ảnh Valuation sửa xong** (trước đó lỗi 100%): đổi `html2canvas.min.js` → `html2canvas-pro.min.js` 2.5.1 (npm, MIT). Mobile lưu vào Ảnh qua bảng chia sẻ, desktop mở hộp thoại lưu ở Desktop. Đã test headless (vẽ OK, nhánh tải về + popup mobile OK); CHƯA test trên điện thoại thật + hộp thoại lưu thật.
