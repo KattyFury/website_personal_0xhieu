@@ -96,6 +96,8 @@ vcFDV = fundraising / (vcAlloc/100)
 
 ## 5. Work — luật rank
 
+- Card có `twitter` + `discord` (link http/https, `private.js` lọc). Header: icon X/Discord bên phải hàng 1; dự án chưa nhập Discord thì ẩn icon. Nhập Discord ở popup admin task.
+
 - Thang: **`$` (INCOME) · S · A · B · C**. `$` không phải rank — suy từ thẻ `Work-to-Earn` qua `groupOf()`. `groupOf()` còn map rank cũ `SS` → `S`.
 - Khai **1 chỗ**: `WTE_GROUPS` · `WTE_RANKS` · `RANK_LABEL` (mục "AIRDROP — Work to Earn" trong `index.html`). Dropdown admin đổ bằng JS từ đó.
 - `WTE_TYPES` là nguồn duy nhất cho thẻ phân loại: vừa là dropdown admin, vừa là thứ tự card trong mỗi nhóm (`typeOrder()`).
@@ -138,6 +140,7 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 
 ## Nhật ký
 
+- 2026-10-24: **Header card Work làm lại** (narrative bị cắt "…" vì potential + narrative chung nửa header): hàng 1 = logo + tên trái · icon X + Discord phải; hàng 2 = thẻ potential · narrative · rank. Thêm trường **`discord`** (form admin + `private.js` sanitize) — data cũ chưa có, phải nhập tay qua popup admin.
 - 2026-10-24: **Redesign cả site theo design system nguyen0xhieu**, biến thể riêng: ĐEN thay 0x Blue (mèo đen), nền TRẮNG, **vàng mắt mèo `#FFA111`** (đúng mã trong `icon.png` → hết lệch màu mắt mèo vs cam thương hiệu) + vàng sẫm `#9C6200` cho chữ. Chữ số chẵn ≥14 (bảng altcoin mobile 12 là ngoại lệ), lưới 1200/rãnh 24, bo 16 + pill, 1 shadow Y2, icon Lucide 1.59.0, nút 48/40. Bỏ `--font-c`, bỏ VIẾT HOA giãn chữ, bỏ opacity khi tắt. Rank A đổi xanh dương → cyan-text `#087089`, rank `$` chữ đen trên vàng. Chỉ đổi CSS + SVG icon, không đụng JS/logic/data. Luật mới ở DESIGN_SYSTEM.md (viết lại toàn bộ). Cùng ngày thu khoảng cách navbar → nội dung (CV 48, Valuation/Work 32) theo góp ý user.
 - 2026-10-23: **Bỏ hẳn tab AI.** Nav còn CV · Valuation · Work. Xoá view/CSS/JS/2 popup admin của AI trong `index.html` + `functions/api/ai.js`. `/ai` giờ rơi về trang CV. Key KV `ai-posts` (6 bài) KHÔNG xoá — muốn dựng lại thì data vẫn còn. Meta/og đổi "Valuation · AI · Work." → "Valuation · Work." (châm ngôn giữ nguyên).
 - 2026-10-15: **Dời bot giá từ PC nhà lên VPS** `/opt/val-price-bot` (chép `bot/` bằng scp, `.env` quyền 600 — ban đầu dùng token Cloudflare, cùng ngày đổi sang **`ADMIN_PASS`** (lấy từ file secret chung, đi qua whitelist của `/api/val`; trên VPS không còn token Cloudflare), `docker compose up -d --build`). Lượt đầu 79/79 có giá. Docker bật cùng VPS + `restart: unless-stopped`. Sửa `sync-prices.js` thì phải scp lại + `docker compose up -d --build` trên VPS — **push GitHub không tự cập nhật bot**.

@@ -50,6 +50,7 @@ const cleanVisibility = v => v === 'public' ? 'public' : 'personal';
 const sanitize = t => ({
   name:       clean(t.name, 120) || 'Không tên',
   twitter:    cleanLink(t.twitter),
+  discord:    cleanLink(t.discord),
   potential:  cleanPotential(t.potential),
   type:       clean(t.type, 60),
   rank:       t.type === 'Work-to-Earn' ? '' : cleanRank(t.rank),   // nhóm $ không có rank (WTE_INCOME_TYPE)
