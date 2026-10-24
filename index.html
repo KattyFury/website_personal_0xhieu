@@ -63,7 +63,7 @@
       --mist:       #ECF0F8;   /* box phẳng · dòng · ô nhập — design system */
       --line:       #DCE3EE;   /* kẻ mảnh · viền ô nhập · nền nút tắt */
       --amber:      #FFA111;   /* vàng mắt mèo (lấy đúng từ icon.png): khối, chấm, vạch — chữ trên nó luôn đen */
-      --amber-text: #965E00;   /* vàng sẫm cùng hue, cho CHỮ: 5.4:1 trên trắng · 4.7:1 trên mist · 4.8:1 trên --amber-soft */
+      --amber-text: #B84A0C;   /* chữ cam = orange-text của design system: 5.2:1 trên trắng · 4.6:1 trên mist · 4.7:1 trên --amber-soft */
       --amber-soft: #FFF1DB;   /* nền nhạt vàng: header card, ô nhấn */
       --scrim:      rgba(0,0,0,.48);
       --red-text:   #C42B3F;   /* chữ đỏ: nguy hiểm, lỗi, xoá */
@@ -472,7 +472,7 @@
     .lr-main { min-width: 0; display: flex; flex-direction: column; }
     .lr-title { display: flex; align-items: center; gap: 8px; font-weight: 600; white-space: nowrap; }
     .lr-label, .lr-meta { color: var(--grey); white-space: nowrap; }
-    .lr-val { flex-shrink: 0; font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; color: var(--amber-text); }   /* số chính của box = cam sẫm (4.7:1 trên mist) */
+    .lr-val { flex-shrink: 0; font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; color: var(--amber-text); }   /* số chính của box = chữ cam orange-text (4.6:1 trên mist) */
     .danger-multi { color: var(--red-text); }   /* mọi dòng ở đây đều ×ATM ≥ 15 = nguy hiểm */
     .rt-btn-row { flex-shrink: 0; height: 48px; margin-top: 16px; display: flex; align-items: center; justify-content: center; }
     .danger-badge-new {
