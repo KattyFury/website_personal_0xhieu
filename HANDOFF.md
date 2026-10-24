@@ -22,6 +22,7 @@ functions/valuation.js — route /valuation: điền sẵn Low/High ×N, Market 
 bot/                  — job lấy giá hằng ngày, chạy Docker trên VPS `/opt/val-price-bot` (xem bot/README.md)
 _redirects            — SPA fallback: /* → /index.html
 tools/ds-audit.js     — gác cổng design system (xem §7)
+tools/og-gen.html     — nguồn vẽ og.png (ảnh preview khi share link)
 DESIGN_SYSTEM.md      — luật thiết kế (màu, chữ, lưới, thành phần). ĐỌC trước khi đụng giao diện
 highlights.txt + highlights/   — ảnh + caption mục Highlights ở CV
 icon.png              — favicon + nút mèo + logo navbar
@@ -92,7 +93,7 @@ vcFDV = fundraising / (vcAlloc/100)
 - **Dự đoán FDV TGE:** `predictFDV()` lấy weighted median theo rổ FDV của dự án đang đoán (rổ <2 mẫu thì dùng toàn bộ).
 - **Vùng nguy hiểm:** ×ATM ≥ 15, TGE mới nhất lên đầu; TGE < 30 ngày → badge "⚠ FAKE PUMP".
 - **Narrative đang hot:** mọi narrative có data từ 02/2025, xếp theo **median ×TGE** (không dùng ×ATH — 1 coin pump muộn kéo cả nhóm), kèm `SL:nn` số deal.
-- Mỗi box luôn vẽ đủ 3 chip (`pad3()`). Tiêu đề box kiêm nút mở popup giải thích.
+- 3 box = dòng danh sách nhãn trái · giá trị phải (`.list-row`). Vùng nguy hiểm/Narrative luôn vẽ đủ 4 dòng (`padRows()`), thừa thì cuộn. Tiêu đề box kiêm nút mở popup giải thích.
 - **Admin:** nút Admin (đã mở khoá = [+]) mở danh sách dự án (chỉ data nguồn); bấm dòng danh sách hoặc dòng bảng → form sửa. `ticker` khoá khi sửa. Ô vốn/supply nhận viết tắt `6.8M` / `10B` (`parseSupply()`). Xoá hỏi lại 1 nhịp ("Chắc chưa?" 4 giây).
 
 ## 5. Work — luật rank
@@ -108,7 +109,7 @@ vcFDV = fundraising / (vcAlloc/100)
 
 - **Ngôn ngữ:** tiếng Việt CHỈ ở tab có toggle (Valuation · Work) + tài liệu nội bộ. Tab CV + mọi thẻ meta/og/JSON-LD luôn tiếng Anh. Dịch nhãn UI tĩnh (`VAL_HEAD_LABELS` · `VAL_PLACEHOLDERS` · `VAL_TITLES`), **không dịch data** (ticker, narrative, số). Ngoại lệ: task cá nhân Work **không** dịch.
 - **Châm ngôn, nguyên văn mọi nơi:** `Sharing POVs on Crypto and AI`. Câu niềm tin có **2 bản cố ý**: bản dài 3 vế ở hero CV, bản ngắn *"AI is the future. Crypto is the money of the future."* ở meta/og/JSON-LD/`og.png`. `jobTitle` JSON-LD giữ "Builder + Contributor".
-- **Đổi `og.png` phải bump `?v=`** (đang `?v=7`) — X/Telegram cache theo URL. Nguồn vẽ ngoài repo: `C:\tmp\cvshot\og-gen-a.html`.
+- **Đổi `og.png` phải bump `?v=`** (đang `?v=7`) — X/Telegram cache theo URL. Nguồn vẽ: `tools/og-gen.html` (1200×630) — render bằng Chrome headless đúng 1200×630 (vd script `C:\tmp\cvshot\shot.js file:///D:/Files/Claude/website_personal_0xhieu/tools/og-gen.html og.png 1200 630`).
 - **Client ↔ server phải khớp:** `WTE_RANKS` ↔ `RANKS` (`private.js`). Lệch là server âm thầm ép về mặc định.
 - **Hàng đầu mỗi tab:** tiêu đề TRÁI, nút PHẢI (flex). Không quay lại kiểu tiêu đề canh giữa + nút absolute. Tiêu đề dài thì cho xuống 2 dòng, đừng rút ngắn câu. **Mobile: KHÔNG cắt "…"** — `fitIntroTitles()` thu nhỏ chữ từng 1px (sàn 10px) cho vừa 2 dòng; chạy lại khi đổi ngôn ngữ + khi bề ngang `.val-intro` đổi (ResizeObserver).
 - **Thanh cuộn:** mọi vùng cuộn dùng `.thin-scroll`. **Không set `scrollbar-width`/`scrollbar-color` cho Chromium** — từ bản 121 chúng tắt hết `::-webkit-scrollbar`.
@@ -137,12 +138,15 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 3. **Rank `SS` còn sót trong KV** — đang hiện ở nhóm S nhờ `groupOf()`; sửa tay qua popup admin rồi bỏ shim.
 4. **Làm tab Valuation dễ hiểu cho số đông** (hướng đã chốt: diễn giải ngay trong box — con số nói gì, ngưỡng nào tốt/xấu). Chưa làm.
 5. Ảnh mới cho Highlights: nén WebP ~750×500, dưới ~150KB, tên khớp `highlights.txt`.
+6. **Link Discord cho card Work** — trường `discord` có từ 2026-10-24, data cũ trống nên chưa card nào hiện icon Discord. Nhập tay qua popup Admin. Popup Admin (ô Discord, nút icon mới) CHƯA test bằng mật khẩu thật.
+7. **Ngoại lệ design system còn giữ có chủ đích:** dòng bảng altcoin cao 40 (DS dòng danh sách 56 — bảng số kéo lên 56 thì xem được ít dòng); emoji 1️⃣ 👉 trong popup giải thích (luật trình bày user chốt 2026-08-05). User chưa phán — hỏi trước khi đổi.
+8. Tiêu đề Valuation trên mobile 390 tự lùi xuống 14 vì cụm nút (camera · Admin · VI/EN) chiếm chỗ — đúng luật nhưng nhỏ; muốn to hơn thì phải tính lại bố cục hàng đầu mobile.
 
 ---
 
 ## Nhật ký
 
-- 2026-10-24: **Soát toàn bộ bằng script `tools/ds-audit.js`** (78 chỗ lệch → 0, trừ margin auto). Sửa: nền vàng nhạt tự pha `#FFF1DB` → `yellow-soft #FEF5D9`; hover/link không còn chữ cam (đen + gạch chân vàng); đậm 700 ở chữ nhỏ → 600; line-height/giãn chữ đúng cặp DS (bảng, tab nav mobile, nút, label form); icon ký tự ✕ ⋮ + → SVG Lucide trong nút icon 40×40; vòng ảnh đại diện/chấm timeline dùng outline thay shadow; lightbox dùng scrim + shadow Y2; nút mèo 48. **`og.png` vẽ lại** theo design system (nền trắng, chữ đen, vàng mắt mèo, Inter, ảnh đại diện mới) → `?v=7`; nguồn `C:\tmp\cvshot\og-gen-a.html`.
+- 2026-10-24: **Soát toàn bộ bằng script `tools/ds-audit.js`** (78 chỗ lệch → 0, trừ margin auto). Sửa: nền vàng nhạt tự pha `#FFF1DB` → `yellow-soft #FEF5D9`; hover/link không còn chữ cam (đen + gạch chân vàng); đậm 700 ở chữ nhỏ → 600; line-height/giãn chữ đúng cặp DS (bảng, tab nav mobile, nút, label form); icon ký tự ✕ ⋮ + → SVG Lucide trong nút icon 40×40; vòng ảnh đại diện/chấm timeline dùng outline thay shadow; lightbox dùng scrim + shadow Y2; nút mèo 48. **`og.png` vẽ lại** theo design system (nền trắng, chữ đen, vàng mắt mèo, Inter, ảnh đại diện mới) → `?v=7`; nguồn `tools/og-gen.html`.
 - 2026-10-24: **Chữ cam đổi `#965E00` → `#B84A0C` = `orange-text` của design system.** `#965E00` là màu tự pha (không có trong guideline), user chê xấu. Bài học: màu chữ/nền phải lấy đúng token design system, không tự pha.
 - 2026-10-24: **Valuation thêm lại cam** (user: chỉ đen + xám thì flat): ×TGE ≥ 13, ×ATH tuần đầu, và giá trị bên phải mọi dòng trong 3 box = cam sẫm `--amber-text` đậm 700. Đỏ vẫn chỉ cho nguy hiểm.
 - 2026-10-24: **Valuation: cách hiện + màu số liệu theo design system** (user: "lệch system"). 3 box thành dòng danh sách nhãn trái · giá trị phải (bỏ kiểu căn giữa, bỏ `SL:02` → "12 dự án", bỏ dấu `:`), Hệ số TGE tách FDV thấp / FDV cao / Điều kiện thành 3 dòng, box cao 328 hiện 4 dòng. Số liệu bỏ tô vàng: nhấn = đậm 700 ink; nguy hiểm (×ATM ≥ 15, badge FAKE PUMP) = đỏ design system (`--red-text`/`--red-soft`) — tổng màu đi kèm/màn: vàng (thiết kế) + đỏ (ngữ nghĩa). `pad3()` → `padRows()` (4 dòng). `functions/valuation.js` không phải sửa (chỉ điền id + class bảng, CSS tự đổi).
