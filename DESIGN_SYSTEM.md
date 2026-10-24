@@ -63,7 +63,7 @@ Font hệ thống Apple (`-apple-system, BlinkMacSystemFont, 'SF Pro Text', syst
 | **Navbar** | cao 64 (mobile 56) · trắng mờ blur · kẻ dưới `--line` · logo mèo 32 + tên site 20 · tab 16/600 cách 32, đang chọn chữ đen + vạch vàng 4px rộng bằng chữ |
 | **Box nổi** | trắng · **radius 16** · `--shadow` (không viền) · hover nhích 2px. Áp cho: card Work · box Valuation · bảng altcoin · ảnh Highlights · popup |
 | **Header card** | cao 48 · nền `--amber-soft` (Work: theo màu rank) · icon + tiêu đề web-h4 canh TRÁI · đệm trái 24 |
-| **Header card Work** | luôn 2 hàng ở mọi bề ngang. Hàng 1: logo 24 + tên 20 canh TRÁI · icon X + Discord (nút tròn 32, icon 20, ẩn nếu chưa có link) canh PHẢI · ⋮ admin. Hàng 2: dãy **thẻ** viên trắng cao 24 chữ 14/600 — potential · narrative · rank (thẻ rank nền màu rank), thẳng mép chữ tên, tự xuống dòng, không cắt chữ |
+| **Header card Work** | luôn 2 hàng ở mọi bề ngang. Hàng 1: logo 24 + tên 20 canh TRÁI · icon X + Discord (nút tròn 32, icon 20, ẩn nếu chưa có link) canh PHẢI · ⋮ admin. Hàng 2: dãy **thẻ** viên trắng cao 24 chữ 14/600 — potential · narrative · rank (thẻ rank nền màu rank, chữ "rank: S"). Chữ thẻ viết thường hết, chỉ "AI" + chữ rank viết hoa (`tagCase()`, chỉ đổi lúc hiện), thẳng mép chữ tên, tự xuống dòng, không cắt chữ |
 | **Dòng chỉ-đọc** (box Valuation) | viên `--mist` cao 40, radius pill, chữ 14, đệm ngang 16, cách nhau 8 |
 | **Dòng bấm được** (task Work) | như dòng chỉ-đọc; hover nền `--amber-soft` + ô mũi tên tròn nền đen. Trong dải Daily nền dòng là trắng |
 | **Nhãn nhóm** (Work) | cao 32 · icon 16 đen + chữ 14/600 grey + kẻ mảnh kéo hết ngang |

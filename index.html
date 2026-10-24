@@ -2429,6 +2429,8 @@ ${line}
       high:       '<path d="M16 7h6v6"/><path d="m22 7-8.5 8.5-5-5L2 17"/>',
       low:        '<path d="M16 17h6v-6"/><path d="m22 17-8.5-8.5-5 5L2 7"/>',
     };
+    // Chữ trên thẻ viết thường hết, chỉ "AI" (và chữ rank $ S A B C) viết hoa. Chỉ đổi lúc hiện — data giữ nguyên.
+    const tagCase = t => t.toLowerCase().replace(/\bai\b/g, 'AI');
     const wteIcon = (k, cls = '') =>
       `<svg class="wte-ico ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${WTE_ICON[k] || ''}</svg>`;
 
@@ -2486,7 +2488,7 @@ ${line}
             <span class="wte-name-wrap">${logoHtml}${nameHtml}</span>
             <span class="wte-socials">${p.twitter ? `<a class="wte-social" href="${p.twitter}" target="_blank" rel="noopener" title="X" aria-label="X">${wteIcon('x')}</a>` : ''}${p.discord ? `<a class="wte-social" href="${p.discord}" target="_blank" rel="noopener" title="Discord" aria-label="Discord">${wteIcon('discord')}</a>` : ''}</span>
             ${adminUnlocked ? `<button class="wte-opt" data-id="${p.id}" title="Sửa task">⋮</button>` : ''}
-            <span class="wte-tags">${potLv ? `<span class="wte-tag wte-pot--${potLv}">${wteIcon(potLv)}${potLv}-potential</span>` : ''}${p.type ? `<span class="wte-tag wte-narr">${p.type}</span>` : ''}<b class="wte-tag wte-rank-v rank-${g}">${RANK_LABEL[g] || g}</b></span>
+            <span class="wte-tags">${potLv ? `<span class="wte-tag wte-pot--${potLv}">${wteIcon(potLv)}${potLv}-potential</span>` : ''}${p.type ? `<span class="wte-tag wte-narr">${tagCase(p.type)}</span>` : ''}<b class="wte-tag wte-rank-v rank-${g}">rank: ${RANK_LABEL[g] || g}</b></span>
           </div>
           ${section('Get Started', p.getStarted, 'getStarted')}
           ${section('Daily', p.daily, 'daily')}
