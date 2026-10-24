@@ -21,7 +21,7 @@
   <meta property="og:description" content="AI is the future. Crypto is the money of the future. Valuation · Work." />
   <!-- ?v=N BẮT BUỘC tăng mỗi lần thay ảnh: X/Telegram/Facebook cache ảnh preview theo URL,
        giữ nguyên URL cũ thì chúng vẫn hiện ảnh cũ dù file đã thay trên server -->
-  <meta property="og:image" content="https://0xhieu.xyz/og.png?v=6" />
+  <meta property="og:image" content="https://0xhieu.xyz/og.png?v=7" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="Hieu Nguyen — Sharing POVs on Crypto and AI. 0xhieu.xyz" />
@@ -36,7 +36,7 @@
     "@type": "Person",
     "name": "Hieu Nguyen",
     "url": "https://0xhieu.xyz/",
-    "image": "https://0xhieu.xyz/og.png?v=6",
+    "image": "https://0xhieu.xyz/og.png?v=7",
     "jobTitle": "Builder + Contributor",
     "description": "Sharing POVs on Crypto and AI. AI is the future, crypto is the money of the future.",
     "address": { "@type": "PostalAddress", "addressLocality": "Hanoi", "addressCountry": "VN" },
@@ -63,8 +63,8 @@
       --mist:       #ECF0F8;   /* box phẳng · dòng · ô nhập — design system */
       --line:       #DCE3EE;   /* kẻ mảnh · viền ô nhập · nền nút tắt */
       --amber:      #FFA111;   /* vàng mắt mèo (lấy đúng từ icon.png): khối, chấm, vạch — chữ trên nó luôn đen */
-      --amber-text: #B84A0C;   /* chữ cam = orange-text của design system: 5.2:1 trên trắng · 4.6:1 trên mist · 4.7:1 trên --amber-soft */
-      --amber-soft: #FFF1DB;   /* nền nhạt vàng: header card, ô nhấn */
+      --amber-text: #B84A0C;   /* CHỈ cho số liệu Valuation — chữ cam = orange-text của design system: 5.2:1 trên trắng · 4.6:1 trên mist · 4.8:1 trên --amber-soft */
+      --amber-soft: #FEF5D9;   /* = yellow-soft của design system (gần hue mắt mèo nhất): header card, ô kết quả */
       --scrim:      rgba(0,0,0,.48);
       --red-text:   #C42B3F;   /* chữ đỏ: nguy hiểm, lỗi, xoá */
       --red-soft:   #FDE8EB;   /* nền đỏ nhạt cho badge/ô nguy hiểm */
@@ -122,7 +122,7 @@
       color: var(--ink); text-decoration: none; white-space: nowrap;
       transition: color .15s;
     }
-    .header-home:hover { color: var(--amber-text); }
+    .header-home:hover span { text-decoration: underline; text-decoration-color: var(--amber); text-decoration-thickness: 2px; text-underline-offset: 4px; }
     .header-home img { display: block; width: 32px; height: 32px; }
     nav { display: flex; align-items: center; gap: 32px; flex-shrink: 0; }
     /* web-nav-button 16/24 600 · đang chọn: chữ đen + vạch vàng mắt mèo */
@@ -133,7 +133,7 @@
       white-space: nowrap; color: var(--grey); transition: color .15s;
     }
     .nav-btn.active { color: var(--ink); }
-    .nav-btn:hover { color: var(--amber-text); }
+    .nav-btn:hover { color: var(--ink); }
     .nav-btn.active::after {
       content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 4px;
       border-radius: 9999px 9999px 0 0; background: var(--amber);
@@ -163,7 +163,7 @@
       overflow: hidden; white-space: normal;
     }
     .val-intro-clickable { cursor: pointer; }
-    .val-intro-clickable:hover { color: var(--amber-text); }
+    .val-intro-clickable:hover > span { text-decoration: underline; text-decoration-color: var(--amber); text-decoration-thickness: 2px; text-underline-offset: 4px; }
     .val-head-ctrl { position: static; flex-shrink: 0; display: flex; align-items: center; gap: 16px; }
 
     /* Nút Admin = nút nhỏ (cao 40, đệm 16, web-label 14) · nút phụ: trắng chữ đen + shadow */
@@ -230,14 +230,12 @@
     .wte-task-row--link:hover .wte-task-icon { background: var(--ink); color: var(--ground); }
 
     /* Nút ⋮ của admin (card Work). ::after nới vùng bấm. */
-    .wte-opt {
-      position: relative; padding: 0; border: none; background: none; cursor: pointer;
-      font-size: 16px; line-height: 1; color: var(--grey); transition: color .15s;
+    .wte-opt, .modal-corner-close, .calc-reset-btn, .pt-item-del {
+      position: relative; flex-shrink: 0; width: 40px; height: 40px; padding: 0; border: none; border-radius: 16px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent; color: var(--grey); cursor: pointer; transition: background .15s, color .15s;
     }
-    .wte-opt:hover { color: var(--ink); }
-    .wte-opt::after, .calc-reset-btn::after, .modal-corner-close::after {
-      content: ''; position: absolute; inset: -8px -12px;
-    }
+    .wte-opt:hover, .modal-corner-close:hover, .calc-reset-btn:hover, .pt-item-del:hover { background: var(--mist); color: var(--ink); }
 
     /* Báo lỗi tải data + nút thử lại */
     .data-error { padding: 24px 0; text-align: center; font-size: 14px; line-height: 20px; color: var(--grey); }
@@ -264,12 +262,12 @@
     .hero-top { display: flex; align-items: center; gap: 24px; }
     .pfp {
       flex-shrink: 0; width: 96px; height: 96px; border-radius: 50%; overflow: hidden; background: var(--ink);
-      box-shadow: 0 0 0 4px var(--ground), 0 0 0 8px var(--amber);
+      outline: 4px solid var(--amber); outline-offset: 4px;
     }
     .pfp img { display: block; width: 100%; height: 100%; object-fit: cover; }
     .pfp-fallback {
       width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
-      font-size: 24px; font-weight: 700; color: var(--ground);
+      font-size: 24px; font-weight: 600; line-height: 32px; letter-spacing: -.019em; color: var(--ground);
     }
     .hero-info { display: flex; flex-direction: column; gap: 8px; }
     .hero-handle { font-size: 40px; font-weight: 700; line-height: 48px; letter-spacing: -.022em; color: var(--ink); }
@@ -302,22 +300,23 @@
     .tl-item { position: relative; display: grid; grid-template-columns: 128px 64px minmax(0, 1008px); }
     .tl-item + .tl-item { margin-top: 32px; }
     .tl-year {
-      font-size: 16px; font-weight: 600; line-height: 28px; letter-spacing: -.011em;
-      font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; color: var(--grey);
+      height: 28px; display: flex; align-items: center; justify-content: flex-end;
+      font-size: 16px; font-weight: 600; line-height: 24px; letter-spacing: -.011em;
+      font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--grey);
     }
     /* chấm canh giữa dòng đầu (cao 28) bằng flex — không cần số lệch lẻ */
     .tl-gutter { position: relative; height: 28px; display: flex; align-items: center; justify-content: center; }
     .tl-gutter::before {
       content: ''; width: 16px; height: 16px; border-radius: 50%;
-      background: var(--amber); box-shadow: 0 0 0 4px var(--ground);
+      background: var(--amber); outline: 4px solid var(--ground);
     }
     .tl-role { font-size: 20px; font-weight: 600; line-height: 28px; letter-spacing: -.017em; color: var(--ink); }
     .tl-bullets { max-width: 680px; margin-top: 8px; padding-left: 24px; list-style: disc; }
     .tl-bullets li { font-size: 16px; line-height: 24px; color: var(--grey); }
     .tl-bullets li + li { margin-top: 8px; }
     .tl-bullets li::marker { color: var(--muted); }
-    .tl-bullets a { color: var(--amber-text); text-underline-offset: 3px; }
-    .tl-bullets a:hover { color: var(--ink); }
+    .tl-bullets a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--amber); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+    .tl-bullets a:hover { text-decoration-color: var(--ink); }
 
     /* Highlights: 3 cột × 384 (4 cột lưới), rãnh 24, ảnh 3:2 */
     #highlights-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
@@ -341,24 +340,24 @@
     .footer-inner { display: flex; align-items: center; justify-content: center; padding-top: 24px; border-top: 1px solid var(--line); }
     .footer-links { display: flex; align-items: center; gap: 24px; }
     .footer-links a { display: inline-flex; color: var(--grey); transition: color .15s; }
-    .footer-links a:hover { color: var(--amber-text); }
+    .footer-links a:hover { color: var(--ink); }
     .footer-links a svg { width: 20px; height: 20px; }
 
     /* Lightbox ảnh highlight */
     #lightbox {
       display: none; position: fixed; inset: 0; z-index: 999; padding: 24px;
-      align-items: center; justify-content: center; background: rgba(0,0,0,.82); cursor: zoom-out;
+      align-items: center; justify-content: center; background: var(--scrim); cursor: zoom-out;
     }
     #lightbox.open { display: flex; }
     #lightbox img {
       max-width: 100%; max-height: 90vh; border-radius: 16px; object-fit: contain; cursor: default;
-      box-shadow: 0 2px 8px 0 rgba(0,0,0,.48);
+      box-shadow: var(--shadow);
     }
     #lightbox-close {
-      position: fixed; top: 16px; right: 24px; background: none; border: none; cursor: pointer;
-      font-size: 32px; line-height: 1; color: var(--line); transition: color .15s;
+      position: fixed; top: 16px; right: 16px; width: 40px; height: 40px; padding: 0; border: none; border-radius: 16px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--ground); box-shadow: var(--shadow); color: var(--ink); cursor: pointer;
     }
-    #lightbox-close:hover { color: var(--ground); }
 
     /* ══ VALUATION ════════════════════════════════════════════════ */
     /* Nút icon 40×40, icon 20. Mask đặt ở ::before (Chromium hit-test theo vùng mask). */
@@ -381,7 +380,7 @@
     }
     #tge-head-wrap { flex: none; overflow: hidden; background: var(--amber-soft); }
     #tge-section .val-table-scroll { flex: 1 1 auto; min-height: 0; overflow: auto; }
-    .val-table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 14px; }
+    .val-table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 14px; line-height: 20px; letter-spacing: -.006em; }
     #tge-section .val-table-body { border-spacing: 0; }
     #tge-section th, #tge-section td { width: 14.458%; padding: 0 16px; }
     #tge-section th:first-child, #tge-section td:first-child { width: 13.855%; padding-left: 16px; }
@@ -402,10 +401,10 @@
     #tge-section tbody tr.row-editable { cursor: pointer; }
     /* Ticker ĐẬM + chấm vàng = vcFDV ≥ $300M · THƯỜNG = dưới.
        Chữ 3 cấp: số ink · narrative, ×ATL, đáy-trước-đỉnh, ×ATM < 1 grey · ngày TGE muted (meta).
-       Số cần chú ý = CAM SẪM --amber-text đậm 700 (×TGE ≥ 13, ×ATH tuần đầu) — cùng màu với số chính trong 3 box.
+       Số cần chú ý = chữ cam --amber-text đậm 600 (×TGE ≥ 13, ×ATH tuần đầu) — cùng màu với số chính trong 3 box.
        ĐỎ = nguy hiểm (×ATM ≥ 15, badge soft). */
     #tge-section td.td-ticker { font-weight: 400; }
-    #tge-section td.td-ticker.fdv-hi { font-weight: 700; }
+    #tge-section td.td-ticker.fdv-hi { font-weight: 600; }
     #tge-section td.td-ticker.fdv-hi .ck::after {
       content: ''; display: inline-block; width: 8px; height: 8px; margin-left: 8px;
       border-radius: 50%; background: var(--amber); vertical-align: middle;
@@ -416,10 +415,10 @@
     .val-table .ck { display: inline-block; text-align: left; }
     #tge-section .ath-pre { font-weight: 400; color: var(--grey); }
     #tge-section .ath-arrow { font-weight: 400; color: var(--grey); }
-    #tge-section .ath-early { font-weight: 700; color: var(--amber-text); }  /* ATH trong tuần đầu lên sàn */
-    .val-table .m-hot { font-weight: 700; color: var(--amber-text); }
+    #tge-section .ath-early { font-weight: 600; color: var(--amber-text); }  /* ATH trong tuần đầu lên sàn */
+    .val-table .m-hot { font-weight: 600; color: var(--amber-text); }
     .val-table .m-low { font-weight: 400; color: var(--grey); }
-    .val-table .m-danger { display: inline-block; padding: 0 8px; line-height: 24px; border-radius: 9999px; background: var(--red-soft); color: var(--red-text); font-weight: 600; }
+    .val-table .m-danger { display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 9999px; background: var(--red-soft); color: var(--red-text); font-weight: 600; }
     .val-empty { padding: 40px 16px; text-align: center; font-size: 16px; color: var(--grey); }
 
     /* ── Popup bảng dài (bấm tiêu đề): clone thead/tbody của bảng trên ──
@@ -440,7 +439,7 @@
     }
     .tge-modal-body tbody tr:last-child td { border-bottom: none; }
     .tge-modal-body tbody tr:hover { background: var(--mist); }
-    .tge-modal-body .td-ticker { font-size: 14px; font-weight: 700; color: var(--ink); }
+    .tge-modal-body .td-ticker { font-size: 14px; font-weight: 600; color: var(--ink); }
     .tge-modal-body .td-narrative { font-size: 14px; }
     .tge-modal-body .td-date { font-size: 14px; font-variant-numeric: tabular-nums; color: var(--muted); }
     .tge-modal-body .td-multi { font-size: 14px; font-weight: 400; font-variant-numeric: tabular-nums; color: var(--ink); }
@@ -472,7 +471,7 @@
     .lr-main { min-width: 0; display: flex; flex-direction: column; }
     .lr-title { display: flex; align-items: center; gap: 8px; font-weight: 600; white-space: nowrap; }
     .lr-label, .lr-meta { color: var(--grey); white-space: nowrap; }
-    .lr-val { flex-shrink: 0; font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; color: var(--amber-text); }   /* số chính của box = chữ cam orange-text (4.6:1 trên mist) */
+    .lr-val { flex-shrink: 0; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; color: var(--amber-text); }   /* số chính của box = chữ cam orange-text (4.6:1 trên mist) */
     .danger-multi { color: var(--red-text); }   /* mọi dòng ở đây đều ×ATM ≥ 15 = nguy hiểm */
     .rt-btn-row { flex-shrink: 0; height: 48px; margin-top: 16px; display: flex; align-items: center; justify-content: center; }
     .danger-badge-new {
@@ -486,7 +485,7 @@
       min-width: 216px; height: 48px; margin: 0 auto; padding: 0 24px; border-radius: 16px;
       display: inline-flex; align-items: center; justify-content: center;
       background: var(--ink); border: none; box-shadow: var(--shadow);
-      font-family: var(--font); font-size: 16px; font-weight: 600; letter-spacing: -.011em; color: var(--ground); white-space: nowrap;
+      font-family: var(--font); font-size: 16px; font-weight: 600; line-height: 24px; letter-spacing: -.011em; color: var(--ground); white-space: nowrap;
       cursor: pointer; transition: transform .15s;
     }
     .predict-link:hover { transform: translateY(-1px); }
@@ -508,9 +507,9 @@
     .wte-name-wrap { grid-column: 1; grid-row: 1; min-width: 0; display: flex; align-items: center; gap: 8px; }
     .wte-socials { grid-column: 2; grid-row: 1; display: flex; gap: 8px; }
     .wte-card-head .wte-opt { grid-column: 3; grid-row: 1; }
-    /* Icon link 32×32 (icon 20): nghỉ đen, hover nền trắng */
+    /* Nút icon 40×40 (icon 20): nghỉ đen, hover nền trắng */
     .wte-social {
-      width: 32px; height: 32px; border-radius: 9999px;
+      width: 40px; height: 40px; border-radius: 16px;
       display: inline-flex; align-items: center; justify-content: center;
       color: var(--ink); transition: background .15s;
     }
@@ -523,7 +522,7 @@
       flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
       font-size: 20px; font-weight: 600; line-height: 28px; letter-spacing: -.017em; color: var(--ink); text-decoration: none;
     }
-    .wte-name:hover { color: var(--amber-text); }
+    .wte-name:hover { text-decoration: underline; text-decoration-color: var(--amber); text-decoration-thickness: 2px; text-underline-offset: 4px; }
     .wte-tags { grid-column: 1 / -1; grid-row: 2; display: flex; flex-wrap: wrap; gap: 8px; }
     /* Thẻ: viên trắng cao 24, chữ 14/600 */
     .wte-tag {
@@ -569,13 +568,13 @@
       height: 48px;
       background: rgba(255,255,255,.92); box-shadow: var(--shadow); backdrop-filter: blur(8px);
     }
-    #rank-filter-float .lang-btn { min-width: 48px; height: 48px; padding: 0 8px; font-size: 16px; transition: color .15s, background .15s; }
+    #rank-filter-float .lang-btn { min-width: 48px; height: 48px; padding: 0 8px; font-size: 16px; line-height: 24px; letter-spacing: -.011em; transition: color .15s, background .15s; }
     #rank-filter-float #rf-income.active { background: var(--amber); color: var(--ink); }
 
     /* ══ NÚT MÈO (Agent) — mới có vỏ, bấm hiện "coming soon" ════════ */
     #cat-btn {
       position: fixed; right: 32px; bottom: 32px; z-index: 80;
-      width: 80px; height: 80px; padding: 0; border: none; border-radius: 50%; overflow: hidden;
+      width: 48px; height: 48px; padding: 0; border: none; border-radius: 50%; overflow: hidden;
       background: var(--ink); box-shadow: var(--shadow); cursor: pointer;
       transition: transform .15s;
     }
@@ -583,7 +582,7 @@
     #cat-btn:hover { transform: scale(1.06); }
     #cat-btn:active { transform: scale(.98); }
     #cat-hint {
-      position: fixed; right: 32px; bottom: 128px; z-index: 80; padding: 8px 16px; border-radius: 16px;
+      position: fixed; right: 32px; bottom: 96px; z-index: 80; padding: 8px 16px; border-radius: 16px;
       background: var(--ink); box-shadow: var(--shadow);
       font-family: var(--font); font-size: 14px; font-weight: 600; line-height: 20px; color: var(--ground); white-space: nowrap;
       opacity: 0; pointer-events: none; transition: opacity .2s;
@@ -602,26 +601,21 @@
       display: flex; flex-direction: column; gap: 16px;
       background: var(--ground); border-radius: 16px; box-shadow: var(--shadow);
     }
-    .wl-modal-title { padding-right: 32px; font-size: 20px; font-weight: 600; line-height: 28px; letter-spacing: -.017em; color: var(--ink); }
+    .wl-modal-title { padding-right: 40px; font-size: 20px; font-weight: 600; line-height: 28px; letter-spacing: -.017em; color: var(--ink); }
     #ptask-modal .wl-modal-title { padding-right: 0; text-align: center; }
     .info-modal-body { font-size: 16px; line-height: 24px; color: var(--grey); white-space: pre-line; }
     .shot-modal { align-items: center; text-align: center; }
     #shot-modal-img { display: block; width: 100%; max-height: 56vh; object-fit: contain; border: 1px solid var(--line); border-radius: 16px; }
     .shot-modal-hint { font-size: 14px; color: var(--grey); }
-    .info-modal-link { font-weight: 600; color: var(--amber-text); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
-    .info-modal-link:hover { color: var(--ink); }
+    .info-modal-link { font-weight: 600; color: var(--ink); text-decoration: underline; text-decoration-color: var(--amber); text-decoration-thickness: 2px; text-underline-offset: 4px; cursor: pointer; }
+    .info-modal-link:hover { text-decoration-color: var(--ink); }
     .admin-msg { font-size: 14px; font-weight: 400; color: var(--red-text); }
 
-    .modal-corner-close, .calc-reset-btn {
-      width: 24px; height: 24px; padding: 0; border: none; background: none; cursor: pointer;
-      font-family: inherit; font-size: 16px; line-height: 1; text-align: center; color: var(--grey);
-    }
-    .modal-corner-close:hover, .calc-reset-btn:hover { color: var(--ink); }
-    .modal-corner-close { position: absolute; top: 16px; right: 16px; }
+    .modal-corner-close { position: absolute; top: 8px; right: 8px; }
 
     /* Ô nhập — cao 48, đệm 16, nền mist, viền line 1px; khi chọn viền 2px đen */
     .calc-field { display: flex; flex-direction: column; gap: 8px; }
-    .calc-field label, .pt-group > label { font-size: 14px; font-weight: 600; line-height: 20px; color: var(--grey); }
+    .calc-field label, .pt-group > label { font-size: 14px; font-weight: 600; line-height: 20px; letter-spacing: -.006em; color: var(--grey); }
     .wl-modal input, .wl-modal select {
       width: 100%; min-width: 0; height: 48px; padding: 0 16px; outline: none;
       background: var(--mist); border: 1px solid var(--line); border-radius: 16px;
@@ -656,14 +650,14 @@
       position: relative; margin-top: 8px; padding: 16px; border-radius: 16px;
       background: var(--amber-soft);
     }
-    #calc-res-sub { display: flex; flex-direction: column; gap: 8px; padding-right: 32px; }
+    #calc-res-sub { display: flex; flex-direction: column; gap: 8px; padding-right: 48px; }
     #calc-res-sub .res-expected {
-      font-size: 20px; font-weight: 700; line-height: 28px; letter-spacing: -.017em;
+      font-size: 20px; font-weight: 600; line-height: 28px; letter-spacing: -.017em;
       font-variant-numeric: tabular-nums; color: var(--ink);
     }
     #calc-res-sub .res-price { font-size: 14px; line-height: 20px; font-variant-numeric: tabular-nums; color: var(--grey); }
     /* ✕ TRONG ô kết quả = "tính lại" (modal vẫn mở) — khác ✕ góc popup = "thoát" */
-    .calc-reset-btn { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); }
+    .calc-reset-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); }
 
     /* Admin Valuation: danh sách + form sửa */
     .val-count { font-size: 14px; font-weight: 400; color: var(--grey); }
@@ -675,8 +669,8 @@
       background: var(--mist); font-size: 14px; color: var(--ink); cursor: pointer; transition: background .15s;
     }
     .val-row:hover { background: var(--amber-soft); }
-    .val-row b { font-weight: 700; }
-    .val-row .vr-warn { font-weight: 700; color: var(--red-text); }
+    .val-row b { font-weight: 600; }
+    .val-row .vr-warn { font-weight: 600; color: var(--red-text); }
     #val-form-fields { display: flex; flex-direction: column; gap: 16px; }
     #val-list-modal .predict-actions { display: flex; justify-content: center; }
     #val-form-fields .predict-actions { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
@@ -693,15 +687,10 @@
     .pt-items { display: flex; flex-direction: column; gap: 8px; }
     .pt-item-head { display: flex; align-items: center; gap: 8px; }
     .pt-item-head input { flex: 1; }
-    .pt-item-del {
-      width: 16px; padding: 0; border: none; background: none; cursor: pointer;
-      font-family: var(--font); font-size: 14px; line-height: 1; color: var(--muted); transition: color .15s;
-    }
-    .pt-item-del:hover { color: var(--ink); }
     .pt-row-add {
       align-self: flex-start; width: 40px; height: 40px; padding: 0; border-radius: 16px; cursor: pointer;
-      border: 1px dashed var(--line); background: var(--ground);
-      font-family: var(--font); font-size: 16px; line-height: 1; color: var(--grey);
+      display: inline-flex; align-items: center; justify-content: center;
+      border: 1px dashed var(--line); background: var(--ground); color: var(--grey);
       transition: border-color .15s, color .15s;
     }
     .pt-row-add:hover { border-color: var(--ink); color: var(--ink); }
@@ -723,21 +712,20 @@
 
       .header-home img { width: 24px; height: 24px; }
       nav { gap: 16px; }
-      .nav-btn { font-size: 14px; }
+      .nav-btn { font-size: 14px; line-height: 20px; letter-spacing: -.006em; }
 
       section + section { margin-top: 32px; }
       .hero-top { gap: 16px; }
       .pfp { width: 72px; height: 72px; }
       .hero-handle { font-size: 32px; line-height: 40px; }
       .hero-tagline { font-size: 20px; line-height: 28px; letter-spacing: -.017em; }
-      .hero-belief { font-size: 16px; line-height: 24px; }
-      .socials { gap: 8px; }
+      .hero-belief { font-size: 16px; line-height: 24px; letter-spacing: -.011em; }
       .social-btn { flex: 1; padding: 0 8px; }
       #highlights-grid { grid-template-columns: 1fr; gap: 16px; }
       .hl-card:hover, .val-card:hover, .wte-card:hover { transform: none; }
       .timeline::before { left: 8px; }
       .tl-item { grid-template-columns: 1fr; padding-left: 32px; }
-      .tl-year { text-align: left; }
+      .tl-year { justify-content: flex-start; }
       .tl-gutter { position: absolute; left: 0; width: 16px; }
       footer { margin-top: 32px; padding-bottom: 32px; }
 
@@ -773,8 +761,8 @@
       .wte-task-text { white-space: normal; }
 
 
-      #cat-btn  { width: 56px; height: 56px; right: 16px; bottom: 16px; }
-      #cat-hint { right: 16px; bottom: 88px; }
+      #cat-btn  { right: 16px; bottom: 16px; }
+      #cat-hint { right: 16px; bottom: 80px; }
     }
   </style>
 </head>
@@ -783,7 +771,7 @@
   <!-- ── HEADER ──────────────────────────────────────── -->
   <header>
     <div class="header-inner">
-      <a class="header-home" href="https://0xhieu.xyz"><img src="icon.png?v=2" width="32" height="32" alt="" />0xhieu.xyz</a>
+      <a class="header-home" href="https://0xhieu.xyz"><img src="icon.png?v=2" width="32" height="32" alt="" /><span>0xhieu.xyz</span></a>
       <nav>
         <button class="nav-btn active" id="nav-cv-btn">CV</button>
         <button class="nav-btn" id="nav-val-btn">Valuation</button>
@@ -1010,7 +998,7 @@
 
   <!-- Lightbox -->
   <div id="lightbox">
-    <button id="lightbox-close" aria-label="Close">&#x2715;</button>
+    <button id="lightbox-close" aria-label="Close"><svg class="wte-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
     <img id="lightbox-img" src="" alt="" />
   </div>
 
@@ -1042,7 +1030,7 @@
   <!-- Admin Valuation: danh sách dự án (bấm "+") -->
   <div class="wl-modal-backdrop" id="val-list-modal">
     <div class="wl-modal wl-modal--wide">
-      <button class="modal-corner-close" id="val-list-close" aria-label="Đóng">✕</button>
+      <button class="modal-corner-close" id="val-list-close" aria-label="Đóng"><svg class="wte-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
       <div class="wl-modal-title">Dự án <span id="val-list-count" class="val-count"></span></div>
       <div class="val-list-head">
         <span>Ticker</span><span>TGE</span><span>Narrative</span><span>Gọi vốn</span><span>VC&nbsp;%</span>
@@ -1057,7 +1045,7 @@
   <!-- Admin Valuation: form thêm / sửa 1 dự án -->
   <div class="wl-modal-backdrop" id="val-form-modal">
     <div class="wl-modal">
-      <button class="modal-corner-close" id="val-form-close" aria-label="Đóng">✕</button>
+      <button class="modal-corner-close" id="val-form-close" aria-label="Đóng"><svg class="wte-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
       <div class="wl-modal-title" id="val-form-title">Sửa dự án</div>
       <div id="val-form-fields">
         <div class="ptask-row">
@@ -1088,7 +1076,7 @@
 
   <div class="wl-modal-backdrop" id="predict-modal">
     <div class="wl-modal">
-      <button class="modal-corner-close" id="predict-modal-close" aria-label="Đóng">✕</button>
+      <button class="modal-corner-close" id="predict-modal-close" aria-label="Đóng"><svg class="wte-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
       <div class="wl-modal-title" id="predict-modal-title">Predict TGE FDV</div>
       <div id="calc-form">
         <div class="calc-field">
@@ -1110,7 +1098,7 @@
       </div>
       <div id="calc-result" style="display:none">
         <div id="calc-res-sub"></div>
-        <button class="calc-reset-btn" id="calc-reset-btn" title="New calculation">✕</button>
+        <button class="calc-reset-btn" id="calc-reset-btn" title="New calculation" aria-label="New calculation"><svg class="wte-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
       </div>
     </div>
   </div>
@@ -1215,17 +1203,17 @@
         <div class="pt-group">
           <label>Get started</label>
           <div class="pt-items" id="pt-gs-items"></div>
-          <button type="button" class="pt-row-add" id="pt-gs-add" title="Thêm dòng">+</button>
+          <button type="button" class="pt-row-add" id="pt-gs-add" title="Thêm dòng" aria-label="Thêm dòng"><svg class="wte-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button>
         </div>
         <div class="pt-group">
           <label>Daily task</label>
           <div class="pt-items" id="pt-daily-items"></div>
-          <button type="button" class="pt-row-add" id="pt-daily-add" title="Thêm dòng">+</button>
+          <button type="button" class="pt-row-add" id="pt-daily-add" title="Thêm dòng" aria-label="Thêm dòng"><svg class="wte-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button>
         </div>
         <div class="pt-group">
           <label>Weekly task</label>
           <div class="pt-items" id="pt-weekly-items"></div>
-          <button type="button" class="pt-row-add" id="pt-weekly-add" title="Thêm dòng">+</button>
+          <button type="button" class="pt-row-add" id="pt-weekly-add" title="Thêm dòng" aria-label="Thêm dòng"><svg class="wte-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button>
         </div>
       </div>
       <div class="admin-msg" id="pt-error" style="display:none"></div>
@@ -2395,6 +2383,8 @@ ${line}
       weekly:     '<path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/>',
       x:          '<path d="M4 4l11.733 16h4.267l-11.733 -16z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/>',
       discord:    '<path d="M8 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"/><path d="M14 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"/><path d="M15.5 17c0 1 1.5 3 2 3c1.5 0 2.833 -1.667 3.5 -3c.667 -1.667 .5 -5.833 -1.5 -11.5c-1.457 -1.015 -3 -1.34 -4.5 -1.5l-.972 1.923a11.913 11.913 0 0 0 -4.053 0l-.975 -1.923c-1.5 .16 -3.043 .485 -4.5 1.5c-2 5.667 -2.167 9.833 -1.5 11.5c.667 1.333 2 3 3.5 3c.5 0 2 -2 2 -3"/><path d="M7 16.5c3.5 1 6.5 1 10 0"/>',
+      close:      '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+      more:       '<circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>',
       link:       '<path d="M7 7h10v10"/><path d="M7 17 17 7"/>',
       high:       '<path d="M16 7h6v6"/><path d="m22 7-8.5 8.5-5-5L2 17"/>',
       low:        '<path d="M16 17h6v-6"/><path d="m22 17-8.5-8.5-5 5L2 7"/>',
@@ -2457,7 +2447,7 @@ ${line}
           <div class="wte-card-head">
             <span class="wte-name-wrap">${logoHtml}${nameHtml}</span>
             <span class="wte-socials">${p.twitter ? `<a class="wte-social" href="${p.twitter}" target="_blank" rel="noopener" title="X" aria-label="X">${wteIcon('x')}</a>` : ''}${p.discord ? `<a class="wte-social" href="${p.discord}" target="_blank" rel="noopener" title="Discord" aria-label="Discord">${wteIcon('discord')}</a>` : ''}</span>
-            ${adminUnlocked ? `<button class="wte-opt" data-id="${p.id}" title="Sửa task">⋮</button>` : ''}
+            ${adminUnlocked ? `<button class="wte-opt" data-id="${p.id}" title="Sửa task" aria-label="Sửa task">${wteIcon('more')}</button>` : ''}
             <span class="wte-tags">${potLv ? `<span class="wte-tag wte-pot--${potLv}">${wteIcon(potLv)}${potLv}-potential</span>` : ''}${p.type ? `<span class="wte-tag wte-narr">${tagCase(p.type)}</span>` : ''}<b class="wte-tag wte-rank-v rank-${g}">rank: ${RANK_LABEL[g] || g}</b></span>
           </div>
           ${section('Get Started', p.getStarted, 'getStarted')}
@@ -2638,7 +2628,7 @@ ${line}
       row.className = 'pt-item calc-field';
       row.innerHTML = `<div class="pt-item-head">
           <input type="text" class="pt-item-text" placeholder="${PT_GROUPS[key]}" />
-          <button type="button" class="pt-item-del" title="Xoá dòng">✕</button>
+          <button type="button" class="pt-item-del" title="Xoá dòng" aria-label="Xoá dòng">${wteIcon('close')}</button>
         </div>
         <input type="text" class="pt-item-link" placeholder="https://..." />`;
       row.querySelector('.pt-item-del').addEventListener('click', () => row.remove());

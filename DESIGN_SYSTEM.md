@@ -18,29 +18,34 @@
 | `--mist` | `#ECF0F8` | Box phẳng · dòng danh sách · ô nhập · header card Work rank S/A/B/C · hover dòng bảng |
 | `--line` | `#DCE3EE` | Kẻ mảnh · viền ô nhập · **nền nút tắt** |
 | `--amber` | `#FFA111` | **Vàng mắt mèo** (lấy đúng từ `icon.png`): khối, chấm, vạch. **Chữ trên nền vàng luôn đen** (10.4:1), không bao giờ trắng |
-| `--amber-text` | `#B84A0C` | Chữ cam = **`orange-text` của design system** (không tự pha màu): 5.2:1 trên trắng · 4.6:1 trên mist · 4.7:1 trên `--amber-soft`. Vàng mắt mèo `#FFA111` không làm chữ được (2:1) |
-| `--amber-soft` | `#FFF1DB` | Nền nhạt vàng: header card · header bảng · ô kết quả · hover nút phụ |
+| `--amber-text` | `#B84A0C` | **CHỈ cho số liệu Valuation.** Chữ cam = **`orange-text` của design system**: 5.2:1 trên trắng · 4.6:1 trên mist · 4.8:1 trên `--amber-soft`. Vàng mắt mèo `#FFA111` không làm chữ được (2:1) |
+| `--amber-soft` | `#FEF5D9` | = **`yellow-soft` của design system** (gần hue mắt mèo nhất): header card · header bảng · ô kết quả · nền hover nút phụ/dòng |
+| `--red-text` / `--red-soft` | `#C42B3F` / `#FDE8EB` | Đỏ design system: nguy hiểm, lỗi, xoá |
+| `--scrim` | `rgba(0,0,0,.48)` | Nền mờ sau popup + lightbox |
+
+> **Mọi mã màu phải là token của design system** (trừ vàng mắt mèo `#FFA111` do user chốt). Không tự pha màu, kể cả màu hover. `tools/ds-audit.js` sẽ báo màu lạ.
 
 - Chỉ 3 cấp chữ: `ink` · `grey` · `muted`. Không thêm cấp xám thứ 4.
 - Tắt (disabled): nền `--line`, chữ `--muted`, bỏ shadow. **Không giảm opacity.**
 - Không gradient (solid là mặc định của design system; nếu sau này thêm thì tối đa 1 vùng/màn).
 - **Tối đa 2 màu đi kèm/màn:** vàng mắt mèo (màu THIẾT KẾ) + đỏ (màu NGỮ NGHĨA duy nhất: nguy hiểm, lỗi, xoá — `--red-text #C42B3F` chữ, `--red-soft #FDE8EB` nền badge/ô). Rank Work **không** tô mỗi rank 1 màu — rank phân biệt bằng chữ.
-- **Số liệu:** số chính/cần chú ý = **chữ cam `--amber-text` (orange-text) đậm 700** (user: chỉ đen + xám thì flat); số nguy hiểm = đỏ; còn lại ink/grey.
+- **Số liệu:** số chính/cần chú ý = **chữ cam `--amber-text` (orange-text) đậm 600** (user: chỉ đen + xám thì flat); số nguy hiểm = đỏ; còn lại ink/grey.
 
 **Vàng mắt mèo xuất hiện ở đâu** (chỉ chỗ mang nghĩa hoặc nhận diện, không rải trang trí):
 - Vạch dưới tab nav đang chọn · vòng quanh ảnh đại diện · chấm timeline · chấm "Available for" · gạch chân khi hover tiêu đề box.
 - Nền `--amber-soft`: header box Valuation, header bảng altcoin, header + dải Daily của card `$`.
-- Chữ `--amber-text`: link (timeline, popup) · hover tên site / tab nav / tiêu đề màn / tên dự án.
+- **Link + hover chữ: chữ ĐEN + gạch chân vàng mắt mèo 2px** (link timeline, link popup, hover tên site / tiêu đề màn / tên dự án). Tab nav hover: xám → đen. KHÔNG đổi chữ sang cam.
+- Hover nút phụ / dòng bấm được: nền `--amber-soft`. Hover nút icon: nền `--mist`.
 - Viên `--amber` chữ đen: thẻ `rank: $` · nút `$` đang chọn ở thanh lọc.
 
-**Số liệu Valuation:** số thường ink 400 · ×TGE ≥ 13, ×ATH tuần đầu (`×TGE → ×ATH`) = **chữ cam đậm 700** · giá trị bên phải mọi dòng box (FDV thấp/cao, Điều kiện thị trường, median narrative) = **chữ cam đậm 700** · ×ATM ≥ 15 trong bảng = viên `--red-soft` chữ `--red-text` · ×ATM trong box Vùng nguy hiểm = chữ đỏ · badge FAKE PUMP/PUMP LÁO = viên `--red-soft` chữ đỏ · ×ATM < 1, ×ATL, đáy-trước-đỉnh = grey · ngày TGE = muted (meta).
+**Số liệu Valuation:** số thường ink 400 · ×TGE ≥ 13, ×ATH tuần đầu (`×TGE → ×ATH`) = **chữ cam đậm 600** · giá trị bên phải mọi dòng box (FDV thấp/cao, Điều kiện thị trường, median narrative) = **chữ cam đậm 600** · ×ATM ≥ 15 trong bảng = viên `--red-soft` chữ `--red-text` · ×ATM trong box Vùng nguy hiểm = chữ đỏ · badge FAKE PUMP/PUMP LÁO = viên `--red-soft` chữ đỏ · ×ATM < 1, ×ATL, đáy-trước-đỉnh = grey · ngày TGE = muted (meta).
 - Chấm `--amber` 8px cạnh ticker có vcFDV ≥ $300M.
 
 **Rank (Work):** card `$` = header + Daily nền `--amber-soft`, thẻ `rank: $` nền vàng chữ đen. Card S/A/B/C = header + Daily nền `--mist`, thẻ `rank: S` nền đen chữ trắng. Thanh lọc: nút đang chọn đen chữ trắng (`$` vàng chữ đen).
 
 ## 2. Chữ
 
-Font hệ thống Apple (`-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui…`), máy khác tự lùi. Không webfont ngoài. Chỉ dùng **đúng các style web của design system** (bảng dưới), cỡ tối thiểu 14, **không ngoại lệ**. Letter-spacing theo bảng Inter: 14 −.006em · 16 −.011em · 18 −.014em · 20 −.017em · 24 −.019em · 32+ −.022em. Không VIẾT HOA giãn chữ.
+Font hệ thống Apple (`-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui…`), máy khác tự lùi. Không webfont ngoài. Chỉ dùng **đúng các style web của design system** (bảng dưới), cỡ tối thiểu 14, **không ngoại lệ**. Letter-spacing theo bảng Inter: 14 −.006em · 16 −.011em · 18 −.014em · 20 −.017em · 24 −.019em · 32+ −.022em. Không VIẾT HOA giãn chữ. **Đậm 700 chỉ cho cỡ ≥ 32** (tên ở hero); dưới đó chỉ 400/600 — số cần nhấn dùng 600. Giãn chữ khai ở CHÍNH phần tử đặt cỡ chữ (em kế thừa theo px của cha → sai).
 
 | Style | Cỡ / dòng / đậm | Dùng cho |
 |---|---|---|
@@ -67,10 +72,12 @@ Tiêu đề màn dài (VI Valuation) trên màn hẹp: `fitIntroTitles()` lùi *
 | **Tiêu đề mục** (CV) | icon 24 + chữ 24 + kẻ mảnh kéo hết ngang |
 | **Nút chính** | cao 48 đệm 24 · radius 16 · nền đen chữ trắng 16/600 · shadow. **Nút đứng một mình trên mobile rộng cố định 296** (vd "Dự đoán FDV TGE") |
 | **Nút phụ** | như nút chính nhưng trắng chữ đen · shadow · hover nền `--amber-soft` (Twitter/Telegram/Email cao 48; Admin = nút nhỏ cao 40 đệm 16 chữ 14) |
-| **Nút icon** | 40×40 radius 16, icon 20 (camera, [+]) |
+| **Nút icon** | 40×40 radius 16, icon 20: camera, [+], X/Discord trên card, ⋮ admin, đóng popup, tính lại, xoá dòng, thêm dòng, đóng lightbox. **Không dùng ký tự ✕ ⋮ + làm icon** — dùng SVG Lucide (`wteIcon('close'|'more')`) |
+| **Nút mèo (Agent)** | nút icon tròn 48×48, góc dưới phải cách 32 (mobile 16) |
+| **Vòng trang trí** (quanh ảnh đại diện, quanh chấm timeline) | dùng `outline` (+ `outline-offset`), KHÔNG dùng box-shadow — design system chỉ có 1 shadow Y2 |
 | **Toggle VI/EN · thanh lọc rank** | máng `--mist` radius pill, **không đệm/khe trong** — viên chiếm trọn máng: toggle cao 40 (viên 40), thanh lọc cao 48 (viên 48) · viên đang chọn đen chữ trắng |
 | **Ô nhập** | cao 48 đệm 16 · nền `--mist` · viền `--line` 1px · radius 16 · khi chọn viền 2px đen |
-| **Thẻ / badge** | cao 24 · đệm ngang 8 · radius pill (×ATM nguy hiểm, FAKE PUMP, thẻ Work) |
+| **Thẻ / badge** | cao 24 · đệm ngang 8 · chữ 14/20 · radius pill (×ATM nguy hiểm, FAKE PUMP, thẻ Work) |
 | **Icon** | **Lucide 1.59.0** (ISC), nét 2, cỡ 16/20/24, tô `currentColor`. SVG inline (`WTE_ICON` + `wteIcon()` trong JS); riêng camera/plus là file SVG dùng CSS mask ở `::before`. Icon thương hiệu X/Discord lấy từ Tabler (Lucide không có) |
 
 **Luật bo góc** (design system gốc): **16** cho mọi box, dòng, ô nhập và nút · **pill** cho thẻ, badge, toggle, hình tròn. Không dùng radius nào khác.
