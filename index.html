@@ -494,12 +494,11 @@
        Card cùng rank dàn 2 cột × 588 (6 cột lưới), rãnh 24; khác rank cách 48. */
     #wte-cards { display: flex; flex-direction: column; gap: 48px; }
     .wte-group { scroll-margin-top: 88px; }
-    /* tiêu đề nhóm (Work to Earn · Rank: S …) = web-h4 20/28 + kẻ mảnh kéo hết ngang, cách card 16 */
+    /* tiêu đề nhóm (work-to-earn · Rank: S …) = web-h4 20/28, cách card 16 — KHÔNG kẻ mảnh (user bỏ 2026-10-24) */
     .wte-group-label {
       display: flex; align-items: center; gap: 16px; margin-bottom: 16px;
       font-size: 20px; font-weight: 600; line-height: 28px; letter-spacing: -.017em; color: var(--ink);
     }
-    .wte-group-label::after { content: ''; flex: 1; height: 1px; background: var(--line); }
     .wte-rank-group { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; align-items: start; }
     .wte-card { width: 100%; min-width: 0; }
 
@@ -905,7 +904,7 @@
   <div id="valuation-view">
     <div class="val-wrap">
       <div class="panel-head">
-        <div class="val-intro val-intro-clickable" id="tge-intro" title="Mở rộng"><span id="val-headline-text">Tracking altcoins to read the market</span></div>
+        <div class="val-intro val-intro-clickable" id="tge-intro" title="Mở rộng"><span id="val-headline-text">Quan sát altcoin</span></div>
         <div class="val-head-ctrl">
           <button class="camera-btn" id="val-shot-btn" title="Chụp ảnh dashboard" aria-label="Chụp ảnh dashboard"></button>
           <button class="lang-dd-btn" id="val-admin-btn" title="Đăng nhập admin">Admin</button>
@@ -981,9 +980,9 @@
   <div id="airdrop-view" style="display:none">
     <div class="ard-wrap">
 
-      <!-- Hàng 3-4: tiêu đề "Work to Earn" GIỮA · Admin + EN|VI phải -->
+      <!-- Hàng đầu: tiêu đề TRÁI · Admin + VI|EN phải -->
       <div class="ard-subtabs panel-head" id="ard-subtabs">
-        <div class="val-intro"><span>Work to Earn</span></div>
+        <div class="val-intro"><span id="wte-title">Danh sách công việc</span></div>
         <div class="val-head-ctrl" id="ard-wte-controls">
           <button class="lang-dd-btn" id="admin-btn" title="Task cá nhân">Admin</button>
           <div class="lang-toggle">
@@ -1315,7 +1314,7 @@
     // Thêm nhãn tĩnh mới ở đâu thì PHẢI khai báo ở đây, nếu không nó sẽ kẹt tiếng Anh khi ở mode VI.
     const VAL_HEAD_LABELS = {
       // headline + 3 tiêu đề box
-      'val-headline-text':       { EN: 'Tracking altcoins to read the market', VI: 'Theo dõi altcoin để nhận định thị trường' },
+      'val-headline-text':       { EN: 'Altcoin watch', VI: 'Quan sát altcoin' },
       'tge-title-text':          { EN: 'Recent TGE multiples', VI: 'Hệ số TGE gần đây' },
       'danger-title-text':       { EN: 'Danger Zone', VI: 'Vùng nguy hiểm' },
       'narr-title-text':         { EN: 'Trending Narratives', VI: 'Narrative đang hot' },
@@ -2293,8 +2292,8 @@
     const RANK_LABEL      = { INCOME: '$', S: 'S', A: 'A', B: 'B', C: 'C' };
 
     // Tiêu đề nhóm — SUY RA từ RANK_LABEL, không khai lại danh sách thứ 2.
-    // INCOME = "Work to Earn" (không phải rank); còn lại "Rank: S" — khớp chữ trên thẻ rank của card.
-    const groupLabel = r => (r === 'INCOME' ? 'Work to Earn' : `Rank: ${RANK_LABEL[r]}`);
+    // INCOME = "work-to-earn" (không phải rank, viết thường như thẻ phân loại); còn lại "Rank: S" — khớp chữ trên thẻ rank của card.
+    const groupLabel = r => (r === 'INCOME' ? 'work-to-earn' : `Rank: ${RANK_LABEL[r]}`);
 
     // Rank "SS" (S+) của thang cũ đọc thành S, để project trong KV chưa sửa
     // tay vẫn hiện đúng chỗ thay vì rơi khỏi mọi nhóm.
@@ -2421,6 +2420,7 @@
 
     // ── Render all cards ──────────────────────────────
     function renderWTE() {
+      document.getElementById('wte-title').textContent = wteLang === 'EN' ? 'Task list' : 'Danh sách công việc';
       const container = document.getElementById('wte-cards');
       const projects  = wteData[wteLang];
 

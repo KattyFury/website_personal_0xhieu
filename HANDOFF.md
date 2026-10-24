@@ -38,8 +38,8 @@ Secret: `ADMIN_PASS` đặt ở Cloudflare Dashboard; bot dùng `bot/.env` (giti
 | Tab (nav) | Route | Nội dung | Ngôn ngữ |
 |---|---|---|---|
 | CV | `/` | Hero · Experience (timeline) · Highlights · Available for | **Tiếng Anh cố định** |
-| Valuation | `/valuation` | Bảng altcoin 7 cột + 3 box phân tích | Toggle VI/EN, mặc định VI |
-| Work | `/airdrop` | Card Work to Earn theo rank + thanh lọc `$ S A B C` | Toggle VI/EN |
+| Valuation | `/valuation` | Tiêu đề "Quan sát altcoin" (EN "Altcoin watch") · Bảng altcoin 7 cột + 3 box phân tích | Toggle VI/EN, mặc định VI |
+| Work | `/airdrop` | Tiêu đề "Danh sách công việc" (EN "Task list") · card theo nhóm work-to-earn / rank + thanh lọc `$ S A B C` | Toggle VI/EN |
 
 Nút mèo góc dưới phải (cả 3 tab) = **Agent**, mới có vỏ ("coming soon"). Agent là dự án riêng, sẽ ở chung repo với bot.
 
@@ -104,7 +104,7 @@ vcFDV = fundraising / (vcAlloc/100)
 - Thang: **`$` (INCOME) · S · A · B · C**. `$` không phải rank — suy từ thẻ `Work-to-Earn` qua `groupOf()`. `groupOf()` còn map rank cũ `SS` → `S`.
 - Khai **1 chỗ**: `WTE_GROUPS` · `WTE_RANKS` · `RANK_LABEL` (mục "AIRDROP — Work to Earn" trong `index.html`). Dropdown admin đổ bằng JS từ đó.
 - `WTE_TYPES` là nguồn duy nhất cho thẻ phân loại: vừa là dropdown admin, vừa là thứ tự card trong mỗi nhóm (`typeOrder()`).
-- Card cùng rank dàn 2 cột, khác rank cách 48. Mỗi nhóm có tiêu đề: "Work to Earn" (nhóm $) · "Rank: S/A/B/C" (`groupLabel()`). KV lưu `potential` 1–3, client quy đổi `≥2 = high-potential`.
+- Card cùng rank dàn 2 cột, khác rank cách 48. Mỗi nhóm có tiêu đề (không kẻ mảnh): "work-to-earn" (nhóm $) · "Rank: S/A/B/C" (`groupLabel()`). KV lưu `potential` 1–3, client quy đổi `≥2 = high-potential`.
 
 ## 6. Luật bắt buộc
 
@@ -145,6 +145,7 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 
 ## Nhật ký
 
+- 2026-10-24: Work bỏ kẻ mảnh cạnh tiêu đề nhóm; nhóm $ đổi tên "work-to-earn"; tiêu đề tab Work "Work to Earn" → **"Danh sách công việc"** (EN "Task list", đổi theo toggle trong `renderWTE()`); tiêu đề tab Valuation → **"Quan sát altcoin"** (EN "Altcoin watch").
 - 2026-10-24: **Work: tiêu đề từng nhóm** ("Work to Earn" · "Rank: S"…) + **form task bỏ lựa chọn rank "—"** (rank bắt buộc nên "—" vô nghĩa → gợi ý "Chọn rank" không chọn được; Work-to-Earn thì ẩn ô Rank; lỗi "Chọn rank" tự tắt khi đổi phân loại; rank cũ `SS` hiện thành S). **Hover đồng bộ cả site:** mọi thứ bấm được có chữ → gạch chân vàng 2px; bỏ hết hover đổi màu nền box (dòng task, nút phụ, Admin, nút xã hội, danh sách admin) + bỏ nhích card + bỏ màu tự pha `#262626` ở nút chính.
 - 2026-10-24: **Dọn việc treo theo user:** bỏ "test điện thoại thật" (lỗi thì user tự báo) + "nhập Discord" (Discord là OPTIONAL). Hết 2 ngoại lệ design system: dòng bảng altcoin 40 → **56** (bảng cao tối đa 440 = header 48 + 7 dòng), popup giải thích bỏ emoji 1️⃣ 👉 → "1." "2." + câu chốt đậm (`.info-key`). Mobile: tiêu đề Valuation chiếm trọn hàng trên (cụm nút xuống hàng dưới canh phải) → giữ cỡ 24, không bị ép xuống 14.
 - 2026-10-24: **Sửa ô nhập trên mobile bể khung/nhảy** — đo được: trang nền không khoá cuộn khi mở popup (trình duyệt cuộn nền khi chạm ô nhập → popup giật), popup căn giữa cứng không cuộn được (bàn phím bật → "Sửa dự án" lòi khỏi mép trên 66px), max-height theo `vh` co giãn khi bàn phím bật/tắt, `scroll-behavior: smooth` làm cú cuộn giật. Sửa: khoá cuộn bằng `html:has(.open)`, nền mờ cuộn được + popup `margin: auto`, `svh`, `interactive-widget=resizes-content`, bỏ smooth toàn trang, ô nhập `appearance: none`, ô số `inputmode="decimal"`. Cỡ chữ ô nhập vốn đã 16 (không phải lỗi iPhone tự zoom). Cùng ngày: **card work-to-earn không hiện thẻ rank** (user chốt). `tools/ds-audit.js` bỏ qua margin căn giữa tự động → kết quả đúng là TỔNG 0.
