@@ -111,7 +111,7 @@ vcFDV = fundraising / (vcAlloc/100)
 - **Châm ngôn, nguyên văn mọi nơi:** `Sharing POVs on Crypto and AI`. Câu niềm tin có **2 bản cố ý**: bản dài 3 vế ở hero CV, bản ngắn *"AI is the future. Crypto is the money of the future."* ở meta/og/JSON-LD/`og.png`. `jobTitle` JSON-LD giữ "Builder + Contributor".
 - **Đổi `og.png` phải bump `?v=`** (đang `?v=7`) — X/Telegram cache theo URL. Nguồn vẽ: `tools/og-gen.html` (1200×630) — render bằng Chrome headless đúng 1200×630 (vd script `C:\tmp\cvshot\shot.js file:///D:/Files/Claude/website_personal_0xhieu/tools/og-gen.html og.png 1200 630`).
 - **Client ↔ server phải khớp:** `WTE_RANKS` ↔ `RANKS` (`private.js`). Lệch là server âm thầm ép về mặc định.
-- **Hàng đầu mỗi tab:** tiêu đề TRÁI, nút PHẢI (flex). Không quay lại kiểu tiêu đề canh giữa + nút absolute. Tiêu đề dài thì cho xuống 2 dòng, đừng rút ngắn câu. **Mobile: KHÔNG cắt "…"** — `fitIntroTitles()` thu nhỏ chữ từng 1px (sàn 10px) cho vừa 2 dòng; chạy lại khi đổi ngôn ngữ + khi bề ngang `.val-intro` đổi (ResizeObserver).
+- **Hàng đầu mỗi tab:** tiêu đề TRÁI, nút PHẢI (flex). Riêng Valuation trên mobile ≤ 640: tiêu đề trọn hàng trên, cụm nút xuống hàng dưới canh phải. Không quay lại kiểu tiêu đề canh giữa + nút absolute. Tiêu đề dài thì cho xuống 2 dòng, đừng rút ngắn câu. **Mobile: KHÔNG cắt "…"** — `fitIntroTitles()` thu nhỏ chữ từng 1px (sàn 10px) cho vừa 2 dòng; chạy lại khi đổi ngôn ngữ + khi bề ngang `.val-intro` đổi (ResizeObserver).
 - **Popup + ô nhập trên mobile (sửa 2026-10-24, user báo "bể khung, nhảy chữ"):** mở popup phải khoá cuộn trang nền (`html:has(.wl-modal-backdrop.open)`); nền mờ `overflow-y: auto`, popup `margin: auto` (đừng quay lại `align-items: center` — popup dài lòi khỏi mép trên khi bàn phím bật); chiều cao trong popup dùng `svh`; viewport có `interactive-widget=resizes-content`; không đặt `scroll-behavior: smooth` cho cả trang. Kiểm bằng script đo popup ở 390×844 và 390×460 (giả lập bàn phím).
 - **Thanh cuộn:** mọi vùng cuộn dùng `.thin-scroll`. **Không set `scrollbar-width`/`scrollbar-color` cho Chromium** — từ bản 121 chúng tắt hết `::-webkit-scrollbar`.
 - **Icon tô bằng CSS mask → mask đặt ở `::before`**, không trên nút (Chromium hit-test theo vùng mask). Icon mới thì dùng SVG inline (`wteIcon()`), không dùng mask.
@@ -139,15 +139,12 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 3. **Rank `SS` còn sót trong KV** — đang hiện ở nhóm S nhờ `groupOf()`; sửa tay qua popup admin rồi bỏ shim.
 4. **Làm tab Valuation dễ hiểu cho số đông** (hướng đã chốt: diễn giải ngay trong box — con số nói gì, ngưỡng nào tốt/xấu). Chưa làm.
 5. Ảnh mới cho Highlights: nén WebP ~750×500, dưới ~150KB, tên khớp `highlights.txt`.
-6. **Link Discord cho card Work** — trường `discord` có từ 2026-10-24; user đã nhập được cho Binance Pick qua popup Admin (lưu chạy đúng). Card khác chưa có thì nhập dần.
-7. **Ngoại lệ design system còn giữ có chủ đích:** dòng bảng altcoin cao 40 (DS dòng danh sách 56 — bảng số kéo lên 56 thì xem được ít dòng); emoji 1️⃣ 👉 trong popup giải thích (luật trình bày user chốt 2026-08-05). User chưa phán — hỏi trước khi đổi.
-8. Tiêu đề Valuation trên mobile 390 tự lùi xuống 14 vì cụm nút (camera · Admin · VI/EN) chiếm chỗ — đúng luật nhưng nhỏ; muốn to hơn thì phải tính lại bố cục hàng đầu mobile.
-9. **Sửa popup/ô nhập mobile (10-24) mới kiểm bằng trình duyệt giả lập**, CHƯA thử trên điện thoại thật (iPhone Safari + Android Chrome) — hỏi user kết quả gõ thử.
 
 ---
 
 ## Nhật ký
 
+- 2026-10-24: **Dọn việc treo theo user:** bỏ "test điện thoại thật" (lỗi thì user tự báo) + "nhập Discord" (Discord là OPTIONAL). Hết 2 ngoại lệ design system: dòng bảng altcoin 40 → **56** (bảng cao tối đa 440 = header 48 + 7 dòng), popup giải thích bỏ emoji 1️⃣ 👉 → "1." "2." + câu chốt đậm (`.info-key`). Mobile: tiêu đề Valuation chiếm trọn hàng trên (cụm nút xuống hàng dưới canh phải) → giữ cỡ 24, không bị ép xuống 14.
 - 2026-10-24: **Sửa ô nhập trên mobile bể khung/nhảy** — đo được: trang nền không khoá cuộn khi mở popup (trình duyệt cuộn nền khi chạm ô nhập → popup giật), popup căn giữa cứng không cuộn được (bàn phím bật → "Sửa dự án" lòi khỏi mép trên 66px), max-height theo `vh` co giãn khi bàn phím bật/tắt, `scroll-behavior: smooth` làm cú cuộn giật. Sửa: khoá cuộn bằng `html:has(.open)`, nền mờ cuộn được + popup `margin: auto`, `svh`, `interactive-widget=resizes-content`, bỏ smooth toàn trang, ô nhập `appearance: none`, ô số `inputmode="decimal"`. Cỡ chữ ô nhập vốn đã 16 (không phải lỗi iPhone tự zoom). Cùng ngày: **card work-to-earn không hiện thẻ rank** (user chốt). `tools/ds-audit.js` bỏ qua margin căn giữa tự động → kết quả đúng là TỔNG 0.
 - 2026-10-24: Sửa nút "Dự đoán FDV TGE" cách dòng 3 thành 16 (margin-top 8 cộng margin-bottom 8 của dòng trên) làm box Hệ số TGE tràn → bỏ margin-top. Đo lại: 3 box đều 4 ô 56, khe 8, không tràn.
 - 2026-10-24: **Nút "Dự đoán FDV TGE" chiếm đúng ô dòng thứ 4** của box Hệ số TGE (rộng hết, cao 56, cách 8) cho đồng bộ với 3 dòng trên — user chốt. `tools/ds-audit.js` cho phép riêng nút này cao 56.

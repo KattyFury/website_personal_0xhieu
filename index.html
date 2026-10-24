@@ -378,7 +378,7 @@
     /* ── Bảng altcoin: header cố định tách khỏi vùng cuộn ──
        7 cột theo tỉ lệ (2 cột mép hẹp hơn chút vì không có khe ngoài), khai bằng % để co theo màn. */
     #tge-section {
-      display: flex; flex-direction: column; max-height: 432px; margin-bottom: 24px; overflow: hidden;
+      display: flex; flex-direction: column; max-height: 440px; margin-bottom: 24px; overflow: hidden;   /* header 48 + 7 dòng × 56 */
       background: var(--ground); border-radius: 16px; box-shadow: var(--shadow);
     }
     #tge-head-wrap { flex: none; overflow: hidden; background: var(--amber-soft); }
@@ -395,7 +395,7 @@
       text-align: center; white-space: nowrap; color: var(--ink);
     }
     #tge-section tbody td {
-      height: 40px; border: none; box-shadow: inset 0 -1px 0 var(--line);
+      height: 56px; border: none; box-shadow: inset 0 -1px 0 var(--line);
       font-size: 14px; font-weight: 400; letter-spacing: -.006em; font-variant-numeric: tabular-nums;
       text-align: center; vertical-align: middle; white-space: nowrap; color: var(--ink);
     }
@@ -437,7 +437,7 @@
       font-size: 14px; font-weight: 600; text-align: center; white-space: nowrap; color: var(--ink);
     }
     .tge-modal-body tbody td {
-      padding: 8px 16px; border-bottom: 1px solid var(--line);
+      height: 56px; padding: 8px 16px; border-bottom: 1px solid var(--line);
       text-align: center; vertical-align: middle; white-space: nowrap; color: var(--grey);
     }
     .tge-modal-body tbody tr:last-child td { border-bottom: none; }
@@ -608,6 +608,7 @@
     .wl-modal-title { padding-right: 40px; font-size: 20px; font-weight: 600; line-height: 28px; letter-spacing: -.017em; color: var(--ink); }
     #ptask-modal .wl-modal-title { padding-right: 0; text-align: center; }
     .info-modal-body { font-size: 16px; line-height: 24px; color: var(--grey); white-space: pre-line; }
+    .info-key { font-weight: 600; color: var(--ink); }   /* câu chốt của popup giải thích */
     .shot-modal { align-items: center; text-align: center; }
     #shot-modal-img { display: block; width: 100%; max-height: 56vh; max-height: 56svh; object-fit: contain; border: 1px solid var(--line); border-radius: 16px; }
     .shot-modal-hint { font-size: 14px; color: var(--grey); }
@@ -739,6 +740,9 @@
       /* Khung chung */
       .val-wrap, .ard-wrap { padding-bottom: 32px; }
       .panel-head { gap: 8px; }
+      /* Valuation: tiêu đề dài + 3 nút không đủ chỗ 1 hàng → tiêu đề trọn hàng trên, nút xuống dưới canh phải */
+      #valuation-view .panel-head { flex-wrap: wrap; justify-content: flex-end; }
+      #valuation-view .val-intro { flex-basis: 100%; }
       /* Tiêu đề dài không cắt "…": fitIntroTitles() lùi dần theo cỡ của design system (24→20→18→16→14) cho vừa 2 dòng */
       .val-intro { height: auto; }
       .val-intro > span { display: block; -webkit-line-clamp: unset; }
@@ -1393,26 +1397,26 @@
     applyValHeadLabels();
 
     /* ── Nội dung info popup (icon "i" cạnh tiêu đề mỗi box) ──────────────────────
-       QUY ĐỊNH TRÌNH BÀY (chốt 2026-08-05, user yêu cầu "thiếu khoảng trống, chưa hấp dẫn"):
-       mỗi ý một dòng đánh số 1️⃣ 2️⃣ · giữa các ý cách nhau ĐÚNG 1 dòng trống ·
-       chốt lại bằng một dòng mở đầu bằng 👉. Viết cho người KHÔNG rành đọc số.
+       QUY ĐỊNH TRÌNH BÀY (chốt 2026-08-05, đổi 2026-10-24 theo design system — KHÔNG emoji):
+       mỗi ý một dòng đánh số "1." "2." · giữa các ý cách nhau ĐÚNG 1 dòng trống ·
+       chốt lại bằng một câu ĐẬM (<b class="info-key">). Viết cho người KHÔNG rành đọc số.
        Xuống dòng trong template literal là xuống dòng thật vì .info-modal-body
        dùng `white-space: pre-line` (đừng thay bằng <br>). */
     const DANGER_INFO = {
       VI: `Những dự án lên mức FDV gấp 15 lần FDV mà VC đầu tư trở lên thường rơi vào 2 trường hợp:
 
-1️⃣ Pump mạnh để tạo đỉnh, hoặc là TGE ở vùng đỉnh để rồi nuke về 0
+1. Pump mạnh để tạo đỉnh, hoặc là TGE ở vùng đỉnh để rồi nuke về 0
 
-2️⃣ Tính chất dự án quá mạnh, nên giữ vững FDV ở mức cao so với định giá ban đầu VC định ra
+2. Tính chất dự án quá mạnh, nên giữ vững FDV ở mức cao so với định giá ban đầu VC định ra
 
-👉 Dù ở trường hợp nào thì các dự án như này cũng rất rủi ro khi mua vào.`,
+<b class="info-key">Dù ở trường hợp nào thì các dự án như này cũng rất rủi ro khi mua vào.</b>`,
       EN: `Projects trading at ×15 the FDV VCs invested at (or higher) usually fall into one of two cases:
 
-1️⃣ A strong pump forming a top — or TGE-ing straight into the top before nuking to zero
+1. A strong pump forming a top — or TGE-ing straight into the top before nuking to zero
 
-2️⃣ The project is genuinely strong, holding FDV well above what VCs originally priced it at
+2. The project is genuinely strong, holding FDV well above what VCs originally priced it at
 
-👉 Either way, buying in at this level is very risky.`,
+<b class="info-key">Either way, buying in at this level is very risky.</b>`,
     };
     const NARRATIVES_INFO = {
       VI: `Trung vị của [FDV khi TGE] / [FDV mà VC đầu tư] của các dự án cùng một Narrative, cho thấy trong điều kiện thị trường hiện tại, Narrative nào đang mạnh và Narrative nào đang yếu.`,
@@ -1420,17 +1424,17 @@
     };
     // dùng bởi calculator Predict TGE FDV ở cuối file (khi data không đủ để chạy predictFDV)
     const NOT_ENOUGH_DATA = { VI: 'Không đủ dữ liệu để dự đoán', EN: 'Not enough data to predict' };
-    // dòng 👉 của popup Recent TGE multiples — chọn theo Market condition đang hiện
+    // câu chốt (đậm) của popup Recent TGE multiples — chọn theo Market condition đang hiện
     const TGE_MARKET_LINE = {
       VI: {
-        Weak:   '👉 Thị trường đang rất yếu (hiếm khi altcoin TGE tệ đến vậy).',
-        Normal: '👉 Thị trường đang ở mức bình thường (ngang mặt bằng chung các đợt TGE altcoin).',
-        Strong: '👉 Thị trường đang mạnh (altcoin TGE cao vượt xa giá vốn VC).',
+        Weak:   'Thị trường đang rất yếu (hiếm khi altcoin TGE tệ đến vậy).',
+        Normal: 'Thị trường đang ở mức bình thường (ngang mặt bằng chung các đợt TGE altcoin).',
+        Strong: 'Thị trường đang mạnh (altcoin TGE cao vượt xa giá vốn VC).',
       },
       EN: {
-        Weak:   '👉 Market is super weak right now (altcoins rarely TGE this poorly).',
-        Normal: '👉 Market is at a normal level (a typical condition for altcoin TGEs).',
-        Strong: '👉 Market is strong right now (altcoins are TGE-ing far above VC cost).',
+        Weak:   'Market is super weak right now (altcoins rarely TGE this poorly).',
+        Normal: 'Market is at a normal level (a typical condition for altcoin TGEs).',
+        Strong: 'Market is strong right now (altcoins are TGE-ing far above VC cost).',
       },
     };
 
@@ -1438,20 +1442,20 @@
     // không tính lại) → popup luôn khớp với con số user đang nhìn thấy
     function tgeInfoHTML(low, high, level) {
       const line = TGE_MARKET_LINE[valLang][level]
-        || (valLang === 'VI' ? '👉 Chưa đủ dữ liệu để đọc thị trường.' : '👉 Not enough data yet to read the market.');
+        || (valLang === 'VI' ? 'Chưa đủ dữ liệu để đọc thị trường.' : 'Not enough data yet to read the market.');
       return valLang === 'VI'
-        ? `1️⃣ Các dự án Low FDV thường TGE ở mức ${low} so với FDV lúc VC rót vốn.
+        ? `1. Các dự án Low FDV thường TGE ở mức ${low} so với FDV lúc VC rót vốn.
 
-2️⃣ Các dự án High FDV thường TGE ở mức ${high} so với FDV lúc VC rót vốn.
+2. Các dự án High FDV thường TGE ở mức ${high} so với FDV lúc VC rót vốn.
 
-${line}
+<b class="info-key">${line}</b>
 
 <span class="info-modal-link" id="info-tge-predict-link">Bấm vào đây</span> để nhập vài thông tin, mình sẽ dự đoán FDV và giá TGE của dự án bạn đang quan tâm.`
-        : `1️⃣ Low FDV projects typically TGE at ${low} the FDV VCs invested at.
+        : `1. Low FDV projects typically TGE at ${low} the FDV VCs invested at.
 
-2️⃣ High FDV projects typically TGE at ${high} the FDV VCs invested at.
+2. High FDV projects typically TGE at ${high} the FDV VCs invested at.
 
-${line}
+<b class="info-key">${line}</b>
 
 <span class="info-modal-link" id="info-tge-predict-link">Click here</span> to enter a few details and I'll predict the TGE FDV and price for the project you're looking at.`;
     }
@@ -1485,7 +1489,7 @@ ${line}
     const infoDangerModal = document.getElementById('info-danger-modal');
     const closeInfoDanger = () => infoDangerModal.classList.remove('open');
     bindBoxInfo('danger-title-text', () => {
-      document.getElementById('info-danger-body').textContent = DANGER_INFO[valLang];
+      document.getElementById('info-danger-body').innerHTML = DANGER_INFO[valLang];
       infoDangerModal.classList.add('open');
     });
     infoDangerModal.addEventListener('click', e => { if (e.target === infoDangerModal) closeInfoDanger(); });
@@ -1508,7 +1512,7 @@ ${line}
       applyValHeadLabels();
       renderAnalysis(); renderDanger(); renderNarratives();   // Weak/Normal/Strong, empty-state, badge "PUMP LÁO" đều phụ thuộc valLang
       if (infoTgeModal.classList.contains('open')) renderTgeInfo();
-      if (infoDangerModal.classList.contains('open')) document.getElementById('info-danger-body').textContent = DANGER_INFO[valLang];
+      if (infoDangerModal.classList.contains('open')) document.getElementById('info-danger-body').innerHTML = DANGER_INFO[valLang];
       if (infoNarrModal.classList.contains('open')) document.getElementById('info-narratives-body').textContent = NARRATIVES_INFO[valLang];
     }
     valLangViBtn.addEventListener('click', () => switchValLang('VI'));

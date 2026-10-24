@@ -56,7 +56,7 @@ Font hệ thống Apple (`-apple-system, BlinkMacSystemFont, 'SF Pro Text', syst
 | web-body / nav-button | 16/24 (400 / 600) | Thân bài · bullet · caption · tab nav · nút 48 · ô nhập |
 | web-caption / label | 14/20 (400 / 600) | Dòng danh sách · task · thẻ · header + số trong bảng (cả mobile) · nút nhỏ 40 · nhãn form · tab nav mobile |
 
-Tiêu đề màn dài (VI Valuation) trên màn hẹp: `fitIntroTitles()` lùi **theo thang** 24/32 → 20/28 → 18/28 → 16/24 → 14/20 tới khi vừa 2 dòng — không bao giờ ra cỡ lẻ, không cắt "…".
+Tiêu đề màn dài (VI Valuation) trên mobile: **chiếm trọn hàng trên**, cụm nút xuống hàng dưới canh phải → giữ 24/32. Dự phòng `fitIntroTitles()` lùi **theo thang** 24/32 → 20/28 → 18/28 → 16/24 → 14/20 nếu vẫn quá 2 dòng — không bao giờ ra cỡ lẻ, không cắt "…".
 
 ## 3. Thành phần
 
@@ -79,6 +79,7 @@ Tiêu đề màn dài (VI Valuation) trên màn hẹp: `fitIntroTitles()` lùi *
 | **Ô nhập** | cao 48 đệm 16 · nền `--mist` · viền `--line` 1px · radius 16 · khi chọn viền 2px đen |
 | **Popup trên mobile** | nền mờ tự cuộn được (popup dài hơn màn → cuộn, không lòi khỏi mép), popup căn giữa bằng `margin: auto` (KHÔNG `align-items: center`), mở popup = khoá cuộn trang nền (`html:has(.open)`), chiều cao trong popup dùng `svh` (không đổi khi bàn phím bật). Ô nhập chữ 16 (dưới 16 iPhone tự phóng to), `appearance: none` |
 | **Thẻ / badge** | cao 24 · đệm ngang 8 · chữ 14/20 · radius pill (×ATM nguy hiểm, FAKE PUMP, thẻ Work) |
+| **Popup giải thích** | đánh số "1." "2." (KHÔNG emoji 1️⃣ 👉 — DS cấm emoji thay icon), các ý cách 1 dòng trống, câu chốt đậm 600 ink (`.info-key`) |
 | **Icon** | **Lucide 1.59.0** (ISC), nét 2, cỡ 16/20/24, tô `currentColor`. SVG inline (`WTE_ICON` + `wteIcon()` trong JS); riêng camera/plus là file SVG dùng CSS mask ở `::before`. Icon thương hiệu X/Discord lấy từ Tabler (Lucide không có) |
 
 **Luật bo góc** (design system gốc): **16** cho mọi box, dòng, ô nhập và nút · **pill** cho thẻ, badge, toggle, hình tròn. Không dùng radius nào khác.
@@ -95,7 +96,7 @@ Mọi khoảng cách là **bội số của 8** — không có khe/đệm 2, 4, 
 | Chỗ | Chia |
 |---|---|
 | Valuation — 3 box | 3 × 384 (4 cột lưới), rãnh 24, box cao 328 = header 48 + 16 + thân 248 + 16. Thân: Vùng nguy hiểm/Narrative = 4 dòng 56 + 3 khe 8 (thiếu thì `padRows()` đệm dòng trống, thừa thì cuộn); Hệ số TGE = 3 dòng + nút "Dự đoán FDV TGE" chiếm đúng ô dòng thứ 4 (rộng hết, cao 56, khe 8 = margin-bottom của dòng 3, KHÔNG cộng thêm margin-top — user chốt cho đồng bộ với 3 dòng trên, ngoại lệ với nút 48) |
-| Valuation — bảng | 7 cột theo % (cột mép 13.855%, 5 cột giữa 14.458%), header 48, dòng 40, cao tối đa 432. **Mobile:** ẩn Narrative · TGE · ×ATL, còn 4 cột 22 / 20 / 36 / 22 % (×ATH dạng "đáy → đỉnh" cần rộng nhất), chữ vẫn 14 |
+| Valuation — bảng | 7 cột theo % (cột mép 13.855%, 5 cột giữa 14.458%), header 48, **dòng 56** (dòng danh sách DS), cao tối đa 440 (header + 7 dòng). **Mobile:** ẩn Narrative · TGE · ×ATL, còn 4 cột 22 / 20 / 36 / 22 % (×ATH dạng "đáy → đỉnh" cần rộng nhất), chữ vẫn 14 |
 | Work | card cùng rank 2 × 588 (6 cột lưới), rãnh 24; khác rank cách 48 (mobile 32) |
 | CV — Highlights | 3 × 384, rãnh 24, ảnh 3:2 |
 | CV — timeline | 3 cột `128 / 64 / nội dung`, chấm vàng 16 canh giữa dòng đầu (flex, không số lệch), item cách 32; bullet rộng tối đa 680 |
