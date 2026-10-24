@@ -146,6 +146,7 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 
 ## Nhật ký
 
+- 2026-10-24: **Nút "Dự đoán FDV TGE" chiếm đúng ô dòng thứ 4** của box Hệ số TGE (rộng hết, cao 56, cách 8) cho đồng bộ với 3 dòng trên — user chốt. `tools/ds-audit.js` cho phép riêng nút này cao 56.
 - 2026-10-24: **Soát toàn bộ bằng script `tools/ds-audit.js`** (78 chỗ lệch → 0, trừ margin auto). Sửa: nền vàng nhạt tự pha `#FFF1DB` → `yellow-soft #FEF5D9`; hover/link không còn chữ cam (đen + gạch chân vàng); đậm 700 ở chữ nhỏ → 600; line-height/giãn chữ đúng cặp DS (bảng, tab nav mobile, nút, label form); icon ký tự ✕ ⋮ + → SVG Lucide trong nút icon 40×40; vòng ảnh đại diện/chấm timeline dùng outline thay shadow; lightbox dùng scrim + shadow Y2; nút mèo 48. **`og.png` vẽ lại** theo design system (nền trắng, chữ đen, vàng mắt mèo, Inter, ảnh đại diện mới) → `?v=7`; nguồn `tools/og-gen.html`.
 - 2026-10-24: **Chữ cam đổi `#965E00` → `#B84A0C` = `orange-text` của design system.** `#965E00` là màu tự pha (không có trong guideline), user chê xấu. Bài học: màu chữ/nền phải lấy đúng token design system, không tự pha.
 - 2026-10-24: **Valuation thêm lại cam** (user: chỉ đen + xám thì flat): ×TGE ≥ 13, ×ATH tuần đầu, và giá trị bên phải mọi dòng trong 3 box = cam sẫm `--amber-text` đậm 700. Đỏ vẫn chỉ cho nguy hiểm.

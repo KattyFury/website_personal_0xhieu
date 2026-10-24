@@ -70,7 +70,7 @@ Tiêu đề màn dài (VI Valuation) trên màn hẹp: `fitIntroTitles()` lùi *
 | **Dòng bấm được** (task Work) | như dòng danh sách; hover nền `--amber-soft` + ô mũi tên tròn 32 nền đen. Trong dải Daily nền dòng là trắng |
 | **Nhãn nhóm** (Work) | cao 32 · icon 16 đen + chữ 14/600 grey + kẻ mảnh kéo hết ngang |
 | **Tiêu đề mục** (CV) | icon 24 + chữ 24 + kẻ mảnh kéo hết ngang |
-| **Nút chính** | cao 48 đệm 24 · radius 16 · nền đen chữ trắng 16/600 · shadow. **Nút đứng một mình trên mobile rộng cố định 296** (vd "Dự đoán FDV TGE") |
+| **Nút chính** | cao 48 đệm 24 · radius 16 · nền đen chữ trắng 16/600 · shadow. **Nút đứng một mình trên mobile rộng cố định 296** (ngoại lệ: "Dự đoán FDV TGE" = ô dòng thứ 4 của box) |
 | **Nút phụ** | như nút chính nhưng trắng chữ đen · shadow · hover nền `--amber-soft` (Twitter/Telegram/Email cao 48; Admin = nút nhỏ cao 40 đệm 16 chữ 14) |
 | **Nút icon** | 40×40 radius 16, icon 20: camera, [+], X/Discord trên card, ⋮ admin, đóng popup, tính lại, xoá dòng, thêm dòng, đóng lightbox. **Không dùng ký tự ✕ ⋮ + làm icon** — dùng SVG Lucide (`wteIcon('close'|'more')`) |
 | **Nút mèo (Agent)** | nút icon tròn 48×48, góc dưới phải cách 32 (mobile 16) |
@@ -93,7 +93,7 @@ Mọi khoảng cách là **bội số của 8** — không có khe/đệm 2, 4, 
 
 | Chỗ | Chia |
 |---|---|
-| Valuation — 3 box | 3 × 384 (4 cột lưới), rãnh 24, box cao 328 = header 48 + 16 + thân 248 + 16. Thân: Vùng nguy hiểm/Narrative = 4 dòng 56 + 3 khe 8 (thiếu thì `padRows()` đệm dòng trống, thừa thì cuộn); Hệ số TGE = 3 dòng + nút 48 cách 16 |
+| Valuation — 3 box | 3 × 384 (4 cột lưới), rãnh 24, box cao 328 = header 48 + 16 + thân 248 + 16. Thân: Vùng nguy hiểm/Narrative = 4 dòng 56 + 3 khe 8 (thiếu thì `padRows()` đệm dòng trống, thừa thì cuộn); Hệ số TGE = 3 dòng + nút "Dự đoán FDV TGE" chiếm đúng ô dòng thứ 4 (rộng hết, cao 56, cách 8 — user chốt cho đồng bộ với 3 dòng trên, ngoại lệ với nút 48) |
 | Valuation — bảng | 7 cột theo % (cột mép 13.855%, 5 cột giữa 14.458%), header 48, dòng 40, cao tối đa 432. **Mobile:** ẩn Narrative · TGE · ×ATL, còn 4 cột 22 / 20 / 36 / 22 % (×ATH dạng "đáy → đỉnh" cần rộng nhất), chữ vẫn 14 |
 | Work | card cùng rank 2 × 588 (6 cột lưới), rãnh 24; khác rank cách 48 (mobile 32) |
 | CV — Highlights | 3 × 384, rãnh 24, ảnh 3:2 |

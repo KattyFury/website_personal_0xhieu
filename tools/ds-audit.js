@@ -77,7 +77,7 @@ const PROBE = `(() => {
     const isBtn = tag === 'button' || (tag === 'a' && /btn/.test(el.className));
     if (isBtn && !el.closest('nav') && !el.classList.contains('box-title-btn')) {
       const h = Math.round(r.height);
-      if (![40, 48].includes(h)) bad(el, 'nút cao ' + h + ' (DS: 48, nhỏ 40, icon 40×40)');
+      if (![40, 48].includes(h) && !(el.classList.contains('predict-link') && h === 56)) bad(el, 'nút cao ' + h + ' (DS: 48, nhỏ 40, icon 40×40)');
     }
     if ((tag === 'input' || tag === 'select') && Math.round(r.height) !== 48) bad(el, 'ô nhập cao ' + Math.round(r.height));
   }
