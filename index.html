@@ -152,7 +152,7 @@
     .val-wrap, .ard-wrap { max-width: calc(var(--content) + 2 * var(--gutter)); margin: 0 auto; padding: 0 var(--gutter) 96px; }
     .panel-head {
       position: static; display: flex; align-items: center; justify-content: space-between; gap: 24px;
-      padding: 48px 0 24px;
+      padding: 32px 0 24px;
     }
     .ard-subtabs { background: var(--ground); }
     /* tiêu đề màn = web-h3 24/32 */
@@ -264,7 +264,7 @@
     #cv-view h2::after { content: ''; flex: 1; height: 1px; margin-left: 16px; background: var(--line); }
 
     /* Hero: ảnh 96 · tên web-h2 40 · châm ngôn web-h3 24 · niềm tin web-lead 18 */
-    .hero { padding-top: 96px; text-align: left; }
+    .hero { padding-top: 48px; text-align: left; }
     .hero-top { display: flex; align-items: center; gap: 24px; }
     .pfp {
       flex-shrink: 0; width: 96px; height: 96px; border-radius: 50%; overflow: hidden; background: var(--ink);
@@ -753,7 +753,7 @@
 
       section + section { margin-top: 48px; }
       #cv-view h2 { margin-bottom: 24px; font-size: 20px; line-height: 28px; }
-      .hero { padding-top: 48px; }
+      .hero { padding-top: 24px; }
       .hero-top { gap: 16px; }
       .pfp { width: 72px; height: 72px; }
       .hero-handle { font-size: 32px; line-height: 40px; }
@@ -774,7 +774,7 @@
 
       /* Khung chung */
       .val-wrap, .ard-wrap { padding-bottom: 48px; }
-      .panel-head { gap: 8px; padding: 24px 0 16px; }
+      .panel-head { gap: 8px; padding: 16px 0 16px; }
       /* Tiêu đề dài không cắt "…" nữa: fitIntroTitles() thu nhỏ chữ cho vừa 2 dòng */
       .val-intro { font-size: 20px; line-height: 1.25; height: auto; }
       .val-intro > span { display: block; -webkit-line-clamp: unset; }

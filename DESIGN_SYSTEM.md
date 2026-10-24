@@ -80,8 +80,8 @@ Font hệ thống Apple (`-apple-system, BlinkMacSystemFont, 'SF Pro Text', syst
 
 Mọi khoảng cách là **bội số của 8**. Lưới web 1440: **lề 120 · 12 cột · rãnh 24 · nội dung 1200** (code: `--content 1200` + lề tối thiểu `--gutter 48`, nên ở 1440 tự ra 120). Mobile ≤ 640: lề 16.
 
-- **Dọc CV:** hero đệm trên 96 (mobile 48) · mục cách nhau 96 (mobile 48) · tiêu đề mục → nội dung 32 (mobile 24).
-- **Dọc Valuation/Work:** navbar → hàng tiêu đề 48 (mobile 24) → nội dung 24 (mobile 16).
+- **Dọc CV:** hero đệm trên 48 (mobile 24) · mục cách nhau 96 (mobile 48) · tiêu đề mục → nội dung 32 (mobile 24).
+- **Dọc Valuation/Work:** navbar → hàng tiêu đề 32 (mobile 16) → nội dung 24 (mobile 16).
 - **Trong card:** header 48 → đệm 16 → dòng 40 → khe 8 → … → đệm đáy 16–24. Đệm ngang 24 (mobile 16).
 
 | Chỗ | Chia |
