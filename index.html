@@ -402,8 +402,8 @@
     #tge-section tbody tr.row-editable { cursor: pointer; }
     /* Ticker ĐẬM + chấm vàng = vcFDV ≥ $300M · THƯỜNG = dưới.
        Chữ 3 cấp: số ink · narrative, ×ATL, đáy-trước-đỉnh, ×ATM < 1 grey · ngày TGE muted (meta).
-       Vàng mắt mèo là màu THIẾT KẾ (chấm, nền header), KHÔNG tô số. Số cần chú ý = ĐẬM 700 ink
-       (×TGE ≥ 13, ×ATH tuần đầu). Màu ngữ nghĩa duy nhất: ĐỎ = nguy hiểm (×ATM ≥ 15, badge soft). */
+       Số cần chú ý = CAM SẪM --amber-text đậm 700 (×TGE ≥ 13, ×ATH tuần đầu) — cùng màu với số chính trong 3 box.
+       ĐỎ = nguy hiểm (×ATM ≥ 15, badge soft). */
     #tge-section td.td-ticker { font-weight: 400; }
     #tge-section td.td-ticker.fdv-hi { font-weight: 700; }
     #tge-section td.td-ticker.fdv-hi .ck::after {
@@ -416,8 +416,8 @@
     .val-table .ck { display: inline-block; text-align: left; }
     #tge-section .ath-pre { font-weight: 400; color: var(--grey); }
     #tge-section .ath-arrow { font-weight: 400; color: var(--grey); }
-    #tge-section .ath-early { font-weight: 700; }  /* ATH trong tuần đầu lên sàn */
-    .val-table .m-hot, .narrative-med.m-hot { font-weight: 700; }
+    #tge-section .ath-early { font-weight: 700; color: var(--amber-text); }  /* ATH trong tuần đầu lên sàn */
+    .val-table .m-hot { font-weight: 700; color: var(--amber-text); }
     .val-table .m-low { font-weight: 400; color: var(--grey); }
     .val-table .m-danger { display: inline-block; padding: 0 8px; line-height: 24px; border-radius: 9999px; background: var(--red-soft); color: var(--red-text); font-weight: 600; }
     .val-empty { padding: 40px 16px; text-align: center; font-size: 16px; color: var(--grey); }
@@ -472,7 +472,7 @@
     .lr-main { min-width: 0; display: flex; flex-direction: column; }
     .lr-title { display: flex; align-items: center; gap: 8px; font-weight: 600; white-space: nowrap; }
     .lr-label, .lr-meta { color: var(--grey); white-space: nowrap; }
-    .lr-val { flex-shrink: 0; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; color: var(--ink); }
+    .lr-val { flex-shrink: 0; font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; color: var(--amber-text); }   /* số chính của box = cam sẫm (4.7:1 trên mist) */
     .danger-multi { color: var(--red-text); }   /* mọi dòng ở đây đều ×ATM ≥ 15 = nguy hiểm */
     .rt-btn-row { flex-shrink: 0; height: 48px; margin-top: 16px; display: flex; align-items: center; justify-content: center; }
     .danger-badge-new {
