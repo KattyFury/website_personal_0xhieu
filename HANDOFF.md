@@ -108,7 +108,7 @@ vcFDV = fundraising / (vcAlloc/100)
 
 ## 6. Luật bắt buộc
 
-- **Ngôn ngữ:** tiếng Việt CHỈ ở tab có toggle (Valuation · Work) + tài liệu nội bộ. Tab CV + mọi thẻ meta/og/JSON-LD luôn tiếng Anh. Dịch nhãn UI tĩnh (`VAL_HEAD_LABELS` · `VAL_PLACEHOLDERS` · `VAL_TITLES`), **không dịch data** (ticker, narrative, số). Ngoại lệ: task cá nhân Work **không** dịch.
+- **Ngôn ngữ:** tiếng Việt CHỈ ở tab có toggle (Valuation · Work) + tài liệu nội bộ. Tab CV + mọi thẻ meta/og/JSON-LD luôn tiếng Anh. Dịch nhãn UI tĩnh (`VAL_HEAD_LABELS` · `VAL_PLACEHOLDERS` · `VAL_TITLES`), **không dịch data** (ticker, narrative, số). Tab Work bản EN: dịch (Google gtx, `translateToEN()`) nội dung task của card public **và** task cá nhân, cùng tên card nếu tên có dấu tiếng Việt (tên dự án giữ nguyên); Google lỗi thì không đánh dấu đã dịch → bấm EN lần sau dịch lại.
 - **Châm ngôn, nguyên văn mọi nơi:** `Sharing POVs on Crypto and AI`. Câu niềm tin có **2 bản cố ý**: bản dài 3 vế ở hero CV, bản ngắn *"AI is the future. Crypto is the money of the future."* ở meta/og/JSON-LD/`og.png`. `jobTitle` JSON-LD giữ "Builder + Contributor".
 - **Đổi `og.png` phải bump `?v=`** (đang `?v=7`) — X/Telegram cache theo URL. Nguồn vẽ: `tools/og-gen.html` (1200×630) — render bằng Chrome headless đúng 1200×630 (vd script `C:\tmp\cvshot\shot.js file:///D:/Files/Claude/website_personal_0xhieu/tools/og-gen.html og.png 1200 630`).
 - **Client ↔ server phải khớp:** `WTE_RANKS` ↔ `RANKS` (`private.js`). Lệch là server âm thầm ép về mặc định.
@@ -145,6 +145,7 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 
 ## Nhật ký
 
+- 2026-10-24: **Work bản EN dịch đủ** (user: "EN chưa dịch task"). Lỗi cũ: task cá nhân bị cố ý không dịch; tên card tiếng Việt không dịch; Google lỗi 1 lượt là kẹt tiếng Việt tới khi tải lại trang; bấm EN trước khi data về thì dịch xong không vẽ lại. Sửa trong `translateToEN()` (+ `personalTasksEN`). Test: bấm EN lúc 7s và 0.4s sau khi mở trang → 18/18 card không còn chữ có dấu.
 - 2026-10-24: Work bỏ kẻ mảnh cạnh tiêu đề nhóm; nhóm $ đổi tên "work-to-earn"; tiêu đề tab Work "Work to Earn" → **"Danh sách công việc"** (EN "Task list", đổi theo toggle trong `renderWTE()`); tiêu đề tab Valuation → **"Quan sát altcoin"** (EN "Altcoin watch").
 - 2026-10-24: **Work: tiêu đề từng nhóm** ("Work to Earn" · "Rank: S"…) + **form task bỏ lựa chọn rank "—"** (rank bắt buộc nên "—" vô nghĩa → gợi ý "Chọn rank" không chọn được; Work-to-Earn thì ẩn ô Rank; lỗi "Chọn rank" tự tắt khi đổi phân loại; rank cũ `SS` hiện thành S). **Hover đồng bộ cả site:** mọi thứ bấm được có chữ → gạch chân vàng 2px; bỏ hết hover đổi màu nền box (dòng task, nút phụ, Admin, nút xã hội, danh sách admin) + bỏ nhích card + bỏ màu tự pha `#262626` ở nút chính.
 - 2026-10-24: **Dọn việc treo theo user:** bỏ "test điện thoại thật" (lỗi thì user tự báo) + "nhập Discord" (Discord là OPTIONAL). Hết 2 ngoại lệ design system: dòng bảng altcoin 40 → **56** (bảng cao tối đa 440 = header 48 + 7 dòng), popup giải thích bỏ emoji 1️⃣ 👉 → "1." "2." + câu chốt đậm (`.info-key`). Mobile: tiêu đề Valuation chiếm trọn hàng trên (cụm nút xuống hàng dưới canh phải) → giữ cỡ 24, không bị ép xuống 14.

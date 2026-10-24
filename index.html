@@ -2334,7 +2334,9 @@
     }
 
     // ── Auto-translate VI → EN (Google Translate, dùng chung) ─
+    // Trả về { out, ok }: ok = false nếu có lượt gọi Google lỗi (khi đó phần lỗi giữ nguyên tiếng Việt).
     async function gtranslate(texts) {
+      let ok = true;
       const SEP = '\n[|||]\n';
       const BATCH = 30;
       const batches = [];
@@ -2349,30 +2351,43 @@
           const parts = raw.split(/\n?\[\|\|\|\]\n?/);
           while (parts.length < batch.length) parts.push(batch[parts.length]);
           return parts.slice(0, batch.length);
-        } catch { return batch; }
+        } catch { ok = false; return batch; }
       }));
-      return results.flat();
+      return { out: results.flat(), ok };
     }
 
-    async function translateToEN() {
-      if (wteLoaded.EN) return;
-      if (!wteData.VI.length) return;
+    // Dịch VI → EN: nội dung task của card public + task cá nhân, và TÊN card nếu tên có dấu tiếng Việt
+    // (tên dự án như Kaito, Flop Labs giữ nguyên). Google lỗi thì KHÔNG đánh dấu xong → lần bấm EN sau dịch lại.
+    const HAS_VN = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i;
+    let personalTasksEN = [];
+    let wteTranslating = null;
+    function translateToEN() {
+      if (wteLoaded.EN) return Promise.resolve();
+      if (!wteTranslating) wteTranslating = doTranslateToEN().finally(() => { wteTranslating = null; });
+      return wteTranslating;
+    }
+    async function doTranslateToEN() {
+      const lists = [wteData.VI, personalTasks];
+      if (!lists.some(l => l.length)) return;
       const texts = [];
-      wteData.VI.forEach(p => {
-        ['getStarted','daily','weekly'].forEach(f => {
-          (p[f] || []).forEach(item => texts.push(item.text || ''));
-        });
-      });
-      const translated = await gtranslate(texts);
+      lists.forEach(list => list.forEach(p => {
+        if (HAS_VN.test(p.name || '')) texts.push(p.name);
+        ['getStarted','daily','weekly'].forEach(f => (p[f] || []).forEach(item => texts.push(item.text || '')));
+      }));
+      const { out, ok } = await gtranslate(texts);
       let idx = 0;
-      wteData.EN = wteData.VI.map(p => {
+      const [pubEN, perEN] = lists.map(list => list.map(p => {
         const en = { ...p };
+        if (HAS_VN.test(p.name || '')) en.name = out[idx++] || p.name;
         ['getStarted','daily','weekly'].forEach(f => {
-          en[f] = (p[f] || []).map(item => ({ ...item, text: translated[idx++] || item.text }));
+          en[f] = (p[f] || []).map(item => ({ ...item, text: out[idx++] || item.text }));
         });
         return en;
-      });
-      wteLoaded.EN = true;
+      }));
+      wteData.EN = pubEN;
+      personalTasksEN = perEN;
+      wteLoaded.EN = ok;
+      if (wteLang === 'EN') renderWTE();   // dịch xong (kể cả lúc user bấm EN trước khi data về) → vẽ lại ngay
     }
 
     // ── Icon SVG dùng chung cả site (nét 1.5, tô bằng currentColor) ──
@@ -2472,7 +2487,7 @@
       const personalHtml = (adminUnlocked && personalTasks.length)
         ? `<div id="wte-personal" class="wte-group">
              <div class="wte-group-label">${wteLang === 'EN' ? 'Personal' : 'Cá nhân'}</div>
-             <div class="wte-rank-group">${personalTasks.map(p => cardHtml(p, true)).join('')}</div>
+             <div class="wte-rank-group">${(wteLang === 'EN' && personalTasksEN.length ? personalTasksEN : personalTasks).map(p => cardHtml(p, true)).join('')}</div>
            </div>`
         : '';
 
@@ -2566,6 +2581,7 @@
       wteData.VI    = tasks.filter(t => t.visibility === 'public');
       wteLoaded.VI  = true;
       wteData.EN    = [];
+      personalTasksEN = [];
       wteLoaded.EN  = false;
     }
 
