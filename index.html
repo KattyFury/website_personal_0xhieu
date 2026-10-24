@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
 
   <title>0xhieu.xyz</title>
   <meta name="description" content="Hieu Nguyen (0xhieu.xyz) — Sharing POVs on Crypto and AI. AI is the future, crypto is the money of the future. Valuation · Work." />
@@ -79,7 +79,10 @@
       --modal-w: 384px;    /* popup nhỏ = 4 cột; popup rộng = 2× */
     }
 
-    html { scroll-behavior: smooth; overflow-y: scroll; }
+    html { overflow-y: scroll; }
+    /* Mở popup/lightbox → khoá cuộn trang nền. Không khoá thì chạm ô nhập trên mobile là trình duyệt cuộn
+       cả trang nền để đưa ô lên → popup giật, nhảy (lỗi 2026-10-24). */
+    html:has(.wl-modal-backdrop.open), html:has(#lightbox.open) { overflow: hidden; }
 
     /* ── Thanh cuộn chuẩn (html + .thin-scroll) ─────────────────
        CHỈ style bằng ::-webkit-scrollbar. KHÔNG set scrollbar-width/-color cho
@@ -350,7 +353,7 @@
     }
     #lightbox.open { display: flex; }
     #lightbox img {
-      max-width: 100%; max-height: 90vh; border-radius: 16px; object-fit: contain; cursor: default;
+      max-width: 100%; max-height: 90vh; max-height: 90svh; border-radius: 16px; object-fit: contain; cursor: default;
       box-shadow: var(--shadow);
     }
     #lightbox-close {
@@ -423,8 +426,8 @@
 
     /* ── Popup bảng dài (bấm tiêu đề): clone thead/tbody của bảng trên ──
        JS đo --ck1..7 = bề rộng ô dài nhất mỗi cột để cả cột thẳng mép trái. */
-    .wl-modal.wl-modal--wide { width: calc(var(--modal-w) * 2); max-width: 92vw; }
-    .tge-modal-body { display: flex; flex-direction: column; max-height: 78vh; overflow: hidden; }
+    .wl-modal.wl-modal--wide { width: calc(var(--modal-w) * 2); max-width: 100%; }
+    .tge-modal-body { display: flex; flex-direction: column; max-height: 78vh; max-height: 78svh; overflow: hidden; }
     .tge-modal-head { flex: none; overflow: hidden; }
     .tge-modal-scroll { flex: 1 1 auto; min-height: 0; overflow: auto; }
     .tge-modal-body th, .tge-modal-body td { width: calc(100% / 6); }
@@ -592,12 +595,13 @@
     /* ══ POPUP ════════════════════════════════════════════════════
        thẻ nổi trắng radius 16 · nút cao 48 radius 16 (chính = đen, phụ = trắng) · ô nhập cao 48 nền mist */
     .wl-modal-backdrop {
-      display: none; position: fixed; inset: 0; z-index: 200;
-      align-items: center; justify-content: center; background: var(--scrim);
+      display: none; position: fixed; inset: 0; z-index: 200; padding: 16px;
+      align-items: flex-start; justify-content: center; background: var(--scrim);
+      overflow-y: auto; overscroll-behavior: contain;
     }
     .wl-modal-backdrop.open { display: flex; }
     .wl-modal {
-      position: relative; width: var(--modal-w); max-width: 90vw; padding: 16px;
+      position: relative; width: var(--modal-w); max-width: 100%; margin: auto; padding: 16px;
       display: flex; flex-direction: column; gap: 16px;
       background: var(--ground); border-radius: 16px; box-shadow: var(--shadow);
     }
@@ -605,7 +609,7 @@
     #ptask-modal .wl-modal-title { padding-right: 0; text-align: center; }
     .info-modal-body { font-size: 16px; line-height: 24px; color: var(--grey); white-space: pre-line; }
     .shot-modal { align-items: center; text-align: center; }
-    #shot-modal-img { display: block; width: 100%; max-height: 56vh; object-fit: contain; border: 1px solid var(--line); border-radius: 16px; }
+    #shot-modal-img { display: block; width: 100%; max-height: 56vh; max-height: 56svh; object-fit: contain; border: 1px solid var(--line); border-radius: 16px; }
     .shot-modal-hint { font-size: 14px; color: var(--grey); }
     .info-modal-link { font-weight: 600; color: var(--ink); text-decoration: underline; text-decoration-color: var(--amber); text-decoration-thickness: 2px; text-underline-offset: 4px; cursor: pointer; }
     .info-modal-link:hover { text-decoration-color: var(--ink); }
@@ -619,8 +623,11 @@
     .wl-modal input, .wl-modal select {
       width: 100%; min-width: 0; height: 48px; padding: 0 16px; outline: none;
       background: var(--mist); border: 1px solid var(--line); border-radius: 16px;
-      font-family: var(--font); font-size: 16px; color: var(--ink); transition: border-color .15s;
+      font-family: var(--font); font-size: 16px; line-height: 24px; letter-spacing: -.011em; color: var(--ink); transition: border-color .15s;
     }
+    .wl-modal input { -webkit-appearance: none; appearance: none; display: block; }
+    .wl-modal input[type=date] { text-align: left; }
+    .wl-modal input[type=date]::-webkit-date-and-time-value { text-align: left; }
     .wl-modal input::placeholder { color: var(--muted); }
     .wl-modal select { cursor: pointer; }
     .wl-modal input:focus, .wl-modal select:focus { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
@@ -663,7 +670,7 @@
     .val-count { font-size: 14px; font-weight: 400; color: var(--grey); }
     .val-list-head, .val-row { display: grid; grid-template-columns: 80px 96px 1fr 120px 64px; align-items: center; gap: 8px; }
     .val-list-head { padding: 0 16px 8px; border-bottom: 1px solid var(--line); font-size: 14px; font-weight: 600; color: var(--grey); }
-    #val-list { max-height: 52vh; padding-top: 8px; overflow-y: auto; }
+    #val-list { max-height: 52vh; max-height: 52svh; padding-top: 8px; overflow-y: auto; }
     .val-row {
       height: 56px; margin-bottom: 8px; padding: 0 16px; border-radius: 16px;
       background: var(--mist); font-size: 14px; color: var(--ink); cursor: pointer; transition: background .15s;
@@ -678,7 +685,7 @@
 
     /* Form task cá nhân (cuộn trong popup, ẩn thanh cuộn) */
     #ptask-form {
-      max-height: 62vh; overflow-y: auto; display: flex; flex-direction: column; gap: 16px;
+      max-height: 62vh; max-height: 62svh; overflow-y: auto; display: flex; flex-direction: column; gap: 16px;
       scrollbar-width: none; -ms-overflow-style: none;
     }
     #ptask-form::-webkit-scrollbar { display: none; }
@@ -1053,11 +1060,11 @@
         <div class="calc-field"><label>Narrative *</label><select id="vf-narrative"></select></div>
         <div class="ptask-row">
           <div class="calc-field"><label>Gọi vốn (USD) *</label><input type="text" id="vf-fundraising" placeholder="178.5M" /></div>
-          <div class="calc-field"><label>VC Alloc (%) *</label><input type="number" id="vf-vcAlloc" step="any" placeholder="17" /></div>
+          <div class="calc-field"><label>VC Alloc (%) *</label><input type="number" id="vf-vcAlloc" inputmode="decimal" step="any" placeholder="17" /></div>
         </div>
         <div class="ptask-row">
           <div class="calc-field"><label>Total supply *</label><input type="text" id="vf-totalSupply" placeholder="4.29B" /></div>
-          <div class="calc-field"><label>Giá TGE *</label><input type="number" id="vf-priceTGE" step="any" placeholder="1.1783" /></div>
+          <div class="calc-field"><label>Giá TGE *</label><input type="number" id="vf-priceTGE" inputmode="decimal" step="any" placeholder="1.1783" /></div>
         </div>
         <div class="ptask-row">
           <div class="calc-field"><label>CoinGecko id</label><input type="text" id="vf-cgId" placeholder="optimism" /></div>
@@ -1079,11 +1086,11 @@
       <div id="calc-form">
         <div class="calc-field">
           <label id="calc-raise-label">Fundraising ($M)</label>
-          <input type="number" id="calc-raise" step="0.1" placeholder="e.g. 30" />
+          <input type="number" id="calc-raise" inputmode="decimal" step="0.1" placeholder="e.g. 30" />
         </div>
         <div class="calc-field">
           <label id="calc-alloc-label">VC Alloc (%)</label>
-          <input type="number" id="calc-alloc" step="0.1" placeholder="e.g. 20" />
+          <input type="number" id="calc-alloc" inputmode="decimal" step="0.1" placeholder="e.g. 20" />
         </div>
         <div class="calc-field">
           <label id="calc-supply-label">Total Supply</label>
@@ -2446,7 +2453,7 @@ ${line}
             <span class="wte-name-wrap">${logoHtml}${nameHtml}</span>
             <span class="wte-socials">${p.twitter ? `<a class="wte-social" href="${p.twitter}" target="_blank" rel="noopener" title="X" aria-label="X">${wteIcon('x')}</a>` : ''}${p.discord ? `<a class="wte-social" href="${p.discord}" target="_blank" rel="noopener" title="Discord" aria-label="Discord">${wteIcon('discord')}</a>` : ''}</span>
             ${adminUnlocked ? `<button class="wte-opt" data-id="${p.id}" title="Sửa task" aria-label="Sửa task">${wteIcon('more')}</button>` : ''}
-            <span class="wte-tags">${potLv ? `<span class="wte-tag wte-pot--${potLv}">${wteIcon(potLv)}${potLv}-potential</span>` : ''}${p.type ? `<span class="wte-tag wte-narr">${tagCase(p.type)}</span>` : ''}<b class="wte-tag wte-rank-v rank-${g}">rank: ${RANK_LABEL[g] || g}</b></span>
+            <span class="wte-tags">${potLv ? `<span class="wte-tag wte-pot--${potLv}">${wteIcon(potLv)}${potLv}-potential</span>` : ''}${p.type ? `<span class="wte-tag wte-narr">${tagCase(p.type)}</span>` : ''}${g === 'INCOME' ? '' : `<b class="wte-tag wte-rank-v rank-${g}">rank: ${RANK_LABEL[g] || g}</b>`}</span>
           </div>
           ${section('Get Started', p.getStarted, 'getStarted')}
           ${section('Daily', p.daily, 'daily')}

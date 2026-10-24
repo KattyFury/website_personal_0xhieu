@@ -112,6 +112,7 @@ vcFDV = fundraising / (vcAlloc/100)
 - **Đổi `og.png` phải bump `?v=`** (đang `?v=7`) — X/Telegram cache theo URL. Nguồn vẽ: `tools/og-gen.html` (1200×630) — render bằng Chrome headless đúng 1200×630 (vd script `C:\tmp\cvshot\shot.js file:///D:/Files/Claude/website_personal_0xhieu/tools/og-gen.html og.png 1200 630`).
 - **Client ↔ server phải khớp:** `WTE_RANKS` ↔ `RANKS` (`private.js`). Lệch là server âm thầm ép về mặc định.
 - **Hàng đầu mỗi tab:** tiêu đề TRÁI, nút PHẢI (flex). Không quay lại kiểu tiêu đề canh giữa + nút absolute. Tiêu đề dài thì cho xuống 2 dòng, đừng rút ngắn câu. **Mobile: KHÔNG cắt "…"** — `fitIntroTitles()` thu nhỏ chữ từng 1px (sàn 10px) cho vừa 2 dòng; chạy lại khi đổi ngôn ngữ + khi bề ngang `.val-intro` đổi (ResizeObserver).
+- **Popup + ô nhập trên mobile (sửa 2026-10-24, user báo "bể khung, nhảy chữ"):** mở popup phải khoá cuộn trang nền (`html:has(.wl-modal-backdrop.open)`); nền mờ `overflow-y: auto`, popup `margin: auto` (đừng quay lại `align-items: center` — popup dài lòi khỏi mép trên khi bàn phím bật); chiều cao trong popup dùng `svh`; viewport có `interactive-widget=resizes-content`; không đặt `scroll-behavior: smooth` cho cả trang. Kiểm bằng script đo popup ở 390×844 và 390×460 (giả lập bàn phím).
 - **Thanh cuộn:** mọi vùng cuộn dùng `.thin-scroll`. **Không set `scrollbar-width`/`scrollbar-color` cho Chromium** — từ bản 121 chúng tắt hết `::-webkit-scrollbar`.
 - **Icon tô bằng CSS mask → mask đặt ở `::before`**, không trên nút (Chromium hit-test theo vùng mask). Icon mới thì dùng SVG inline (`wteIcon()`), không dùng mask.
 - **Nút camera dùng `html2canvas-pro`, ĐỪNG quay về html2canvas gốc** — bản 1.4.1 ném "unsupported color function color" vì CSS có `color-mix()` (nút hỏng hẳn tới 10-05). Lưu ảnh: mobile (`pointer: coarse`) → `navigator.share` (Lưu vào Ảnh); mất user-gesture → popup `#shot-modal` bấm thêm 1 lần. Desktop → `showSaveFilePicker({startIn:'desktop'})` mở NGAY lúc bấm, trước khi vẽ; không có API đó → tải về.
@@ -120,7 +121,7 @@ vcFDV = fundraising / (vcAlloc/100)
 
 ## 7. Kiểm tra trước khi push
 
-- **Giao diện: chạy `node tools/ds-audit.js <url>`** — đo computed style mọi phần tử 3 tab × desktop/mobile + popup, so với DESIGN_SYSTEM.md. Chỉ được còn dòng "margin lẻ" do căn giữa tự động. Đừng soát design system bằng mắt (đã sót nhiều lần, 2026-10-24).
+- **Giao diện: chạy `node tools/ds-audit.js <url>`** — đo computed style mọi phần tử 3 tab × desktop/mobile + popup, so với DESIGN_SYSTEM.md. Kết quả đúng là `TỔNG: 0`. Đừng soát design system bằng mắt (đã sót nhiều lần, 2026-10-24).
 - JS: tách script inline ra rồi `node --check`. JSON-LD: `json.loads`.
 - CV: regex dấu tiếng Việt trên vùng `#cv-view` phải ra 0.
 - Giao diện: chụp thật. **`chrome --headless --window-size=390,...` KHÔNG ra mobile thật** (Windows không cho cửa sổ < ~500px, ảnh bị cắt trông như tràn ngang) → dùng puppeteer `setViewport` hoặc nhét trang vào iframe rộng 390.
@@ -138,7 +139,7 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 3. **Rank `SS` còn sót trong KV** — đang hiện ở nhóm S nhờ `groupOf()`; sửa tay qua popup admin rồi bỏ shim.
 4. **Làm tab Valuation dễ hiểu cho số đông** (hướng đã chốt: diễn giải ngay trong box — con số nói gì, ngưỡng nào tốt/xấu). Chưa làm.
 5. Ảnh mới cho Highlights: nén WebP ~750×500, dưới ~150KB, tên khớp `highlights.txt`.
-6. **Link Discord cho card Work** — trường `discord` có từ 2026-10-24, data cũ trống nên chưa card nào hiện icon Discord. Nhập tay qua popup Admin. Popup Admin (ô Discord, nút icon mới) CHƯA test bằng mật khẩu thật.
+6. **Link Discord cho card Work** — trường `discord` có từ 2026-10-24; user đã nhập được cho Binance Pick qua popup Admin (lưu chạy đúng). Card khác chưa có thì nhập dần.
 7. **Ngoại lệ design system còn giữ có chủ đích:** dòng bảng altcoin cao 40 (DS dòng danh sách 56 — bảng số kéo lên 56 thì xem được ít dòng); emoji 1️⃣ 👉 trong popup giải thích (luật trình bày user chốt 2026-08-05). User chưa phán — hỏi trước khi đổi.
 8. Tiêu đề Valuation trên mobile 390 tự lùi xuống 14 vì cụm nút (camera · Admin · VI/EN) chiếm chỗ — đúng luật nhưng nhỏ; muốn to hơn thì phải tính lại bố cục hàng đầu mobile.
 
@@ -146,6 +147,7 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 
 ## Nhật ký
 
+- 2026-10-24: **Sửa ô nhập trên mobile bể khung/nhảy** — đo được: trang nền không khoá cuộn khi mở popup (trình duyệt cuộn nền khi chạm ô nhập → popup giật), popup căn giữa cứng không cuộn được (bàn phím bật → "Sửa dự án" lòi khỏi mép trên 66px), max-height theo `vh` co giãn khi bàn phím bật/tắt, `scroll-behavior: smooth` làm cú cuộn giật. Sửa: khoá cuộn bằng `html:has(.open)`, nền mờ cuộn được + popup `margin: auto`, `svh`, `interactive-widget=resizes-content`, bỏ smooth toàn trang, ô nhập `appearance: none`, ô số `inputmode="decimal"`. Cỡ chữ ô nhập vốn đã 16 (không phải lỗi iPhone tự zoom). Cùng ngày: **card work-to-earn không hiện thẻ rank** (user chốt). `tools/ds-audit.js` bỏ qua margin căn giữa tự động → kết quả đúng là TỔNG 0.
 - 2026-10-24: Sửa nút "Dự đoán FDV TGE" cách dòng 3 thành 16 (margin-top 8 cộng margin-bottom 8 của dòng trên) làm box Hệ số TGE tràn → bỏ margin-top. Đo lại: 3 box đều 4 ô 56, khe 8, không tràn.
 - 2026-10-24: **Nút "Dự đoán FDV TGE" chiếm đúng ô dòng thứ 4** của box Hệ số TGE (rộng hết, cao 56, cách 8) cho đồng bộ với 3 dòng trên — user chốt. `tools/ds-audit.js` cho phép riêng nút này cao 56.
 - 2026-10-24: **Soát toàn bộ bằng script `tools/ds-audit.js`** (78 chỗ lệch → 0, trừ margin auto). Sửa: nền vàng nhạt tự pha `#FFF1DB` → `yellow-soft #FEF5D9`; hover/link không còn chữ cam (đen + gạch chân vàng); đậm 700 ở chữ nhỏ → 600; line-height/giãn chữ đúng cặp DS (bảng, tab nav mobile, nút, label form); icon ký tự ✕ ⋮ + → SVG Lucide trong nút icon 40×40; vòng ảnh đại diện/chấm timeline dùng outline thay shadow; lightbox dùng scrim + shadow Y2; nút mèo 48. **`og.png` vẽ lại** theo design system (nền trắng, chữ đen, vàng mắt mèo, Inter, ảnh đại diện mới) → `?v=7`; nguồn `tools/og-gen.html`.

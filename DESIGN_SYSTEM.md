@@ -36,12 +36,12 @@
 - Nền `--amber-soft`: header box Valuation, header bảng altcoin, header + dải Daily của card `$`.
 - **Link + hover chữ: chữ ĐEN + gạch chân vàng mắt mèo 2px** (link timeline, link popup, hover tên site / tiêu đề màn / tên dự án). Tab nav hover: xám → đen. KHÔNG đổi chữ sang cam.
 - Hover nút phụ / dòng bấm được: nền `--amber-soft`. Hover nút icon: nền `--mist`.
-- Viên `--amber` chữ đen: thẻ `rank: $` · nút `$` đang chọn ở thanh lọc.
+- Viên `--amber` chữ đen: nút `$` đang chọn ở thanh lọc.
 
 **Số liệu Valuation:** số thường ink 400 · ×TGE ≥ 13, ×ATH tuần đầu (`×TGE → ×ATH`) = **chữ cam đậm 600** · giá trị bên phải mọi dòng box (FDV thấp/cao, Điều kiện thị trường, median narrative) = **chữ cam đậm 600** · ×ATM ≥ 15 trong bảng = viên `--red-soft` chữ `--red-text` · ×ATM trong box Vùng nguy hiểm = chữ đỏ · badge FAKE PUMP/PUMP LÁO = viên `--red-soft` chữ đỏ · ×ATM < 1, ×ATL, đáy-trước-đỉnh = grey · ngày TGE = muted (meta).
 - Chấm `--amber` 8px cạnh ticker có vcFDV ≥ $300M.
 
-**Rank (Work):** card `$` = header + Daily nền `--amber-soft`, thẻ `rank: $` nền vàng chữ đen. Card S/A/B/C = header + Daily nền `--mist`, thẻ `rank: S` nền đen chữ trắng. Thanh lọc: nút đang chọn đen chữ trắng (`$` vàng chữ đen).
+**Rank (Work):** card `$` (work-to-earn) = header + Daily nền `--amber-soft`, **không có thẻ rank**. Card S/A/B/C = header + Daily nền `--mist`, thẻ `rank: S` nền đen chữ trắng. Thanh lọc: nút đang chọn đen chữ trắng (`$` vàng chữ đen).
 
 ## 2. Chữ
 
@@ -65,7 +65,7 @@ Tiêu đề màn dài (VI Valuation) trên màn hẹp: `fitIntroTitles()` lùi *
 | **Navbar** | cao 64 (mobile 56) · trắng mờ blur · kẻ dưới `--line` · logo mèo 32 (mobile 24, giữ nguyên hình, không bo thêm) + tên site 20/600 · tab 16/600 cách 32 (mobile 14, cách 16), đang chọn chữ đen + vạch vàng 4px rộng bằng chữ |
 | **Box nổi** | trắng · **radius 16** · `--shadow` (không viền) · hover nhích 2px. Áp cho: card Work · box Valuation · bảng altcoin · ảnh Highlights · popup |
 | **Header card** | cao 48 · nền `--amber-soft` · icon + tiêu đề web-h4 canh TRÁI · đệm 16 |
-| **Header card Work** | luôn 2 hàng, đệm 8/16. Hàng 1: logo 24 + tên 20 canh TRÁI · icon X + Discord (nút tròn 32, icon 20, cách 8, ẩn nếu chưa có link) canh PHẢI · ⋮ admin. Hàng 2: dãy **thẻ** viên trắng cao 24 đệm 8 chữ 14/600, icon cách chữ 8 — potential · narrative · `rank: S`, cách mép card 16 thẳng mép logo. Chữ thẻ viết thường hết, chỉ "AI" + chữ rank viết hoa (`tagCase()`, chỉ đổi lúc hiện), tự xuống dòng, không cắt chữ |
+| **Header card Work** | luôn 2 hàng, đệm 8/16. Hàng 1: logo 24 + tên 20 canh TRÁI · icon X + Discord (nút tròn 32, icon 20, cách 8, ẩn nếu chưa có link) canh PHẢI · ⋮ admin. Hàng 2: dãy **thẻ** viên trắng cao 24 đệm 8 chữ 14/600, icon cách chữ 8 — potential · narrative · `rank: S` (card work-to-earn `$` KHÔNG hiện thẻ rank — user chốt 2026-10-24, nhóm `$` vẫn đứng đầu), cách mép card 16 thẳng mép logo. Chữ thẻ viết thường hết, chỉ "AI" + chữ rank viết hoa (`tagCase()`, chỉ đổi lúc hiện), tự xuống dòng, không cắt chữ |
 | **Dòng danh sách** (box Valuation · task Work · danh sách admin) | nền `--mist` · **cao tối thiểu 56** · radius 16 · đệm ngang 16 · chữ 14 · cách nhau 8. Box Valuation: **nhãn TRÁI, giá trị PHẢI** (`.list-row`): nhãn grey (hoặc dòng chính ink 600 + dòng phụ grey — vd `STABLE` / `TGE 08/12/25`, `layer-1` / `12 dự án`), giá trị ink 600. Không viết tắt kiểu `SL:02`, không dấu `:` sau nhãn |
 | **Dòng bấm được** (task Work) | như dòng danh sách; hover nền `--amber-soft` + ô mũi tên tròn 32 nền đen. Trong dải Daily nền dòng là trắng |
 | **Nhãn nhóm** (Work) | cao 32 · icon 16 đen + chữ 14/600 grey + kẻ mảnh kéo hết ngang |
@@ -77,6 +77,7 @@ Tiêu đề màn dài (VI Valuation) trên màn hẹp: `fitIntroTitles()` lùi *
 | **Vòng trang trí** (quanh ảnh đại diện, quanh chấm timeline) | dùng `outline` (+ `outline-offset`), KHÔNG dùng box-shadow — design system chỉ có 1 shadow Y2 |
 | **Toggle VI/EN · thanh lọc rank** | máng `--mist` radius pill, **không đệm/khe trong** — viên chiếm trọn máng: toggle cao 40 (viên 40), thanh lọc cao 48 (viên 48) · viên đang chọn đen chữ trắng |
 | **Ô nhập** | cao 48 đệm 16 · nền `--mist` · viền `--line` 1px · radius 16 · khi chọn viền 2px đen |
+| **Popup trên mobile** | nền mờ tự cuộn được (popup dài hơn màn → cuộn, không lòi khỏi mép), popup căn giữa bằng `margin: auto` (KHÔNG `align-items: center`), mở popup = khoá cuộn trang nền (`html:has(.open)`), chiều cao trong popup dùng `svh` (không đổi khi bàn phím bật). Ô nhập chữ 16 (dưới 16 iPhone tự phóng to), `appearance: none` |
 | **Thẻ / badge** | cao 24 · đệm ngang 8 · chữ 14/20 · radius pill (×ATM nguy hiểm, FAKE PUMP, thẻ Work) |
 | **Icon** | **Lucide 1.59.0** (ISC), nét 2, cỡ 16/20/24, tô `currentColor`. SVG inline (`WTE_ICON` + `wteIcon()` trong JS); riêng camera/plus là file SVG dùng CSS mask ở `::before`. Icon thương hiệu X/Discord lấy từ Tabler (Lucide không có) |
 

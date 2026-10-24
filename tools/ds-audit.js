@@ -2,7 +2,7 @@
 // so với token trong DESIGN_SYSTEM.md (màu, cỡ/dòng/đậm/giãn chữ, khoảng cách bội số 8, radius 16|pill, shadow Y2, nút 40/48, ô nhập 48).
 //   node tools/ds-audit.js http://127.0.0.1:8787      (server local có SPA fallback + /api proxy)
 //   node tools/ds-audit.js https://0xhieu.xyz
-// Kết quả chấp nhận được: chỉ còn margin lẻ do căn giữa tự động (margin: auto). Mọi dòng khác = lỗi phải sửa.
+// Kết quả đúng: TỔNG 0 (margin căn giữa tự động đã được bỏ qua). Mọi dòng in ra = lỗi phải sửa.
 // Chưa đo được: pseudo-element (::before/::after) và trạng thái hover — soát tay.
 const { spawn } = require('child_process');
 const fs = require('fs'), os = require('os'), path = require('path');
@@ -62,7 +62,11 @@ const PROBE = `(() => {
     }
     // khoảng cách
     for (const p of ['paddingTop','paddingRight','paddingBottom','paddingLeft','marginTop','marginRight','marginBottom','marginLeft','rowGap','columnGap']) {
-      const v = cs[p]; if (v && v !== 'normal' && !ok8(v)) bad(el, p + ' ' + v + ' không bội số 8');
+      const v = cs[p]; if (!v || v === 'normal' || ok8(v)) continue;
+      // margin 2 bên bằng nhau = căn giữa tự động (margin: auto) → không phải lỗi
+      const pair = { marginLeft: 'marginRight', marginRight: 'marginLeft', marginTop: 'marginBottom', marginBottom: 'marginTop' }[p];
+      if (pair && cs[pair] === v) continue;
+      bad(el, p + ' ' + v + ' không bội số 8');
     }
     // bo góc
     const rad = px(cs.borderTopLeftRadius);
