@@ -473,7 +473,7 @@
     .lr-label, .lr-meta { color: var(--grey); white-space: nowrap; }
     .lr-val { flex-shrink: 0; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; color: var(--amber-text); }   /* số chính của box = chữ cam orange-text (4.6:1 trên mist) */
     .danger-multi { color: var(--red-text); }   /* mọi dòng ở đây đều ×ATM ≥ 15 = nguy hiểm */
-    .rt-btn-row { flex-shrink: 0; height: 56px; margin-top: 8px; display: flex; }
+    .rt-btn-row { flex-shrink: 0; height: 56px; display: flex; }   /* khe 8 phía trên đã nằm ở margin-bottom của dòng 3 — đừng cộng thêm */
     .danger-badge-new {
       display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 9999px;
       background: var(--red-soft); font-size: 14px; font-weight: 600; color: var(--red-text);

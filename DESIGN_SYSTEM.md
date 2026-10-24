@@ -93,7 +93,7 @@ Mọi khoảng cách là **bội số của 8** — không có khe/đệm 2, 4, 
 
 | Chỗ | Chia |
 |---|---|
-| Valuation — 3 box | 3 × 384 (4 cột lưới), rãnh 24, box cao 328 = header 48 + 16 + thân 248 + 16. Thân: Vùng nguy hiểm/Narrative = 4 dòng 56 + 3 khe 8 (thiếu thì `padRows()` đệm dòng trống, thừa thì cuộn); Hệ số TGE = 3 dòng + nút "Dự đoán FDV TGE" chiếm đúng ô dòng thứ 4 (rộng hết, cao 56, cách 8 — user chốt cho đồng bộ với 3 dòng trên, ngoại lệ với nút 48) |
+| Valuation — 3 box | 3 × 384 (4 cột lưới), rãnh 24, box cao 328 = header 48 + 16 + thân 248 + 16. Thân: Vùng nguy hiểm/Narrative = 4 dòng 56 + 3 khe 8 (thiếu thì `padRows()` đệm dòng trống, thừa thì cuộn); Hệ số TGE = 3 dòng + nút "Dự đoán FDV TGE" chiếm đúng ô dòng thứ 4 (rộng hết, cao 56, khe 8 = margin-bottom của dòng 3, KHÔNG cộng thêm margin-top — user chốt cho đồng bộ với 3 dòng trên, ngoại lệ với nút 48) |
 | Valuation — bảng | 7 cột theo % (cột mép 13.855%, 5 cột giữa 14.458%), header 48, dòng 40, cao tối đa 432. **Mobile:** ẩn Narrative · TGE · ×ATL, còn 4 cột 22 / 20 / 36 / 22 % (×ATH dạng "đáy → đỉnh" cần rộng nhất), chữ vẫn 14 |
 | Work | card cùng rank 2 × 588 (6 cột lưới), rãnh 24; khác rank cách 48 (mobile 32) |
 | CV — Highlights | 3 × 384, rãnh 24, ảnh 3:2 |
