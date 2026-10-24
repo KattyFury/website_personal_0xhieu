@@ -34,8 +34,8 @@
 **Vàng mắt mèo xuất hiện ở đâu** (chỉ chỗ mang nghĩa hoặc nhận diện, không rải trang trí):
 - Vạch dưới tab nav đang chọn · vòng quanh ảnh đại diện · chấm timeline · chấm "Available for" · gạch chân khi hover tiêu đề box.
 - Nền `--amber-soft`: header box Valuation, header bảng altcoin, header + dải Daily của card `$`.
-- **Link + hover chữ: chữ ĐEN + gạch chân vàng mắt mèo 2px** (link timeline, link popup, hover tên site / tiêu đề màn / tên dự án). Tab nav hover: xám → đen. KHÔNG đổi chữ sang cam.
-- Hover nút phụ / dòng bấm được: nền `--amber-soft`. Hover nút icon: nền `--mist`.
+- **HOVER ĐỒNG BỘ (chốt 2026-10-24): mọi thứ bấm được có chữ → gạch chân vàng mắt mèo 2px, offset 4** — tab nav, tên site, tiêu đề màn/box, tên dự án, nút chính/phụ/Admin/VI-EN, nút xã hội, dòng task Work, dòng danh sách admin, dòng bảng sửa được. **KHÔNG đổi màu nền box, KHÔNG nhích box** (user chê "đổi màu box xấu"). Card không bấm được thì không phản ứng hover. Nút chỉ có icon (không chữ) → nền `--mist` (trắng nếu nằm trên nền màu).
+- Link chữ (timeline, popup) lúc thường đã gạch chân vàng; KHÔNG đổi chữ sang cam.
 - Viên `--amber` chữ đen: nút `$` đang chọn ở thanh lọc.
 
 **Số liệu Valuation:** số thường ink 400 · ×TGE ≥ 13, ×ATH tuần đầu (`×TGE → ×ATH`) = **chữ cam đậm 600** · giá trị bên phải mọi dòng box (FDV thấp/cao, Điều kiện thị trường, median narrative) = **chữ cam đậm 600** · ×ATM ≥ 15 trong bảng = viên `--red-soft` chữ `--red-text` · ×ATM trong box Vùng nguy hiểm = chữ đỏ · badge FAKE PUMP/PUMP LÁO = viên `--red-soft` chữ đỏ · ×ATM < 1, ×ATL, đáy-trước-đỉnh = grey · ngày TGE = muted (meta).
@@ -67,7 +67,8 @@ Tiêu đề màn dài (VI Valuation) trên mobile: **chiếm trọn hàng trên*
 | **Header card** | cao 48 · nền `--amber-soft` · icon + tiêu đề web-h4 canh TRÁI · đệm 16 |
 | **Header card Work** | luôn 2 hàng, đệm 8/16. Hàng 1: logo 24 + tên 20 canh TRÁI · icon X + Discord (nút tròn 32, icon 20, cách 8, ẩn nếu chưa có link) canh PHẢI · ⋮ admin. Hàng 2: dãy **thẻ** viên trắng cao 24 đệm 8 chữ 14/600, icon cách chữ 8 — potential · narrative · `rank: S` (card work-to-earn `$` KHÔNG hiện thẻ rank — user chốt 2026-10-24, nhóm `$` vẫn đứng đầu), cách mép card 16 thẳng mép logo. Chữ thẻ viết thường hết, chỉ "AI" + chữ rank viết hoa (`tagCase()`, chỉ đổi lúc hiện), tự xuống dòng, không cắt chữ |
 | **Dòng danh sách** (box Valuation · task Work · danh sách admin) | nền `--mist` · **cao tối thiểu 56** · radius 16 · đệm ngang 16 · chữ 14 · cách nhau 8. Box Valuation: **nhãn TRÁI, giá trị PHẢI** (`.list-row`): nhãn grey (hoặc dòng chính ink 600 + dòng phụ grey — vd `STABLE` / `TGE 08/12/25`, `layer-1` / `12 dự án`), giá trị ink 600. Không viết tắt kiểu `SL:02`, không dấu `:` sau nhãn |
-| **Dòng bấm được** (task Work) | như dòng danh sách; hover nền `--amber-soft` + ô mũi tên tròn 32 nền đen. Trong dải Daily nền dòng là trắng |
+| **Dòng bấm được** (task Work) | như dòng danh sách; hover = chữ gạch chân vàng + mũi tên đậm sang đen (nền giữ nguyên). Trong dải Daily nền dòng là trắng |
+| **Tiêu đề nhóm** (Work) | web-h4 20/28 600 + kẻ mảnh kéo hết ngang, cách card 16: "Work to Earn" (nhóm $) · "Rank: S" · "Rank: A"… (`groupLabel()`) |
 | **Nhãn nhóm** (Work) | cao 32 · icon 16 đen + chữ 14/600 grey + kẻ mảnh kéo hết ngang |
 | **Tiêu đề mục** (CV) | icon 24 + chữ 24 + kẻ mảnh kéo hết ngang |
 | **Nút chính** | cao 48 đệm 24 · radius 16 · nền đen chữ trắng 16/600 · shadow. **Nút đứng một mình trên mobile rộng cố định 296** (ngoại lệ: "Dự đoán FDV TGE" = ô dòng thứ 4 của box) |

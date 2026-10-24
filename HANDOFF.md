@@ -1,6 +1,6 @@
 # HANDOFF — 0xhieu.xyz (repo `website_personal_0xhieu`, tên cũ `cv`)
 
-**Chốt trạng thái:** 2026-10-24
+**Chốt trạng thái:** 2026-10-24 (cuối ngày)
 **Repo:** https://github.com/KattyFury/website_personal_0xhieu · **Local:** `D:\Files\Claude\website_personal_0xhieu` (thư mục đổi tên từ `cv` 10-05; máy khác còn tên cũ thì đổi theo)
 **Live:** Cloudflare Pages, project **`0xhieu-xyz`** (khác tên repo) — auto-deploy từ `main`.
 
@@ -100,10 +100,11 @@ vcFDV = fundraising / (vcAlloc/100)
 
 - Card có `twitter` + `discord` (link http/https, `private.js` lọc). Header: icon X/Discord bên phải hàng 1; dự án chưa nhập Discord thì ẩn icon. Nhập Discord ở popup admin task.
 
+- **Form task (admin):** ô Rank bắt buộc trừ Work-to-Earn — dòng đầu chỉ là gợi ý "Chọn rank" (không chọn được, KHÔNG có lựa chọn "—"); chọn phân loại Work-to-Earn thì ô Rank ẩn hẳn. Card Work-to-Earn không hiện thẻ rank.
 - Thang: **`$` (INCOME) · S · A · B · C**. `$` không phải rank — suy từ thẻ `Work-to-Earn` qua `groupOf()`. `groupOf()` còn map rank cũ `SS` → `S`.
 - Khai **1 chỗ**: `WTE_GROUPS` · `WTE_RANKS` · `RANK_LABEL` (mục "AIRDROP — Work to Earn" trong `index.html`). Dropdown admin đổ bằng JS từ đó.
 - `WTE_TYPES` là nguồn duy nhất cho thẻ phân loại: vừa là dropdown admin, vừa là thứ tự card trong mỗi nhóm (`typeOrder()`).
-- Card cùng rank dàn 2 cột, khác rank cách 48. KV lưu `potential` 1–3, client quy đổi `≥2 = high-potential`.
+- Card cùng rank dàn 2 cột, khác rank cách 48. Mỗi nhóm có tiêu đề: "Work to Earn" (nhóm $) · "Rank: S/A/B/C" (`groupLabel()`). KV lưu `potential` 1–3, client quy đổi `≥2 = high-potential`.
 
 ## 6. Luật bắt buộc
 
@@ -144,6 +145,7 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 
 ## Nhật ký
 
+- 2026-10-24: **Work: tiêu đề từng nhóm** ("Work to Earn" · "Rank: S"…) + **form task bỏ lựa chọn rank "—"** (rank bắt buộc nên "—" vô nghĩa → gợi ý "Chọn rank" không chọn được; Work-to-Earn thì ẩn ô Rank; lỗi "Chọn rank" tự tắt khi đổi phân loại; rank cũ `SS` hiện thành S). **Hover đồng bộ cả site:** mọi thứ bấm được có chữ → gạch chân vàng 2px; bỏ hết hover đổi màu nền box (dòng task, nút phụ, Admin, nút xã hội, danh sách admin) + bỏ nhích card + bỏ màu tự pha `#262626` ở nút chính.
 - 2026-10-24: **Dọn việc treo theo user:** bỏ "test điện thoại thật" (lỗi thì user tự báo) + "nhập Discord" (Discord là OPTIONAL). Hết 2 ngoại lệ design system: dòng bảng altcoin 40 → **56** (bảng cao tối đa 440 = header 48 + 7 dòng), popup giải thích bỏ emoji 1️⃣ 👉 → "1." "2." + câu chốt đậm (`.info-key`). Mobile: tiêu đề Valuation chiếm trọn hàng trên (cụm nút xuống hàng dưới canh phải) → giữ cỡ 24, không bị ép xuống 14.
 - 2026-10-24: **Sửa ô nhập trên mobile bể khung/nhảy** — đo được: trang nền không khoá cuộn khi mở popup (trình duyệt cuộn nền khi chạm ô nhập → popup giật), popup căn giữa cứng không cuộn được (bàn phím bật → "Sửa dự án" lòi khỏi mép trên 66px), max-height theo `vh` co giãn khi bàn phím bật/tắt, `scroll-behavior: smooth` làm cú cuộn giật. Sửa: khoá cuộn bằng `html:has(.open)`, nền mờ cuộn được + popup `margin: auto`, `svh`, `interactive-widget=resizes-content`, bỏ smooth toàn trang, ô nhập `appearance: none`, ô số `inputmode="decimal"`. Cỡ chữ ô nhập vốn đã 16 (không phải lỗi iPhone tự zoom). Cùng ngày: **card work-to-earn không hiện thẻ rank** (user chốt). `tools/ds-audit.js` bỏ qua margin căn giữa tự động → kết quả đúng là TỔNG 0.
 - 2026-10-24: Sửa nút "Dự đoán FDV TGE" cách dòng 3 thành 16 (margin-top 8 cộng margin-bottom 8 của dòng trên) làm box Hệ số TGE tràn → bỏ margin-top. Đo lại: 3 box đều 4 ô 56, khe 8, không tràn.
