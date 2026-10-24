@@ -1,6 +1,6 @@
 # HANDOFF — 0xhieu.xyz (repo `website_personal_0xhieu`, tên cũ `cv`)
 
-**Chốt trạng thái:** 2026-10-23
+**Chốt trạng thái:** 2026-10-24
 **Repo:** https://github.com/KattyFury/website_personal_0xhieu · **Local:** `D:\Files\Claude\website_personal_0xhieu` (thư mục đổi tên từ `cv` 10-05; máy khác còn tên cũ thì đổi theo)
 **Live:** Cloudflare Pages, project **`0xhieu-xyz`** (khác tên repo) — auto-deploy từ `main`.
 
@@ -25,7 +25,7 @@ DESIGN_SYSTEM.md      — luật thiết kế (màu, chữ, lưới, thành ph�
 highlights.txt + highlights/   — ảnh + caption mục Highlights ở CV
 icon.png              — favicon + nút mèo + logo navbar
 pfp.png · og.png      — avatar hero · ảnh preview khi share link (1200×630)
-camera.svg · plus.svg — 2 icon tô bằng CSS mask (nút chụp ảnh, nút thêm dự án)
+camera.svg · plus.svg — 2 icon Lucide tô bằng CSS mask (nút chụp ảnh, nút thêm dự án)
 html2canvas-pro.min.js — DOM→PNG cho nút camera (fork html2canvas, đọc được color-mix/color(); bản gốc 1.4.1 lỗi). Để trong repo, không CDN, lazy-load khi bấm. Mobile → bảng chia sẻ (Lưu vào Ảnh), desktop → hộp thoại lưu mở ở Desktop
 ```
 
@@ -133,12 +133,12 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 3. **Rank `SS` còn sót trong KV** — đang hiện ở nhóm S nhờ `groupOf()`; sửa tay qua popup admin rồi bỏ shim.
 4. **Làm tab Valuation dễ hiểu cho số đông** (hướng đã chốt: diễn giải ngay trong box — con số nói gì, ngưỡng nào tốt/xấu). Chưa làm.
 5. Ảnh mới cho Highlights: nén WebP ~750×500, dưới ~150KB, tên khớp `highlights.txt`.
-6. **Mắt mèo trong `icon.png` (favicon + nút mèo) vẫn cam sáng `#FFA111`** — lệch với cam thương hiệu mới `#B35C00`. Là ảnh, muốn đồng bộ phải vẽ lại. User chưa quyết.
 
 ---
 
 ## Nhật ký
 
+- 2026-10-24: **Redesign cả site theo design system nguyen0xhieu**, biến thể riêng: ĐEN thay 0x Blue (mèo đen), nền TRẮNG, **vàng mắt mèo `#FFA111`** (đúng mã trong `icon.png` → hết lệch màu mắt mèo vs cam thương hiệu) + vàng sẫm `#9C6200` cho chữ. Chữ số chẵn ≥14 (bảng altcoin mobile 12 là ngoại lệ), lưới 1200/rãnh 24, bo 16 + pill, 1 shadow Y2, icon Lucide 1.59.0, nút 48/40. Bỏ `--font-c`, bỏ VIẾT HOA giãn chữ, bỏ opacity khi tắt. Rank A đổi xanh dương → cyan-text `#087089`, rank `$` chữ đen trên vàng. Chỉ đổi CSS + SVG icon, không đụng JS/logic/data. Luật mới ở DESIGN_SYSTEM.md (viết lại toàn bộ).
 - 2026-10-23: **Bỏ hẳn tab AI.** Nav còn CV · Valuation · Work. Xoá view/CSS/JS/2 popup admin của AI trong `index.html` + `functions/api/ai.js`. `/ai` giờ rơi về trang CV. Key KV `ai-posts` (6 bài) KHÔNG xoá — muốn dựng lại thì data vẫn còn. Meta/og đổi "Valuation · AI · Work." → "Valuation · Work." (châm ngôn giữ nguyên).
 - 2026-10-15: **Dời bot giá từ PC nhà lên VPS** `/opt/val-price-bot` (chép `bot/` bằng scp, `.env` quyền 600 — ban đầu dùng token Cloudflare, cùng ngày đổi sang **`ADMIN_PASS`** (lấy từ file secret chung, đi qua whitelist của `/api/val`; trên VPS không còn token Cloudflare), `docker compose up -d --build`). Lượt đầu 79/79 có giá. Docker bật cùng VPS + `restart: unless-stopped`. Sửa `sync-prices.js` thì phải scp lại + `docker compose up -d --build` trên VPS — **push GitHub không tự cập nhật bot**.
 - 2026-10-15: **CT thiếu ×ATH/×ATL/×ATM — không phải lỗi logic trang.** Bot giá (Docker PC nhà) ngừng chạy từ lượt 2026-10-01; CT thêm sau đó nên `val-prices` không có key `CT` → 3 cột "—" (×TGE vẫn có vì `priceTGE` nhập tay). Đã chạy bot 1 lượt từ máy Dell (`RUN_ONCE=true node sync-prices.js`, ghi thẳng KV bằng `CF_API_TOKEN`) → 79/79 có giá. Cùng ngày dời bot lên VPS (xem dòng trên).
