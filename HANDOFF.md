@@ -142,6 +142,7 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 6. **Link Discord cho card Work** — trường `discord` có từ 2026-10-24; user đã nhập được cho Binance Pick qua popup Admin (lưu chạy đúng). Card khác chưa có thì nhập dần.
 7. **Ngoại lệ design system còn giữ có chủ đích:** dòng bảng altcoin cao 40 (DS dòng danh sách 56 — bảng số kéo lên 56 thì xem được ít dòng); emoji 1️⃣ 👉 trong popup giải thích (luật trình bày user chốt 2026-08-05). User chưa phán — hỏi trước khi đổi.
 8. Tiêu đề Valuation trên mobile 390 tự lùi xuống 14 vì cụm nút (camera · Admin · VI/EN) chiếm chỗ — đúng luật nhưng nhỏ; muốn to hơn thì phải tính lại bố cục hàng đầu mobile.
+9. **Sửa popup/ô nhập mobile (10-24) mới kiểm bằng trình duyệt giả lập**, CHƯA thử trên điện thoại thật (iPhone Safari + Android Chrome) — hỏi user kết quả gõ thử.
 
 ---
 
