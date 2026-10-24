@@ -24,13 +24,16 @@
 - Chỉ 3 cấp chữ: `ink` · `grey` · `muted`. Không thêm cấp xám thứ 4.
 - Tắt (disabled): nền `--line`, chữ `--muted`, bỏ shadow. **Không giảm opacity.**
 - Không gradient (solid là mặc định của design system; nếu sau này thêm thì tối đa 1 vùng/màn).
-- **Màu đi kèm duy nhất là vàng mắt mèo** (+ đỏ `--red-text` cho lỗi/xoá). Rank Work **không** tô mỗi rank 1 màu nữa — design system cho tối đa 2 màu đi kèm/màn; rank phân biệt bằng chữ.
+- **Tối đa 2 màu đi kèm/màn:** vàng mắt mèo (màu THIẾT KẾ) + đỏ (màu NGỮ NGHĨA duy nhất: nguy hiểm, lỗi, xoá — `--red-text #C42B3F` chữ, `--red-soft #FDE8EB` nền badge/ô). Rank Work **không** tô mỗi rank 1 màu — rank phân biệt bằng chữ.
+- **Số liệu KHÔNG tô vàng.** Số cần chú ý nhấn bằng **đậm 700 ink**; số nguy hiểm = đỏ.
 
 **Vàng mắt mèo xuất hiện ở đâu** (chỉ chỗ mang nghĩa hoặc nhận diện, không rải trang trí):
 - Vạch dưới tab nav đang chọn · vòng quanh ảnh đại diện · chấm timeline · chấm "Available for" · gạch chân khi hover tiêu đề box.
 - Nền `--amber-soft`: header box Valuation, header bảng altcoin, header + dải Daily của card `$`.
-- Chữ `--amber-text`: link trong timeline · hover tên site / tab nav / nút chữ · ×TGE ≥ 13 · ×ATH ca list sàn tạo ATH tuần đầu · số trong box Hệ số TGE · ×ATM trong Vùng nguy hiểm · narrative hot.
-- Viên `--amber` chữ đen: ×ATM ≥ 15 trong bảng · badge FAKE PUMP · thẻ `rank: $` · nút `$` đang chọn ở thanh lọc.
+- Chữ `--amber-text`: link (timeline, popup) · hover tên site / tab nav / tiêu đề màn / tên dự án.
+- Viên `--amber` chữ đen: thẻ `rank: $` · nút `$` đang chọn ở thanh lọc.
+
+**Số liệu Valuation:** số thường ink 400 · ×TGE ≥ 13, ×ATH tuần đầu (`×TGE → ×ATH`), narrative median ≥ 13 = **đậm 700 ink** · ×ATM ≥ 15 trong bảng = viên `--red-soft` chữ `--red-text` · ×ATM trong box Vùng nguy hiểm = chữ đỏ · badge FAKE PUMP/PUMP LÁO = viên `--red-soft` chữ đỏ · ×ATM < 1, ×ATL, đáy-trước-đỉnh = grey · ngày TGE = muted (meta).
 - Chấm `--amber` 8px cạnh ticker có vcFDV ≥ $300M.
 
 **Rank (Work):** card `$` = header + Daily nền `--amber-soft`, thẻ `rank: $` nền vàng chữ đen. Card S/A/B/C = header + Daily nền `--mist`, thẻ `rank: S` nền đen chữ trắng. Thanh lọc: nút đang chọn đen chữ trắng (`$` vàng chữ đen).
@@ -58,7 +61,7 @@ Tiêu đề màn dài (VI Valuation) trên màn hẹp: `fitIntroTitles()` lùi *
 | **Box nổi** | trắng · **radius 16** · `--shadow` (không viền) · hover nhích 2px. Áp cho: card Work · box Valuation · bảng altcoin · ảnh Highlights · popup |
 | **Header card** | cao 48 · nền `--amber-soft` · icon + tiêu đề web-h4 canh TRÁI · đệm 16 |
 | **Header card Work** | luôn 2 hàng, đệm 8/16. Hàng 1: logo 24 + tên 20 canh TRÁI · icon X + Discord (nút tròn 32, icon 20, cách 8, ẩn nếu chưa có link) canh PHẢI · ⋮ admin. Hàng 2: dãy **thẻ** viên trắng cao 24 đệm 8 chữ 14/600, icon cách chữ 8 — potential · narrative · `rank: S`, cách mép card 16 thẳng mép logo. Chữ thẻ viết thường hết, chỉ "AI" + chữ rank viết hoa (`tagCase()`, chỉ đổi lúc hiện), tự xuống dòng, không cắt chữ |
-| **Dòng danh sách** (box Valuation · task Work · danh sách admin) | nền `--mist` · **cao tối thiểu 56** · radius 16 · đệm ngang 16 · chữ 14 · cách nhau 8 |
+| **Dòng danh sách** (box Valuation · task Work · danh sách admin) | nền `--mist` · **cao tối thiểu 56** · radius 16 · đệm ngang 16 · chữ 14 · cách nhau 8. Box Valuation: **nhãn TRÁI, giá trị PHẢI** (`.list-row`): nhãn grey (hoặc dòng chính ink 600 + dòng phụ grey — vd `STABLE` / `TGE 08/12/25`, `layer-1` / `12 dự án`), giá trị ink 600. Không viết tắt kiểu `SL:02`, không dấu `:` sau nhãn |
 | **Dòng bấm được** (task Work) | như dòng danh sách; hover nền `--amber-soft` + ô mũi tên tròn 32 nền đen. Trong dải Daily nền dòng là trắng |
 | **Nhãn nhóm** (Work) | cao 32 · icon 16 đen + chữ 14/600 grey + kẻ mảnh kéo hết ngang |
 | **Tiêu đề mục** (CV) | icon 24 + chữ 24 + kẻ mảnh kéo hết ngang |
@@ -83,7 +86,7 @@ Mọi khoảng cách là **bội số của 8** — không có khe/đệm 2, 4, 
 
 | Chỗ | Chia |
 |---|---|
-| Valuation — 3 box | 3 × 384 (4 cột lưới), rãnh 24, box cao 264 (48 + 16 + 3×56 + 2×8 + 16) |
+| Valuation — 3 box | 3 × 384 (4 cột lưới), rãnh 24, box cao 328 = header 48 + 16 + thân 248 + 16. Thân: Vùng nguy hiểm/Narrative = 4 dòng 56 + 3 khe 8 (thiếu thì `padRows()` đệm dòng trống, thừa thì cuộn); Hệ số TGE = 3 dòng + nút 48 cách 16 |
 | Valuation — bảng | 7 cột theo % (cột mép 13.855%, 5 cột giữa 14.458%), header 48, dòng 40, cao tối đa 432. **Mobile:** ẩn Narrative · TGE · ×ATL, còn 4 cột 22 / 20 / 36 / 22 % (×ATH dạng "đáy → đỉnh" cần rộng nhất), chữ vẫn 14 |
 | Work | card cùng rank 2 × 588 (6 cột lưới), rãnh 24; khác rank cách 48 (mobile 32) |
 | CV — Highlights | 3 × 384, rãnh 24, ảnh 3:2 |

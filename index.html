@@ -66,7 +66,8 @@
       --amber-text: #965E00;   /* vàng sẫm cùng hue, cho CHỮ: 5.4:1 trên trắng · 4.7:1 trên mist · 4.8:1 trên --amber-soft */
       --amber-soft: #FFF1DB;   /* nền nhạt vàng: header card, ô nhấn */
       --scrim:      rgba(0,0,0,.48);
-      --red-text:   #C42B3F;
+      --red-text:   #C42B3F;   /* chữ đỏ: nguy hiểm, lỗi, xoá */
+      --red-soft:   #FDE8EB;   /* nền đỏ nhạt cho badge/ô nguy hiểm */
       /* bóng — DUY NHẤT 1 shadow: X0 Y2 Blur8, đen 32% */
       --shadow: 0 2px 8px 0 rgba(0,0,0,.32);
       /* font hệ thống Apple, máy khác tự lùi về font hệ thống */
@@ -393,15 +394,16 @@
     }
     #tge-section tbody td {
       height: 40px; border: none; box-shadow: inset 0 -1px 0 var(--line);
-      font-size: 14px; font-weight: 600; letter-spacing: -.006em; font-variant-numeric: tabular-nums;
+      font-size: 14px; font-weight: 400; letter-spacing: -.006em; font-variant-numeric: tabular-nums;
       text-align: center; vertical-align: middle; white-space: nowrap; color: var(--ink);
     }
     #tge-section tbody tr:last-child td { box-shadow: none; }
     #tge-section tbody tr:hover td { background: var(--mist); }
     #tge-section tbody tr.row-editable { cursor: pointer; }
     /* Ticker ĐẬM + chấm vàng = vcFDV ≥ $300M · THƯỜNG = dưới.
-       Chữ 3 cấp: narrative grey · ngày TGE + đáy-trước-đỉnh muted.
-       Vàng CHỈ ở chỗ mang nghĩa: ×TGE ≥ 13 (chữ vàng sẫm) · ×ATM ≥ 15 = vùng nguy hiểm (ô nền vàng nhạt). ×ATM < 1 = dưới giá vốn VC → muted. */
+       Chữ 3 cấp: số ink · narrative, ×ATL, đáy-trước-đỉnh, ×ATM < 1 grey · ngày TGE muted (meta).
+       Vàng mắt mèo là màu THIẾT KẾ (chấm, nền header), KHÔNG tô số. Số cần chú ý = ĐẬM 700 ink
+       (×TGE ≥ 13, ×ATH tuần đầu). Màu ngữ nghĩa duy nhất: ĐỎ = nguy hiểm (×ATM ≥ 15, badge soft). */
     #tge-section td.td-ticker { font-weight: 400; }
     #tge-section td.td-ticker.fdv-hi { font-weight: 700; }
     #tge-section td.td-ticker.fdv-hi .ck::after {
@@ -412,12 +414,12 @@
     #tge-section td.td-date { font-weight: 400; color: var(--muted); }
     #tge-section td.td-atl { font-weight: 400; color: var(--grey); }
     .val-table .ck { display: inline-block; text-align: left; }
-    #tge-section .ath-pre { font-weight: 400; color: var(--muted); }
-    #tge-section .ath-arrow { font-weight: 400; color: var(--muted); }
-    #tge-section .ath-early { color: var(--amber-text); }  /* ATH trong tuần đầu lên sàn */
-    .val-table .m-hot, .narrative-med.m-hot { color: var(--amber-text); }
-    .val-table .m-low { font-weight: 400; color: var(--muted); }
-    .val-table .m-danger { display: inline-block; padding: 0 8px; line-height: 24px; border-radius: 9999px; background: var(--amber); color: var(--ink); }
+    #tge-section .ath-pre { font-weight: 400; color: var(--grey); }
+    #tge-section .ath-arrow { font-weight: 400; color: var(--grey); }
+    #tge-section .ath-early { font-weight: 700; }  /* ATH trong tuần đầu lên sàn */
+    .val-table .m-hot, .narrative-med.m-hot { font-weight: 700; }
+    .val-table .m-low { font-weight: 400; color: var(--grey); }
+    .val-table .m-danger { display: inline-block; padding: 0 8px; line-height: 24px; border-radius: 9999px; background: var(--red-soft); color: var(--red-text); font-weight: 600; }
     .val-empty { padding: 40px 16px; text-align: center; font-size: 16px; color: var(--grey); }
 
     /* ── Popup bảng dài (bấm tiêu đề): clone thead/tbody của bảng trên ──
@@ -441,7 +443,7 @@
     .tge-modal-body .td-ticker { font-size: 14px; font-weight: 700; color: var(--ink); }
     .tge-modal-body .td-narrative { font-size: 14px; }
     .tge-modal-body .td-date { font-size: 14px; font-variant-numeric: tabular-nums; color: var(--muted); }
-    .tge-modal-body .td-multi { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--ink); }
+    .tge-modal-body .td-multi { font-size: 14px; font-weight: 400; font-variant-numeric: tabular-nums; color: var(--ink); }
     .tge-modal-body th:nth-child(1) .ck, .tge-modal-body td:nth-child(1) .ck { min-width: var(--ck1, 0px); }
     .tge-modal-body th:nth-child(2) .ck, .tge-modal-body td:nth-child(2) .ck { min-width: var(--ck2, 0px); }
     .tge-modal-body th:nth-child(3) .ck, .tge-modal-body td:nth-child(3) .ck { min-width: var(--ck3, 0px); }
@@ -450,36 +452,32 @@
     .tge-modal-body th:nth-child(6) .ck, .tge-modal-body td:nth-child(6) .ck { min-width: var(--ck6, 0px); }
 
     /* ── 3 box phân tích: 3 cột × 384 (4 cột lưới), rãnh 24 ──
-       cao = header 48 + đệm 16 + 3 dòng 56 + 2 khe 8 + đệm 16 = 264 */
+       thân = 4 dòng 56 + 3 khe 8 = 248 (box 1: 3 dòng + nút 48, cách 16) → box cao 48 + 16 + 248 + 16 = 328 */
     .val-boxes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: stretch; }
-    .val-boxes > .val-card { height: 264px; display: grid; grid-template-rows: 48px 1fr; }
+    .val-boxes > .val-card { height: 328px; display: grid; grid-template-rows: 48px 1fr; }
     .vc-q234 { grid-row: 2; min-height: 0; padding: 16px; overflow-x: hidden; overflow-y: auto; }
     /* Tiêu đề box kiêm nút mở popup giải thích */
     .box-title-btn { cursor: pointer; }
     .box-title-btn:hover { text-decoration: underline; text-decoration-color: var(--amber); text-decoration-thickness: 2px; text-underline-offset: 4px; }
 
-    /* Dòng chỉ-đọc = dòng danh sách mist cao 56, bo 16: mỗi box luôn vẽ đủ 3 ô (pad3 thêm .chip-empty) */
+    /* Dòng danh sách (design system): nền mist, cao 56, bo 16, đệm 16 · nhãn TRÁI (chính ink 600 + phụ grey) · giá trị PHẢI ink 600.
+       Box danh sách luôn vẽ đủ 4 dòng (padRows thêm .chip-empty). */
     .rt-items { display: flex; flex-direction: column; }
-    .rt-split, .rt-cond, .danger-row, .narrative-row, .chip-empty {
-      height: 56px; margin: 0 0 8px; padding: 0 16px; border-radius: 16px;
+    .list-row, .chip-empty {
+      flex-shrink: 0; height: 56px; margin: 0 0 8px; padding: 0 16px; border-radius: 16px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
       background: var(--mist); font-size: 14px; line-height: 20px; letter-spacing: -.006em; color: var(--ink);
     }
-    .rt-items > :last-child { margin-bottom: 0; }
-    .rt-split { display: grid; grid-template-columns: 1fr 1fr; align-items: center; }
-    .rt-half { text-align: center; }
-    .rt-cond { display: flex; align-items: center; justify-content: center; }
-    .rt-cond b { margin-left: 8px; font-weight: 700; font-variant-numeric: tabular-nums; }
-    .rt-item-val { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--amber-text); }
-    .rt-btn-row { height: 56px; display: flex; align-items: center; justify-content: center; }
-    .danger-row, .narrative-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; }
-    .danger-row > :first-child, .narrative-row > :first-child { text-align: left; }
-    .danger-multi, .narrative-med { font-weight: 700; font-variant-numeric: tabular-nums; text-align: center; }
-    .danger-multi { color: var(--amber-text); }   /* mọi dòng ở đây đều ×ATM ≥ 15 */
-    .danger-date, .narrative-count { font-variant-numeric: tabular-nums; text-align: right; }
-    .danger-date { width: 64px; }
+    .rt-items > :last-child, .vc-q234 > :last-child { margin-bottom: 0; }
+    .lr-main { min-width: 0; display: flex; flex-direction: column; }
+    .lr-title { display: flex; align-items: center; gap: 8px; font-weight: 600; white-space: nowrap; }
+    .lr-label, .lr-meta { color: var(--grey); white-space: nowrap; }
+    .lr-val { flex-shrink: 0; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; color: var(--ink); }
+    .danger-multi { color: var(--red-text); }   /* mọi dòng ở đây đều ×ATM ≥ 15 = nguy hiểm */
+    .rt-btn-row { flex-shrink: 0; height: 48px; margin-top: 16px; display: flex; align-items: center; justify-content: center; }
     .danger-badge-new {
-      display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 9999px; background: var(--amber);
-      font-size: 14px; font-weight: 600; color: var(--ink);
+      display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 9999px;
+      background: var(--red-soft); font-size: 14px; font-weight: 600; color: var(--red-text);
     }
     .danger-empty { padding: 8px 0; font-size: 14px; color: var(--grey); }
 
@@ -959,13 +957,11 @@
         <div class="val-card">
           <div class="vc-q1"><svg class="wte-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg><span id="tge-title-text" class="box-title-btn" role="button" tabindex="0" title="Giải thích">Recent TGE multiples</span></div>
           <div class="vc-q234 rt-items">
-            <!-- Figma: MỘT chip chứa cả 2 nửa (FDV thấp bên trái · FDV cao bên phải) -->
-            <div class="rt-item rt-split">
-              <span class="rt-half"><span class="rt-item-lbl" id="tge-lowfdv-label">Low FDV</span> <span class="rt-item-val" id="baseline-low">—</span></span>
-              <span class="rt-half"><span class="rt-item-lbl" id="tge-highfdv-label">High FDV</span> <span class="rt-item-val" id="baseline-high">—</span></span>
-            </div>
-            <div class="rt-item rt-cond"><span><span id="tge-cond-label">Market condition:</span><b id="market-condition-lvl">—</b></span></div>
-            <div class="rt-item rt-btn-row">
+            <!-- Dòng danh sách: nhãn trái · giá trị phải -->
+            <div class="list-row"><span class="lr-label" id="tge-lowfdv-label">Low FDV</span><span class="lr-val" id="baseline-low">—</span></div>
+            <div class="list-row"><span class="lr-label" id="tge-highfdv-label">High FDV</span><span class="lr-val" id="baseline-high">—</span></div>
+            <div class="list-row"><span class="lr-label" id="tge-cond-label">Market condition</span><span class="lr-val" id="market-condition-lvl">—</span></div>
+            <div class="rt-btn-row">
               <button class="predict-link" id="predict-open-btn">Predict TGE FDV</button>
             </div>
           </div>
@@ -1331,9 +1327,9 @@
       'danger-title-text':       { EN: 'Danger Zone', VI: 'Vùng nguy hiểm' },
       'narr-title-text':         { EN: 'Trending Narratives', VI: 'Narrative đang hot' },
       // nội dung box Recent TGE multiples + header bảng
-      'tge-lowfdv-label':        { EN: 'Low FDV:',  VI: 'FDV thấp:' },
-      'tge-highfdv-label':       { EN: 'High FDV:', VI: 'FDV cao:' },
-      'tge-cond-label':          { EN: 'Market condition:', VI: 'Điều kiện thị trường:' },
+      'tge-lowfdv-label':        { EN: 'Low FDV',  VI: 'FDV thấp' },
+      'tge-highfdv-label':       { EN: 'High FDV', VI: 'FDV cao' },
+      'tge-cond-label':          { EN: 'Market condition', VI: 'Điều kiện thị trường' },
       'tge-date-th':             { EN: 'TGE', VI: 'TGE' },   // cột ngày TGE — 2 ngôn ngữ dùng chung 1 chữ cho gọn (mobile)
       // tiêu đề 4 popup (3 info + predict) — tiêu đề nằm trong HTML tĩnh nên dễ bị quên
       'info-tge-modal-title':    { EN: 'Recent TGE multiples', VI: 'Hệ số TGE gần đây' },
@@ -1986,11 +1982,10 @@ ${line}
       highEl.textContent = highFDVMults.length ? `×${median(highFDVMults).toFixed(2)}` : '—';
     }
 
-    // Figma vẽ ĐỦ 3 ô chip trong mỗi box, ô thừa để trống. Hộp cao 176 vừa đúng
-    // 3 chip (8 + 32 + 8 + 32 + 8 + 32 + 8 = 128), nên thiếu thì đệm cho đủ.
-    function pad3(html, n) {
+    // Box danh sách luôn vẽ ĐỦ 4 dòng (4 × 56 + 3 × 8 = 248 = thân box), ô thừa để trống.
+    function padRows(html, n) {
       let out = html;
-      for (let i = n; i < 3; i++) out += '<div class="chip-empty"></div>';
+      for (let i = n; i < 4; i++) out += '<div class="chip-empty"></div>';
       return out;
     }
 
@@ -2011,13 +2006,14 @@ ${line}
         return;
       }
 
-      listEl.innerHTML = pad3(danger.map(({ e, xATM }) => {
+      listEl.innerHTML = padRows(danger.map(({ e, xATM }) => {
         const isAlert = now - new Date(e.tgeDate) < ALERT_DAYS;
-        return `<div class="danger-row${isAlert ? ' danger-new' : ''}">
-          <span class="danger-ticker">${e.ticker}</span>
-          ${isAlert ? `<span class="danger-badge-new">⚠ ${valLang === 'VI' ? 'PUMP LÁO' : 'FAKE PUMP'}</span>` : ''}
-          <span class="danger-multi">×${xATM.toFixed(1)}</span>
-          <span class="danger-date">${fmtDate(e.tgeDate)}</span>
+        return `<div class="list-row danger-row${isAlert ? ' danger-new' : ''}">
+          <span class="lr-main">
+            <span class="lr-title">${e.ticker}${isAlert ? `<span class="danger-badge-new">${valLang === 'VI' ? 'PUMP LÁO' : 'FAKE PUMP'}</span>` : ''}</span>
+            <span class="lr-meta">TGE ${fmtDate(e.tgeDate)}</span>
+          </span>
+          <span class="lr-val danger-multi">×${xATM.toFixed(1)}</span>
         </div>`;
       }).join(''), danger.length);
     }
@@ -2065,11 +2061,13 @@ ${line}
         return;
       }
 
-      listEl.innerHTML = pad3(ranked.map(g => `
-        <div class="narrative-row">
-          <span class="narrative-name">${g.name}</span>
-          <span class="narrative-med${g.medTGE >= 13 ? ' m-hot' : ''}">×${g.medTGE.toFixed(1)}</span>
-          <span class="narrative-count">SL:${String(g.count).padStart(2, '0')}</span>
+      listEl.innerHTML = padRows(ranked.map(g => `
+        <div class="list-row narrative-row">
+          <span class="lr-main">
+            <span class="lr-title">${g.name}</span>
+            <span class="lr-meta">${g.count} ${valLang === 'VI' ? 'dự án' : (g.count === 1 ? 'deal' : 'deals')}</span>
+          </span>
+          <span class="lr-val narrative-med${g.medTGE >= 13 ? ' m-hot' : ''}">×${g.medTGE.toFixed(1)}</span>
         </div>
       `).join(''), ranked.length);
     }
