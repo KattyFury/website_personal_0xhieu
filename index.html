@@ -137,16 +137,20 @@
     .nav-btn.active { color: var(--ink); }
     .nav-btn:hover { color: var(--ink); }
 
-    /* ── HOVER ĐỒNG BỘ (chốt 2026-10-25): mọi thứ bấm được có CHỮ → chữ đổi cam --amber-text (không gạch chân).
+    /* ── HOVER ĐỒNG BỘ (chốt 2026-10-25): mọi thứ bấm được có CHỮ → chữ đổi cam --amber-text + đậm 700 (không gạch chân).
        Nút nền đen → chữ vàng mắt mèo --amber (cam đậm trên đen không đủ tương phản).
        KHÔNG đổi màu nền box, KHÔNG nhích box. Nút chỉ có icon (không chữ) → nền --mist (hoặc trắng nếu nằm trên nền màu). */
     .header-home:hover span, .val-intro-clickable:hover > span, .box-title-btn:hover, .wte-name:hover,
     .nav-btn:not(:disabled):hover, .lang-btn:hover, .lang-dd-btn:not(.is-plus):hover, .social-btn:hover,
     .predict-link:hover, .predict-btn-primary:hover, .predict-btn-secondary:hover, .val-del-btn:hover, .retry-btn:hover,
     .pt-delete:hover, .val-row:hover, .wte-task-row--link:hover .wte-task-text, #tge-section tbody tr.row-editable:hover td {
-      color: var(--amber-text);
+      color: var(--amber-text); font-weight: 700;
     }
     .predict-btn-primary:hover, .predict-link:hover, .retry-btn:hover, .lang-btn.active:hover { color: var(--amber); }
+    /* Chữ có độ rộng tự do (nút xã hội rộng theo chữ, link nằm giữa đoạn văn): đậm thật sẽ làm nút/dòng chữ nhích
+       → giữ đậm gốc, tô đậm bằng viền chữ cùng màu (không đổi độ rộng). */
+    .social-btn:hover { font-weight: 600; }
+    .social-btn:hover, .tl-bullets a:hover, .info-modal-link:hover { -webkit-text-stroke: .6px currentColor; }
     .lang-dd-btn.is-plus:hover { background: var(--mist); }
     .nav-btn.active::after {
       content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 4px;
