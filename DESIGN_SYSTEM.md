@@ -32,10 +32,10 @@
 - **Số liệu:** số chính/cần chú ý = **chữ cam `--amber-text` (orange-text) đậm 600** (user: chỉ đen + xám thì flat); số nguy hiểm = đỏ; còn lại ink/grey.
 
 **Vàng mắt mèo xuất hiện ở đâu** (chỉ chỗ mang nghĩa hoặc nhận diện, không rải trang trí):
-- Vạch dưới tab nav đang chọn · vòng quanh ảnh đại diện · chấm timeline · chấm "Available for" · gạch chân khi hover tiêu đề box.
+- Vạch dưới tab nav đang chọn · vòng quanh ảnh đại diện · chấm timeline · chấm "Available for".
 - Nền `--amber-soft`: header box Valuation, header bảng altcoin, header + dải Daily của card `$`.
-- **HOVER ĐỒNG BỘ (chốt 2026-10-24): mọi thứ bấm được có chữ → gạch chân vàng mắt mèo 2px, offset 4** — tab nav, tên site, tiêu đề màn/box, tên dự án, nút chính/phụ/Admin/VI-EN, nút xã hội, dòng task Work, dòng danh sách admin, dòng bảng sửa được. **KHÔNG đổi màu nền box, KHÔNG nhích box** (user chê "đổi màu box xấu"). Card không bấm được thì không phản ứng hover. Nút chỉ có icon (không chữ) → nền `--mist` (trắng nếu nằm trên nền màu).
-- Link chữ (timeline, popup) lúc thường đã gạch chân vàng; KHÔNG đổi chữ sang cam.
+- **HOVER ĐỒNG BỘ (chốt 2026-10-25): mọi thứ bấm được có chữ → chữ đổi cam `--amber-text` #B84A0C, KHÔNG gạch chân** (nút nền đen: chữ trắng → vàng mắt mèo `--amber`, vì cam đậm trên đen không đủ tương phản) — tab nav, tên site, tiêu đề màn/box, tên dự án, nút chính/phụ/Admin/VI-EN, nút xã hội, dòng task Work, dòng danh sách admin, dòng bảng sửa được. **KHÔNG đổi màu nền box, KHÔNG nhích box** (user chê "đổi màu box xấu"). Card không bấm được thì không phản ứng hover. Nút chỉ có icon (không chữ) → nền `--mist` (trắng nếu nằm trên nền màu).
+- Link chữ (timeline, popup) lúc thường đã gạch chân vàng (giữ để biết là link); hover → chữ cam `--amber-text`.
 - Viên `--amber` chữ đen: nút `$` đang chọn ở thanh lọc.
 
 **Số liệu Valuation:** số thường ink 400 · ×TGE ≥ 13, ×ATH tuần đầu (`×TGE → ×ATH`) = **chữ cam đậm 600** · giá trị bên phải mọi dòng box (FDV thấp/cao, Điều kiện thị trường, median narrative) = **chữ cam đậm 600** · ×ATM ≥ 15 trong bảng = viên `--red-soft` chữ `--red-text` · ×ATM trong box Vùng nguy hiểm = chữ đỏ · badge FAKE PUMP/PUMP LÁO = viên `--red-soft` chữ đỏ · ×ATM < 1, ×ATL, đáy-trước-đỉnh = grey · ngày TGE = muted (meta).
@@ -67,7 +67,7 @@ Tiêu đề màn dài (VI Valuation) trên mobile: **chiếm trọn hàng trên*
 | **Header card** | cao 48 · nền `--amber-soft` · icon + tiêu đề web-h4 canh TRÁI · đệm 16 |
 | **Header card Work** | luôn 2 hàng, đệm 8/16. Hàng 1: logo 24 + tên 20 canh TRÁI · icon X + Discord (nút tròn 32, icon 20, cách 8, ẩn nếu chưa có link) canh PHẢI · ⋮ admin. Hàng 2: dãy **thẻ** viên trắng cao 24 đệm 8 chữ 14/600, icon cách chữ 8 — potential · narrative · `rank: S` (card work-to-earn `$` KHÔNG hiện thẻ rank — user chốt 2026-10-24, nhóm `$` vẫn đứng đầu), cách mép card 16 thẳng mép logo. Chữ thẻ viết thường hết, chỉ "AI" + chữ rank viết hoa (`tagCase()`, chỉ đổi lúc hiện), tự xuống dòng, không cắt chữ |
 | **Dòng danh sách** (box Valuation · task Work · danh sách admin) | nền `--mist` · **cao tối thiểu 56** · radius 16 · đệm ngang 16 · chữ 14 · cách nhau 8. Box Valuation: **nhãn TRÁI, giá trị PHẢI** (`.list-row`): nhãn grey (hoặc dòng chính ink 600 + dòng phụ grey — vd `STABLE` / `TGE 08/12/25`, `layer-1` / `12 dự án`), giá trị ink 600. Không viết tắt kiểu `SL:02`, không dấu `:` sau nhãn |
-| **Dòng bấm được** (task Work) | như dòng danh sách; hover = chữ gạch chân vàng + mũi tên đậm sang đen (nền giữ nguyên). Trong dải Daily nền dòng là trắng |
+| **Dòng bấm được** (task Work) | như dòng danh sách; hover = chữ cam `--amber-text` + mũi tên đậm sang đen (nền giữ nguyên). Trong dải Daily nền dòng là trắng |
 | **Tiêu đề nhóm** (Work) | web-h4 20/28 600, cách card 16, **không kẻ mảnh**: "work-to-earn" (nhóm $, viết thường như thẻ) · "Rank: S" · "Rank: A"… (`groupLabel()`) |
 | **Tiêu đề màn** | Valuation: "Quan sát altcoin" (EN "Altcoin watch") · Work: "Danh sách công việc" (EN "Task list") — không trùng tên nhóm |
 | **Nhãn nhóm** (Work) | cao 32 · icon 16 đen + chữ 14/600 grey + kẻ mảnh kéo hết ngang |

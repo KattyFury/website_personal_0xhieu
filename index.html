@@ -63,7 +63,7 @@
       --mist:       #ECF0F8;   /* box phẳng · dòng · ô nhập — design system */
       --line:       #DCE3EE;   /* kẻ mảnh · viền ô nhập · nền nút tắt */
       --amber:      #FFA111;   /* vàng mắt mèo (lấy đúng từ icon.png): khối, chấm, vạch — chữ trên nó luôn đen */
-      --amber-text: #B84A0C;   /* CHỈ cho số liệu Valuation — chữ cam = orange-text của design system: 5.2:1 trên trắng · 4.6:1 trên mist · 4.8:1 trên --amber-soft */
+      --amber-text: #B84A0C;   /* số liệu Valuation + chữ khi hover — chữ cam = orange-text của design system: 5.2:1 trên trắng · 4.6:1 trên mist · 4.8:1 trên --amber-soft */
       --amber-soft: #FEF5D9;   /* = yellow-soft của design system (gần hue mắt mèo nhất): header card, ô kết quả */
       --scrim:      rgba(0,0,0,.48);
       --red-text:   #C42B3F;   /* chữ đỏ: nguy hiểm, lỗi, xoá */
@@ -137,14 +137,16 @@
     .nav-btn.active { color: var(--ink); }
     .nav-btn:hover { color: var(--ink); }
 
-    /* ── HOVER ĐỒNG BỘ (chốt 2026-10-24): mọi thứ bấm được có CHỮ → gạch chân vàng mắt mèo 2px.
+    /* ── HOVER ĐỒNG BỘ (chốt 2026-10-25): mọi thứ bấm được có CHỮ → chữ đổi cam --amber-text (không gạch chân).
+       Nút nền đen → chữ vàng mắt mèo --amber (cam đậm trên đen không đủ tương phản).
        KHÔNG đổi màu nền box, KHÔNG nhích box. Nút chỉ có icon (không chữ) → nền --mist (hoặc trắng nếu nằm trên nền màu). */
     .header-home:hover span, .val-intro-clickable:hover > span, .box-title-btn:hover, .wte-name:hover,
     .nav-btn:not(:disabled):hover, .lang-btn:hover, .lang-dd-btn:not(.is-plus):hover, .social-btn:hover,
     .predict-link:hover, .predict-btn-primary:hover, .predict-btn-secondary:hover, .val-del-btn:hover, .retry-btn:hover,
     .pt-delete:hover, .val-row:hover, .wte-task-row--link:hover .wte-task-text, #tge-section tbody tr.row-editable:hover td {
-      text-decoration: underline; text-decoration-color: var(--amber); text-decoration-thickness: 2px; text-underline-offset: 4px;
+      color: var(--amber-text);
     }
+    .predict-btn-primary:hover, .predict-link:hover, .retry-btn:hover, .lang-btn.active:hover { color: var(--amber); }
     .lang-dd-btn.is-plus:hover { background: var(--mist); }
     .nav-btn.active::after {
       content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 4px;
@@ -321,7 +323,7 @@
     .tl-bullets li + li { margin-top: 8px; }
     .tl-bullets li::marker { color: var(--muted); }
     .tl-bullets a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--amber); text-decoration-thickness: 2px; text-underline-offset: 4px; }
-    .tl-bullets a:hover { text-decoration-color: var(--ink); }
+    .tl-bullets a:hover { color: var(--amber-text); }
 
     /* Highlights: 3 cột × 384 (4 cột lưới), rãnh 24, ảnh 3:2 */
     #highlights-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
@@ -613,7 +615,7 @@
     #shot-modal-img { display: block; width: 100%; max-height: 56vh; max-height: 56svh; object-fit: contain; border: 1px solid var(--line); border-radius: 16px; }
     .shot-modal-hint { font-size: 14px; color: var(--grey); }
     .info-modal-link { font-weight: 600; color: var(--ink); text-decoration: underline; text-decoration-color: var(--amber); text-decoration-thickness: 2px; text-underline-offset: 4px; cursor: pointer; }
-    .info-modal-link:hover { text-decoration-color: var(--ink); }
+    .info-modal-link:hover { color: var(--amber-text); }
     .admin-msg { font-size: 14px; font-weight: 400; color: var(--red-text); }
 
     .modal-corner-close { position: absolute; top: 8px; right: 8px; }
