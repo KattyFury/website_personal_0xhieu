@@ -38,7 +38,7 @@
 - Link chữ (timeline, popup) lúc thường đã gạch chân vàng (giữ để biết là link); hover → chữ cam `--amber-text` + đậm (text-stroke).
 - Viên `--amber` chữ đen: nút `$` đang chọn ở thanh lọc.
 
-**Số liệu Valuation:** số thường ink 400 · ×TGE ≥ 13, ×ATH tuần đầu (`×TGE → ×ATH`) = **chữ cam đậm 600** · giá trị bên phải mọi dòng box (FDV thấp/cao, Điều kiện thị trường, median narrative) = **chữ cam đậm 600** · ×ATM ≥ 15 trong bảng = viên `--red-soft` chữ `--red-text` · ×ATM trong box Vùng nguy hiểm = chữ đỏ · badge FAKE PUMP/PUMP LÁO = viên `--red-soft` chữ đỏ · ×ATM < 1, ×ATL, đáy-trước-đỉnh = grey · ngày TGE = muted (meta).
+**Số liệu Valuation:** số thường ink 400 · ×TGE ≥ 13, ×ATH tuần đầu (`×TGE → ×ATH`) = **chữ cam đậm 600** · giá trị bên phải mọi dòng box (Hệ số TGE, Phạt FDV ≥ $300M, Điều kiện thị trường, median narrative) = **chữ cam đậm 600** · ×ATM ≥ 15 trong bảng = viên `--red-soft` chữ `--red-text` · ×ATM trong box Vùng nguy hiểm = chữ đỏ · badge FAKE PUMP/PUMP LÁO = viên `--red-soft` chữ đỏ · ×ATM < 1, ×ATL, đáy-trước-đỉnh = grey · ngày TGE = muted (meta).
 - Chấm `--amber` 8px cạnh ticker có vcFDV ≥ $300M.
 
 **Rank (Work):** card `$` (work-to-earn) = header + Daily nền `--amber-soft`, **không có thẻ rank**. Card S/A/B/C = header + Daily nền `--mist`, thẻ `rank: S` nền đen chữ trắng. Thanh lọc: nút đang chọn đen chữ trắng (`$` vàng chữ đen).

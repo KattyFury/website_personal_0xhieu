@@ -42,19 +42,21 @@ function compute(projects, prices) {
   const med = median(recent6);
   const condition = recent6.length ? (med >= 13 ? 'Strong' : med >= 4.3 ? 'Normal' : 'Weak') : '—';
 
-  // Low / High FDV — tách ở 300M, 6 deal gần nhất (deal thứ 6 cách >60 ngày thì lấy 4)
+  // Phạt FDV cao — gộp mọi TGE từ 2025: median nhóm ≥300M / median nhóm <300M, cần ≥ 8 dự án lớn
   const SPLIT = 300e6;
-  const pick = test => newest.filter(e => test(vcFDVof(e)))
-    .map(e => ({ m: multiple(e), date: e.tgeDate })).filter(x => isFinite(x.m) && x.m > 0);
-  const recentWindow = arr => {
-    let n = Math.min(6, arr.length);
-    if (arr.length >= 6 && (new Date(arr[0].date) - new Date(arr[5].date)) / 86400000 > 60) n = 4;
-    return arr.slice(0, n).map(x => x.m);
-  };
-  const lowM  = recentWindow(pick(v => v < SPLIT));
-  const highM = recentWindow(pick(v => v >= SPLIT));
-  const low  = lowM.length  ? `×${median(lowM).toFixed(2)}`  : '—';
-  const high = highM.length ? `×${median(highM).toFixed(2)}` : '—';
+  const pool = entries.filter(e => e.tgeDate >= '2025-01-01')
+    .map(e => ({ hi: vcFDVof(e) >= SPLIT, m: multiple(e) })).filter(x => isFinite(x.m) && x.m > 0 && x.m < 1000);
+  const hiM = pool.filter(x => x.hi).map(x => x.m), loM = pool.filter(x => !x.hi).map(x => x.m);
+  const k = hiM.length >= 8 && loM.length ? median(hiM) / median(loM) : null;
+  const penalty = k ? `×${k.toFixed(2)}` : '—';
+
+  // Hệ số TGE — 6 deal gần nhất (deal thứ 6 cách >60 ngày thì lấy 4), dự án FDV cao chia k
+  const norm = newest.map(e => ({ m: k && vcFDVof(e) >= SPLIT ? multiple(e) / k : multiple(e), date: e.tgeDate }))
+    .filter(x => isFinite(x.m) && x.m > 0);
+  let n = Math.min(6, norm.length);
+  if (norm.length >= 6 && (new Date(norm[0].date) - new Date(norm[5].date)) / 86400000 > 60) n = 4;
+  const coefM = norm.slice(0, n).map(x => x.m);
+  const coef = coefM.length ? `×${median(coefM).toFixed(2)}` : '—';
 
   // Bảng — cũ → mới, đúng cột như trang
   const rows = [...entries].sort((a, b) => new Date(a.tgeDate) - new Date(b.tgeDate)).map(e => {
@@ -83,7 +85,7 @@ function compute(projects, prices) {
     </tr>`;
   }).join('');
 
-  return { low, high, condition, rows };
+  return { coef, penalty, condition, rows };
 }
 
 export async function onRequestGet({ request, env }) {
@@ -102,8 +104,8 @@ export async function onRequestGet({ request, env }) {
   }
 
   return new HTMLRewriter()
-    .on('#baseline-low',         { element: el => el.setInnerContent(data.low) })
-    .on('#baseline-high',        { element: el => el.setInnerContent(data.high) })
+    .on('#tge-coef',             { element: el => el.setInnerContent(data.coef) })
+    .on('#tge-penalty',          { element: el => el.setInnerContent(data.penalty) })
     .on('#market-condition-lvl', { element: el => el.setInnerContent(data.condition) })
     .on('#tge-tbody',            { element: el => el.setInnerContent(data.rows, { html: true }) })
     .transform(page);

@@ -1,6 +1,6 @@
 # HANDOFF — 0xhieu.xyz (repo `website_personal_0xhieu`, tên cũ `cv`)
 
-**Chốt trạng thái:** 2026-10-24 (cuối ngày)
+**Chốt trạng thái:** 2026-10-27
 **Repo:** https://github.com/KattyFury/website_personal_0xhieu · **Local:** `D:\Files\Claude\website_personal_0xhieu` (thư mục đổi tên từ `cv` 10-05; máy khác còn tên cũ thì đổi theo)
 **Live:** Cloudflare Pages, project **`0xhieu-xyz`** (khác tên repo) — auto-deploy từ `main`.
 
@@ -89,8 +89,12 @@ vcFDV = fundraising / (vcAlloc/100)
 - **Bảng 7 cột:** Ticker · Narrative · TGE · ×TGE · ×ATH · ×ATL · ×ATM. Ticker **đậm = vcFDV ≥ $300M**. Ô số bỏ dấu `×`, dấu thập phân theo ngôn ngữ; ×ATM 3 số lẻ, còn lại 2.
 - **Cột 176 + khe 16 nhét trong padding ô** (184 · 192×5 · 184 = 1328), khai bằng % để co theo màn. Đừng chia đều 1328/7, đừng kéo giãn cột.
 - Bấm tiêu đề màn → popup bảng dài (clone thead/tbody của bảng). JS đo `--ck1..7` để mỗi cột trong popup thẳng mép trái.
-- **Box "Hệ số TGE gần đây":** chia 2 rổ ở vcFDV **$300M**, mỗi rổ lấy 6 TGE gần nhất (token thứ 6 cách >60 ngày → còn 4), hiện median. Market condition = median ×TGE của 6 deal gần nhất: Weak <4.3 · Normal 4.3–13 · Strong ≥13. **Đừng tách thêm bậc dưới $300M** — data không khác nhau.
-- **Dự đoán FDV TGE:** `predictFDV()` lấy weighted median theo rổ FDV của dự án đang đoán (rổ <2 mẫu thì dùng toàn bộ).
+- **Box "Hệ số TGE gần đây"** (chốt 2026-10-27, bỏ 2 dòng FDV thấp/cao): 4 ô = **Hệ số TGE** · **Phạt FDV ≥ $300M** · Điều kiện thị trường · nút Dự đoán.
+  - **Mức phạt k** (`fdvPenalty()`) = median ×TGE nhóm vcFDV ≥ $300M ÷ median nhóm < $300M, **gộp mọi TGE từ 01/2025** (`PENALTY_FROM`). Cần ≥ 8 dự án lớn (`PENALTY_MIN_HIGH`), thiếu → "—", không phạt. 10-27: ×0.38 (13 dự án lớn / 49 nhỏ).
+  - **Đừng đổi sang cửa sổ trượt** (6 gần nhất / từng nửa năm): dự án lớn hiếm dần (0–5 mẫu mỗi nửa năm, từ 05/2026 chưa có cái nào) → k nhảy 0.17 ↔ 0.95 hoặc không tính được. **Đừng phạt trơn theo log FDV:** dưới $300M ×TGE phẳng (~×4 cho cả $50M lẫn $250M), chỉ tụt ở ngưỡng $300M.
+  - **Hệ số TGE** = median 6 TGE gần nhất (thứ 6 cách >60 ngày → 4), ×TGE dự án FDV cao chia k trước (`normMultiple()`) để không kéo tụt hệ số chung.
+  - Market condition = median ×TGE **thô** của 6 deal gần nhất: Weak <4.3 · Normal 4.3–13 · Strong ≥13.
+- **Dự đoán FDV TGE:** `predictFDV()` lấy mọi dự án với ×TGE đã quy chuẩn như trên; dự án đang đoán có vcFDV ≥ $300M → nhân k vào kết quả (VD 10-27: $66.7M và $299M cùng ×5.03, $400M ×1.92).
 - **Vùng nguy hiểm:** ×ATM ≥ 15, TGE mới nhất lên đầu; TGE < 30 ngày → badge "⚠ FAKE PUMP".
 - **Narrative đang hot:** mọi narrative có data từ 02/2025, xếp theo **median ×TGE** (không dùng ×ATH — 1 coin pump muộn kéo cả nhóm), kèm `SL:nn` số deal.
 - 3 box = dòng danh sách nhãn trái · giá trị phải (`.list-row`). Vùng nguy hiểm/Narrative luôn vẽ đủ 4 dòng (`padRows()`), thừa thì cuộn. Tiêu đề box kiêm nút mở popup giải thích.
@@ -144,6 +148,8 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 ---
 
 ## Nhật ký
+
+- 2026-10-27: **Box Hệ số TGE: bỏ "FDV thấp / FDV cao" → 1 hệ số + phạt FDV ≥ $300M** (user: web3 hết gọi vốn khủng, out meta). Thống kê 62 TGE từ 2025: < $300M median ×3.92, ≥ $300M ×1.49 → k = ×0.38. User hỏi "dự án lớn ngày càng ít, phạt vậy chuẩn không" → chốt gộp từ mốc cố định 01/2025 + ngưỡng tối thiểu 8 mẫu (lý do ở §4). Sửa `index.html` (box, nhãn VI/EN, popup giải thích, `renderAnalysis`, `predictFDV`) + `functions/valuation.js` (id mới `#tge-coef` · `#tge-penalty`). Verify: server compute data thật ra ×5.22 / ×0.38 / Normal; ds-audit TỔNG 0; popup VI/EN + dự đoán 3 mức FDV đúng; không lỗi JS.
 
 - 2026-10-24: **Work bản EN dịch đủ** (user: "EN chưa dịch task"). Lỗi cũ: task cá nhân bị cố ý không dịch; tên card tiếng Việt không dịch; Google lỗi 1 lượt là kẹt tiếng Việt tới khi tải lại trang; bấm EN trước khi data về thì dịch xong không vẽ lại. Sửa trong `translateToEN()` (+ `personalTasksEN`). Test: bấm EN lúc 7s và 0.4s sau khi mở trang → 18/18 card không còn chữ có dấu.
 - 2026-10-24: Work bỏ kẻ mảnh cạnh tiêu đề nhóm; nhóm $ đổi tên "work-to-earn"; tiêu đề tab Work "Work to Earn" → **"Danh sách công việc"** (EN "Task list", đổi theo toggle trong `renderWTE()`); tiêu đề tab Valuation → **"Quan sát altcoin"** (EN "Altcoin watch").

@@ -956,8 +956,8 @@
           <div class="vc-q1"><svg class="wte-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg><span id="tge-title-text" class="box-title-btn" role="button" tabindex="0" title="Giải thích">Recent TGE multiples</span></div>
           <div class="vc-q234 rt-items">
             <!-- Dòng danh sách: nhãn trái · giá trị phải -->
-            <div class="list-row"><span class="lr-label" id="tge-lowfdv-label">Low FDV</span><span class="lr-val" id="baseline-low">—</span></div>
-            <div class="list-row"><span class="lr-label" id="tge-highfdv-label">High FDV</span><span class="lr-val" id="baseline-high">—</span></div>
+            <div class="list-row"><span class="lr-label" id="tge-coef-label">TGE multiple</span><span class="lr-val" id="tge-coef">—</span></div>
+            <div class="list-row"><span class="lr-label" id="tge-penalty-label">Penalty FDV ≥ $300M</span><span class="lr-val" id="tge-penalty">—</span></div>
             <div class="list-row"><span class="lr-label" id="tge-cond-label">Market condition</span><span class="lr-val" id="market-condition-lvl">—</span></div>
             <div class="rt-btn-row">
               <button class="predict-link" id="predict-open-btn">Predict TGE FDV</button>
@@ -1325,8 +1325,8 @@
       'danger-title-text':       { EN: 'Danger Zone', VI: 'Vùng nguy hiểm' },
       'narr-title-text':         { EN: 'Trending Narratives', VI: 'Narrative đang hot' },
       // nội dung box Recent TGE multiples + header bảng
-      'tge-lowfdv-label':        { EN: 'Low FDV',  VI: 'FDV thấp' },
-      'tge-highfdv-label':       { EN: 'High FDV', VI: 'FDV cao' },
+      'tge-coef-label':          { EN: 'TGE multiple', VI: 'Hệ số TGE' },
+      'tge-penalty-label':       { EN: 'Penalty FDV ≥ $300M', VI: 'Phạt FDV ≥ $300M' },
       'tge-cond-label':          { EN: 'Market condition', VI: 'Điều kiện thị trường' },
       'tge-date-th':             { EN: 'TGE', VI: 'TGE' },   // cột ngày TGE — 2 ngôn ngữ dùng chung 1 chữ cho gọn (mobile)
       // tiêu đề 4 popup (3 info + predict) — tiêu đề nằm trong HTML tĩnh nên dễ bị quên
@@ -1439,22 +1439,28 @@
       },
     };
 
-    // low/high/level là số ĐANG hiển thị trên box (renderTgeInfo đọc thẳng từ DOM lúc mở popup,
-    // không tính lại) → popup luôn khớp với con số user đang nhìn thấy
-    function tgeInfoHTML(low, high, level) {
+    // coef/pen/level là số ĐANG hiển thị trên box (renderTgeInfo đọc thẳng từ DOM lúc mở popup,
+    // không tính lại) → popup luôn khớp với con số user đang nhìn thấy. penN = số dự án FDV cao từ 2025.
+    function tgeInfoHTML(coef, pen, penN, level) {
       const line = TGE_MARKET_LINE[valLang][level]
         || (valLang === 'VI' ? 'Chưa đủ dữ liệu để đọc thị trường.' : 'Not enough data yet to read the market.');
+      const penVI = pen === '—'
+        ? `Dự án FDV vòng VC từ $300M trở lên: chưa đủ dữ liệu từ 2025 để tính mức phạt (cần ít nhất ${PENALTY_MIN_HIGH} dự án, đang có ${penN}).`
+        : `Dự án FDV vòng VC từ $300M trở lên bị phạt ${pen}: từ 2025 tới nay, nhóm này TGE chỉ bằng ${pen} so với nhóm dưới $300M (thống kê ${penN} dự án FDV cao).`;
+      const penEN = pen === '—'
+        ? `Projects with a VC-round FDV of $300M or more: not enough data since 2025 to set a penalty (needs at least ${PENALTY_MIN_HIGH} projects, have ${penN}).`
+        : `Projects with a VC-round FDV of $300M or more get a ${pen} penalty: since 2025 they've TGE'd at only ${pen} of what sub-$300M projects did (based on ${penN} high-FDV projects).`;
       return valLang === 'VI'
-        ? `1. Các dự án Low FDV thường TGE ở mức ${low} so với FDV lúc VC rót vốn.
+        ? `1. Các dự án gần đây thường TGE ở mức ${coef} so với FDV lúc VC rót vốn.
 
-2. Các dự án High FDV thường TGE ở mức ${high} so với FDV lúc VC rót vốn.
+2. ${penVI}
 
 <b class="info-key">${line}</b>
 
 <span class="info-modal-link" id="info-tge-predict-link">Bấm vào đây</span> để nhập vài thông tin, mình sẽ dự đoán FDV và giá TGE của dự án bạn đang quan tâm.`
-        : `1. Low FDV projects typically TGE at ${low} the FDV VCs invested at.
+        : `1. Recent projects typically TGE at ${coef} the FDV VCs invested at.
 
-2. High FDV projects typically TGE at ${high} the FDV VCs invested at.
+2. ${penEN}
 
 <b class="info-key">${line}</b>
 
@@ -1464,10 +1470,10 @@
     const infoTgeModal = document.getElementById('info-tge-modal');
     const closeInfoTge = () => infoTgeModal.classList.remove('open');
     function renderTgeInfo() {
-      const low   = document.getElementById('baseline-low').textContent;
-      const high  = document.getElementById('baseline-high').textContent;
+      const coef  = document.getElementById('tge-coef').textContent;
+      const penEl = document.getElementById('tge-penalty');
       const level = document.getElementById('market-condition-lvl').dataset.level;   // luôn key tiếng Anh (Weak/Normal/Strong), không phải chữ đang hiển thị
-      document.getElementById('info-tge-body').innerHTML = tgeInfoHTML(low, high, level);
+      document.getElementById('info-tge-body').innerHTML = tgeInfoHTML(coef, penEl.textContent, penEl.dataset.n || '0', level);
       document.getElementById('info-tge-predict-link').addEventListener('click', () => {
         closeInfoTge();
         predictModal.classList.add('open');
@@ -1803,6 +1809,24 @@
       return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
     }
 
+    // Phạt FDV cao (chốt 2026-10-27): k = median ×TGE nhóm FDV ≥ $300M / median nhóm < $300M,
+    // GỘP mọi TGE từ 2025 (không dùng cửa sổ trượt — dự án lớn hiếm dần, mỗi nửa năm chỉ 0–5 mẫu
+    // nên k nhảy 0.17↔0.95). Dưới 8 dự án lớn → null = không phạt.
+    const PENALTY_FROM = '2025-01-01';
+    const PENALTY_MIN_HIGH = 8;
+    const isHighFDV = e => e.fundraising / (e.vcAlloc / 100) >= FDV_SPLIT_MAIN;
+    function fdvPenalty(entries) {
+      const pool = entries.filter(e => e.tgeDate >= PENALTY_FROM)
+        .map(e => ({ hi: isHighFDV(e), m: multiple(e) }))
+        .filter(x => isFinite(x.m) && x.m > 0 && x.m < 1000);
+      const hi = pool.filter(x => x.hi).map(x => x.m);
+      const lo = pool.filter(x => !x.hi).map(x => x.m);
+      if (hi.length < PENALTY_MIN_HIGH || !lo.length) return { k: null, n: hi.length };
+      return { k: median(hi) / median(lo), n: hi.length };
+    }
+    // ×TGE đã quy về mức chuẩn: dự án FDV cao chia cho k để không kéo tụt hệ số chung
+    const normMultiple = (e, pen) => pen.k && isHighFDV(e) ? multiple(e) / pen.k : multiple(e);
+
     // Parse supply: handles "10B", "500M", plain numbers, and thousand-separated numbers
     // "10.000.000.000" (EU dots) → 10e9 | "10,000,000,000" (US commas) → 10e9 | "10B" → 10e9
     function parseSupply(s) {
@@ -1832,7 +1856,7 @@
 
     // ── Render table ──────────────────────────────────
     // Ngưỡng chia FDV cao/thấp — dùng CHUNG cho chữ đậm ở cột Ticker và cho
-    // 2 dòng "FDV thấp / FDV cao" trong box Hệ số TGE, để người đọc nối được 2 chỗ.
+    // dòng "Phạt FDV ≥ $300M" trong box Hệ số TGE, để người đọc nối được 2 chỗ.
     const FDV_SPLIT_MAIN = 300e6;
 
     // Bội số hiển thị: bỏ dấu × (header đã mang), dấu thập phân theo ngôn ngữ đang chọn
@@ -1951,16 +1975,10 @@
       condEl.dataset.level = levelEN || '';   // luôn giữ key tiếng Anh gốc (Weak/Normal/Strong) cho info popup dùng, bất kể đang hiện ngôn ngữ nào
       condEl.textContent = levelEN ? (valLang === 'VI' ? LEVELS_VI[levelEN] : levelEN) : '—';
 
-      // 2. Recent TGE multiples — split Low FDV (<$300M entry) vs High FDV (≥$300M entry)
-      const FDV_SPLIT = 300e6;
-      const allSorted = [...entries].sort((a, b) => new Date(b.tgeDate) - new Date(a.tgeDate));
-      const lowFDV = allSorted
-        .filter(e => (e.fundraising / (e.vcAlloc / 100)) < FDV_SPLIT)
-        .map(e => ({ m: multiple(e), date: e.tgeDate }))
-        .filter(x => isFinite(x.m) && x.m > 0);
-      const highFDV = allSorted
-        .filter(e => (e.fundraising / (e.vcAlloc / 100)) >= FDV_SPLIT)
-        .map(e => ({ m: multiple(e), date: e.tgeDate }))
+      // 2. Recent TGE multiples — 1 hệ số chung (dự án FDV cao đã quy về chuẩn) + mức phạt FDV cao
+      const pen = fdvPenalty(entries);
+      const allValid = sorted
+        .map(e => ({ m: normMultiple(e, pen), date: e.tgeDate }))
         .filter(x => isFinite(x.m) && x.m > 0);
 
       // 6 most recent; if 6th entry is >60 days older than 1st → reduce to 4
@@ -1972,12 +1990,11 @@
         }
         return arr.slice(0, n).map(x => x.m);
       }
-      const lowFDVMults  = recentWindow(lowFDV);
-      const highFDVMults = recentWindow(highFDV);
-      const lowEl  = document.getElementById('baseline-low');
-      const highEl = document.getElementById('baseline-high');
-      lowEl.textContent  = lowFDVMults.length  ? `×${median(lowFDVMults).toFixed(2)}`  : '—';
-      highEl.textContent = highFDVMults.length ? `×${median(highFDVMults).toFixed(2)}` : '—';
+      const coefMults = recentWindow(allValid);
+      const penEl = document.getElementById('tge-penalty');
+      document.getElementById('tge-coef').textContent = coefMults.length ? `×${median(coefMults).toFixed(2)}` : '—';
+      penEl.textContent = pen.k ? `×${pen.k.toFixed(2)}` : '—';
+      penEl.dataset.n = pen.n;
     }
 
     // Box danh sách luôn vẽ ĐỦ 4 dòng (4 × 56 + 3 × 8 = 248 = thân box), ô thừa để trống.
@@ -2090,23 +2107,16 @@
     function predictFDV(raise, allocPct, entries) {
       const vcFDV = raise / (allocPct / 100);
 
-      // Sample only from the same FDV bucket as the input project
-      // (Low <$300M / High >=$300M), matching the "Recent TGE Multiples" split
-      const FDV_SPLIT = 300e6;
-      const bucket = vcFDV < FDV_SPLIT ? 'low' : 'high';
-      const inBucket = e => {
-        const efdv = e.fundraising / (e.vcAlloc / 100);
-        return bucket === 'low' ? efdv < FDV_SPLIT : efdv >= FDV_SPLIT;
-      };
+      // Dùng mọi dự án, ×TGE dự án FDV cao đã quy về chuẩn (khớp box Hệ số TGE);
+      // dự án đang đoán có FDV ≥ $300M thì nhân mức phạt ở STEP 7
+      const pen = fdvPenalty(entries);
+      const k = pen.k && vcFDV >= FDV_SPLIT_MAIN ? pen.k : 1;
 
-      const toValid = pool => [...pool]
-        .map(e => ({ e, m: multiple(e) }))
+      // Valid entries sorted newest-first
+      const valid = entries
+        .map(e => ({ e, m: normMultiple(e, pen) }))
         .filter(({ m }) => isFinite(m) && m > 0 && m < 1000)
         .sort((a, b) => new Date(b.e.tgeDate) - new Date(a.e.tgeDate));
-
-      // Valid entries sorted newest-first; fall back to all entries if bucket too sparse
-      let valid = toValid(entries.filter(inBucket));
-      if (valid.length < 2) valid = toValid(entries);
 
       if (valid.length < 2) return null;
 
@@ -2158,10 +2168,10 @@
       const maxC = Math.max(...clean);
       const base_mult = Math.max(minC, Math.min(maxC, wMed));
 
-      // STEP 7 — Outputs (final multiple = base_mult, already bucket+recency-aware)
-      const exp = vcFDV * base_mult;
-      const lo  = vcFDV * minC;
-      const hi  = vcFDV * maxC;
+      // STEP 7 — Outputs (final multiple = base_mult × k phạt FDV cao)
+      const exp = vcFDV * base_mult * k;
+      const lo  = vcFDV * minC * k;
+      const hi  = vcFDV * maxC * k;
       const note = `${regime} regime · ${valid.length} data pts`;
 
       return { exp, lo, hi, note };
