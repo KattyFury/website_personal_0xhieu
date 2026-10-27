@@ -90,11 +90,11 @@ vcFDV = fundraising / (vcAlloc/100)
 - **Cột 176 + khe 16 nhét trong padding ô** (184 · 192×5 · 184 = 1328), khai bằng % để co theo màn. Đừng chia đều 1328/7, đừng kéo giãn cột.
 - Bấm tiêu đề màn → popup bảng dài (clone thead/tbody của bảng). JS đo `--ck1..7` để mỗi cột trong popup thẳng mép trái.
 - **Box "Hệ số TGE gần đây"** (chốt 2026-10-27, bỏ 2 dòng FDV thấp/cao): 4 ô = **Hệ số TGE** · **Phạt FDV ≥ $300M** · Điều kiện thị trường · nút Dự đoán.
-  - **Mức phạt k** (`fdvPenalty()`) = median ×TGE nhóm vcFDV ≥ $300M ÷ median nhóm < $300M, **gộp mọi TGE từ 01/2025** (`PENALTY_FROM`). Cần ≥ 8 dự án lớn (`PENALTY_MIN_HIGH`), thiếu → "—", không phạt. 10-27: ×0.38 (13 dự án lớn / 49 nhỏ).
-  - **Đừng đổi sang cửa sổ trượt** (6 gần nhất / từng nửa năm): dự án lớn hiếm dần (0–5 mẫu mỗi nửa năm, từ 05/2026 chưa có cái nào) → k nhảy 0.17 ↔ 0.95 hoặc không tính được. **Đừng phạt trơn theo log FDV:** dưới $300M ×TGE phẳng (~×4 cho cả $50M lẫn $250M), chỉ tụt ở ngưỡng $300M.
+  - **Mức phạt k đi theo điều kiện thị trường HIỆN TẠI** (`fdvPenalty(entries, level)`). Data toàn lịch sử: TGE lúc Weak phạt ×0.25 (10 dự án lớn), Normal ×0.61 (4), Strong ×0.60 (3) → Weak 1 nhóm, **Normal + Strong gộp**. Mỗi TGE gắn điều kiện lúc nó ra = median ×TGE 6 TGE ngay trước (cùng luật box). Mỗi dự án lớn chia median dự án nhỏ **cùng điều kiện** (Strong mặt bằng ×13, Normal ×4.7 — gộp thô rồi chia sẽ ra ×0.28, sai), k = median các tỉ số. Dùng **toàn bộ lịch sử** (Normal/Strong chủ yếu 2023–2024). Cần ≥ 5 dự án lớn (`PENALTY_MIN_HIGH`), thiếu → "—", không phạt. 10-27: thị trường Normal → ×0.60 (7 dự án: SEI, STRK, EIGEN, SCR, IP, BABY, SENT).
+  - **Đừng quay lại 1 k gộp từ 2025** (bản đầu 10-27, ra ×0.38): 10/13 dự án lớn từ 2025 TGE lúc Weak → phạt quá nặng khi thị trường đã Normal (user bắt lỗi). **Đừng dùng cửa sổ trượt** (6 gần nhất / từng nửa năm): dự án lớn hiếm dần, 0–5 mẫu mỗi nửa năm → k nhảy lung tung. **Đừng phạt trơn theo log FDV:** dưới $300M ×TGE phẳng (~×4 cho cả $50M lẫn $250M), chỉ tụt ở ngưỡng $300M.
   - **Hệ số TGE** = median 6 TGE gần nhất (thứ 6 cách >60 ngày → 4), ×TGE dự án FDV cao chia k trước (`normMultiple()`) để không kéo tụt hệ số chung.
   - Market condition = median ×TGE **thô** của 6 deal gần nhất: Weak <4.3 · Normal 4.3–13 · Strong ≥13.
-- **Dự đoán FDV TGE:** `predictFDV()` lấy mọi dự án với ×TGE đã quy chuẩn như trên; dự án đang đoán có vcFDV ≥ $300M → nhân k vào kết quả (VD 10-27: $66.7M và $299M cùng ×5.03, $400M ×1.92).
+- **Dự đoán FDV TGE:** `predictFDV()` lấy mọi dự án với ×TGE đã quy chuẩn như trên; dự án đang đoán có vcFDV ≥ $300M → nhân k (theo điều kiện đang hiện trên box) vào kết quả (VD 10-27: $66.7M ×4.83, $299M ×4.85, $400M ×2.88).
 - **Vùng nguy hiểm:** ×ATM ≥ 15, TGE mới nhất lên đầu; TGE < 30 ngày → badge "⚠ FAKE PUMP".
 - **Narrative đang hot:** mọi narrative có data từ 02/2025, xếp theo **median ×TGE** (không dùng ×ATH — 1 coin pump muộn kéo cả nhóm), kèm `SL:nn` số deal.
 - 3 box = dòng danh sách nhãn trái · giá trị phải (`.list-row`). Vùng nguy hiểm/Narrative luôn vẽ đủ 4 dòng (`padRows()`), thừa thì cuộn. Tiêu đề box kiêm nút mở popup giải thích.
@@ -148,6 +148,8 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 ---
 
 ## Nhật ký
+
+- 2026-10-27: **Mức phạt FDV cao đổi sang theo điều kiện thị trường** (user: "market khởi sắc rồi, đâu thể lấy thời WEAK để đo khi hiện tại là NORMAL" — đúng). Đo: k lúc Weak ×0.25, Normal ×0.61, Strong ×0.60 → Weak riêng, Normal+Strong gộp, toàn lịch sử, so với dự án nhỏ cùng điều kiện. Hiện tại Normal → ×0.38 thành **×0.60**. Sửa `fdvPenalty()` + popup (ghi nhóm điều kiện) ở `index.html`, mirror ở `functions/valuation.js`. Verify: server data thật ×4.06 / ×0.60 / Normal (hệ số ×5.22 → ×4.06 là do user vừa nhập RITUAL ×1.18, không phải do sửa); ds-audit TỔNG 0; popup VI/EN đúng; không lỗi JS.
 
 - 2026-10-27: **Box Hệ số TGE: bỏ "FDV thấp / FDV cao" → 1 hệ số + phạt FDV ≥ $300M** (user: web3 hết gọi vốn khủng, out meta). Thống kê 62 TGE từ 2025: < $300M median ×3.92, ≥ $300M ×1.49 → k = ×0.38. User hỏi "dự án lớn ngày càng ít, phạt vậy chuẩn không" → chốt gộp từ mốc cố định 01/2025 + ngưỡng tối thiểu 8 mẫu (lý do ở §4). Sửa `index.html` (box, nhãn VI/EN, popup giải thích, `renderAnalysis`, `predictFDV`) + `functions/valuation.js` (id mới `#tge-coef` · `#tge-penalty`). Verify: server compute data thật ra ×5.22 / ×0.38 / Normal; ds-audit TỔNG 0; popup VI/EN + dự đoán 3 mức FDV đúng; không lỗi JS.
 

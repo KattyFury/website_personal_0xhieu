@@ -42,12 +42,20 @@ function compute(projects, prices) {
   const med = median(recent6);
   const condition = recent6.length ? (med >= 13 ? 'Strong' : med >= 4.3 ? 'Normal' : 'Weak') : '—';
 
-  // Phạt FDV cao — gộp mọi TGE từ 2025: median nhóm ≥300M / median nhóm <300M, cần ≥ 8 dự án lớn
+  // Phạt FDV cao theo điều kiện hiện tại (khớp fdvPenalty() ở index.html): mỗi TGE gắn điều kiện
+  // = median 6 TGE ngay trước; nhóm Weak riêng, Normal+Strong gộp; mỗi dự án ≥300M chia median dự án
+  // nhỏ cùng điều kiện, k = median các tỉ số; cần ≥ 5 dự án lớn
   const SPLIT = 300e6;
-  const pool = entries.filter(e => e.tgeDate >= '2025-01-01')
-    .map(e => ({ hi: vcFDVof(e) >= SPLIT, m: multiple(e) })).filter(x => isFinite(x.m) && x.m > 0 && x.m < 1000);
-  const hiM = pool.filter(x => x.hi).map(x => x.m), loM = pool.filter(x => !x.hi).map(x => x.m);
-  const k = hiM.length >= 8 && loM.length ? median(hiM) / median(loM) : null;
+  const lvlOf = m => m >= 13 ? 'Strong' : m >= 4.3 ? 'Normal' : 'Weak';
+  const grp = condition === 'Weak' ? ['Weak'] : ['Normal', 'Strong'];
+  const chrono = entries.map(e => ({ hi: vcFDVof(e) >= SPLIT, m: multiple(e), date: e.tgeDate }))
+    .filter(x => isFinite(x.m) && x.m > 0).sort((a, b) => new Date(a.date) - new Date(b.date));
+  chrono.forEach((x, i) => { if (i >= 6) x.lvl = lvlOf(median(chrono.slice(i - 6, i).map(y => y.m))); });
+  const pool = chrono.filter(x => grp.includes(x.lvl) && x.m < 1000);
+  const loMed = {};
+  grp.forEach(l => { loMed[l] = median(pool.filter(x => !x.hi && x.lvl === l).map(x => x.m)); });
+  const ratios = pool.filter(x => x.hi && loMed[x.lvl]).map(x => x.m / loMed[x.lvl]);
+  const k = ratios.length >= 5 ? median(ratios) : null;
   const penalty = k ? `×${k.toFixed(2)}` : '—';
 
   // Hệ số TGE — 6 deal gần nhất (deal thứ 6 cách >60 ngày thì lấy 4), dự án FDV cao chia k

@@ -1440,16 +1440,19 @@
     };
 
     // coef/pen/level là số ĐANG hiển thị trên box (renderTgeInfo đọc thẳng từ DOM lúc mở popup,
-    // không tính lại) → popup luôn khớp với con số user đang nhìn thấy. penN = số dự án FDV cao từ 2025.
-    function tgeInfoHTML(coef, pen, penN, level) {
+    // không tính lại) → popup luôn khớp với con số user đang nhìn thấy. penN = số dự án FDV cao dùng để tính,
+    // penGrp = nhóm điều kiện thị trường ('Weak' | 'Normal+Strong').
+    function tgeInfoHTML(coef, pen, penN, penGrp, level) {
       const line = TGE_MARKET_LINE[valLang][level]
         || (valLang === 'VI' ? 'Chưa đủ dữ liệu để đọc thị trường.' : 'Not enough data yet to read the market.');
+      const grpVI = penGrp === 'Weak' ? 'Yếu' : 'Bình thường / Mạnh';
+      const grpEN = penGrp === 'Weak' ? 'Weak' : 'Normal / Strong';
       const penVI = pen === '—'
-        ? `Dự án FDV vòng VC từ $300M trở lên: chưa đủ dữ liệu từ 2025 để tính mức phạt (cần ít nhất ${PENALTY_MIN_HIGH} dự án, đang có ${penN}).`
-        : `Dự án FDV vòng VC từ $300M trở lên bị phạt ${pen}: từ 2025 tới nay, nhóm này TGE chỉ bằng ${pen} so với nhóm dưới $300M (thống kê ${penN} dự án FDV cao).`;
+        ? `Dự án FDV vòng VC từ $300M trở lên: chưa đủ dữ liệu thời thị trường ${grpVI} để tính mức phạt (cần ít nhất ${PENALTY_MIN_HIGH} dự án, đang có ${penN}).`
+        : `Dự án FDV vòng VC từ $300M trở lên bị phạt ${pen}: những lúc thị trường ${grpVI} như hiện tại, nhóm này TGE chỉ bằng ${pen} so với dự án dưới $300M cùng thời điểm (thống kê ${penN} dự án FDV cao).`;
       const penEN = pen === '—'
-        ? `Projects with a VC-round FDV of $300M or more: not enough data since 2025 to set a penalty (needs at least ${PENALTY_MIN_HIGH} projects, have ${penN}).`
-        : `Projects with a VC-round FDV of $300M or more get a ${pen} penalty: since 2025 they've TGE'd at only ${pen} of what sub-$300M projects did (based on ${penN} high-FDV projects).`;
+        ? `Projects with a VC-round FDV of $300M or more: not enough data from ${grpEN} markets to set a penalty (needs at least ${PENALTY_MIN_HIGH} projects, have ${penN}).`
+        : `Projects with a VC-round FDV of $300M or more get a ${pen} penalty: in ${grpEN} markets like now, they've TGE'd at only ${pen} of what sub-$300M projects did at the same time (based on ${penN} high-FDV projects).`;
       return valLang === 'VI'
         ? `1. Các dự án gần đây thường TGE ở mức ${coef} so với FDV lúc VC rót vốn.
 
@@ -1473,7 +1476,7 @@
       const coef  = document.getElementById('tge-coef').textContent;
       const penEl = document.getElementById('tge-penalty');
       const level = document.getElementById('market-condition-lvl').dataset.level;   // luôn key tiếng Anh (Weak/Normal/Strong), không phải chữ đang hiển thị
-      document.getElementById('info-tge-body').innerHTML = tgeInfoHTML(coef, penEl.textContent, penEl.dataset.n || '0', level);
+      document.getElementById('info-tge-body').innerHTML = tgeInfoHTML(coef, penEl.textContent, penEl.dataset.n || '0', penEl.dataset.grp, level);
       document.getElementById('info-tge-predict-link').addEventListener('click', () => {
         closeInfoTge();
         predictModal.classList.add('open');
@@ -1809,20 +1812,27 @@
       return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
     }
 
-    // Phạt FDV cao (chốt 2026-10-27): k = median ×TGE nhóm FDV ≥ $300M / median nhóm < $300M,
-    // GỘP mọi TGE từ 2025 (không dùng cửa sổ trượt — dự án lớn hiếm dần, mỗi nửa năm chỉ 0–5 mẫu
-    // nên k nhảy 0.17↔0.95). Dưới 8 dự án lớn → null = không phạt.
-    const PENALTY_FROM = '2025-01-01';
-    const PENALTY_MIN_HIGH = 8;
+    // Market condition từ median ×TGE: Strong ≥13 · Normal 4.3–13 · Weak <4.3
+    const marketLevel = med => med >= 13 ? 'Strong' : med >= 4.3 ? 'Normal' : 'Weak';
+
+    // Phạt FDV cao (chốt 2026-10-27) — k đi theo điều kiện thị trường HIỆN TẠI, vì data cho thấy
+    // thời Weak phạt ×0.25, Normal ×0.61, Strong ×0.60. Mỗi TGE gắn điều kiện lúc nó ra (median 6 TGE
+    // ngay trước, cùng luật box); nhóm Weak riêng, Normal+Strong gộp. Mỗi dự án lớn chia cho median dự án
+    // nhỏ CÙNG điều kiện (Strong mặt bằng ×13, Normal ×4.7 — so chéo là sai), k = median các tỉ số đó.
+    // Toàn bộ lịch sử (Normal/Strong chủ yếu ở 2023–2024). Dưới 5 dự án lớn → null = không phạt.
+    const PENALTY_MIN_HIGH = 5;
     const isHighFDV = e => e.fundraising / (e.vcAlloc / 100) >= FDV_SPLIT_MAIN;
-    function fdvPenalty(entries) {
-      const pool = entries.filter(e => e.tgeDate >= PENALTY_FROM)
-        .map(e => ({ hi: isHighFDV(e), m: multiple(e) }))
-        .filter(x => isFinite(x.m) && x.m > 0 && x.m < 1000);
-      const hi = pool.filter(x => x.hi).map(x => x.m);
-      const lo = pool.filter(x => !x.hi).map(x => x.m);
-      if (hi.length < PENALTY_MIN_HIGH || !lo.length) return { k: null, n: hi.length };
-      return { k: median(hi) / median(lo), n: hi.length };
+    function fdvPenalty(entries, level) {
+      const grp = level === 'Weak' ? ['Weak'] : ['Normal', 'Strong'];
+      const chrono = entries.map(e => ({ hi: isHighFDV(e), m: multiple(e), date: e.tgeDate }))
+        .filter(x => isFinite(x.m) && x.m > 0)
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
+      chrono.forEach((x, i) => { if (i >= 6) x.lvl = marketLevel(median(chrono.slice(i - 6, i).map(y => y.m))); });
+      const pool = chrono.filter(x => grp.includes(x.lvl) && x.m < 1000);
+      const loMed = {};
+      grp.forEach(l => { loMed[l] = median(pool.filter(x => !x.hi && x.lvl === l).map(x => x.m)); });
+      const ratios = pool.filter(x => x.hi && loMed[x.lvl]).map(x => x.m / loMed[x.lvl]);
+      return { k: ratios.length >= PENALTY_MIN_HIGH ? median(ratios) : null, n: ratios.length, grp: grp.join('+') };
     }
     // ×TGE đã quy về mức chuẩn: dự án FDV cao chia cho k để không kéo tụt hệ số chung
     const normMultiple = (e, pen) => pen.k && isHighFDV(e) ? multiple(e) / pen.k : multiple(e);
@@ -1976,7 +1986,7 @@
       condEl.textContent = levelEN ? (valLang === 'VI' ? LEVELS_VI[levelEN] : levelEN) : '—';
 
       // 2. Recent TGE multiples — 1 hệ số chung (dự án FDV cao đã quy về chuẩn) + mức phạt FDV cao
-      const pen = fdvPenalty(entries);
+      const pen = fdvPenalty(entries, levelEN);
       const allValid = sorted
         .map(e => ({ m: normMultiple(e, pen), date: e.tgeDate }))
         .filter(x => isFinite(x.m) && x.m > 0);
@@ -1995,6 +2005,7 @@
       document.getElementById('tge-coef').textContent = coefMults.length ? `×${median(coefMults).toFixed(2)}` : '—';
       penEl.textContent = pen.k ? `×${pen.k.toFixed(2)}` : '—';
       penEl.dataset.n = pen.n;
+      penEl.dataset.grp = pen.grp;
     }
 
     // Box danh sách luôn vẽ ĐỦ 4 dòng (4 × 56 + 3 × 8 = 248 = thân box), ô thừa để trống.
@@ -2109,7 +2120,7 @@
 
       // Dùng mọi dự án, ×TGE dự án FDV cao đã quy về chuẩn (khớp box Hệ số TGE);
       // dự án đang đoán có FDV ≥ $300M thì nhân mức phạt ở STEP 7
-      const pen = fdvPenalty(entries);
+      const pen = fdvPenalty(entries, document.getElementById('market-condition-lvl').dataset.level);   // cùng điều kiện đang hiện trên box
       const k = pen.k && vcFDV >= FDV_SPLIT_MAIN ? pen.k : 1;
 
       // Valid entries sorted newest-first
