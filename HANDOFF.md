@@ -149,6 +149,8 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 
 ## Nhật ký
 
+- 2026-10-28: **Task tab Work trên desktop xuống tối đa 2 dòng** (user: "spacing trống nhiều mà ko xuống 2 dòng lại …"). Trước: `.wte-task-text` ép 1 dòng + "…". Nay desktop clamp 2 dòng (quá 2 mới "…"), mobile vẫn xuống dòng hết như cũ. Verify: chụp `/airdrop` desktop 1440 + mobile 390, desktop 0 dòng bị cắt; ds-audit TỔNG 0.
+
 - 2026-10-27: **Mức phạt FDV cao đổi sang theo điều kiện thị trường** (user: "market khởi sắc rồi, đâu thể lấy thời WEAK để đo khi hiện tại là NORMAL" — đúng). Đo: k lúc Weak ×0.25, Normal ×0.61, Strong ×0.60 → Weak riêng, Normal+Strong gộp, toàn lịch sử, so với dự án nhỏ cùng điều kiện. Hiện tại Normal → ×0.38 thành **×0.60**. Sửa `fdvPenalty()` + popup (ghi nhóm điều kiện) ở `index.html`, mirror ở `functions/valuation.js`. Verify: server data thật ×4.06 / ×0.60 / Normal (hệ số ×5.22 → ×4.06 là do user vừa nhập RITUAL ×1.18, không phải do sửa); ds-audit TỔNG 0; popup VI/EN đúng; không lỗi JS.
 
 - 2026-10-27: **Box Hệ số TGE: bỏ "FDV thấp / FDV cao" → 1 hệ số + phạt FDV ≥ $300M** (user: web3 hết gọi vốn khủng, out meta). Thống kê 62 TGE từ 2025: < $300M median ×3.92, ≥ $300M ×1.49 → k = ×0.38. User hỏi "dự án lớn ngày càng ít, phạt vậy chuẩn không" → chốt gộp từ mốc cố định 01/2025 + ngưỡng tối thiểu 8 mẫu (lý do ở §4). Sửa `index.html` (box, nhãn VI/EN, popup giải thích, `renderAnalysis`, `predictFDV`) + `functions/valuation.js` (id mới `#tge-coef` · `#tge-penalty`). Verify: server compute data thật ra ×5.22 / ×0.38 / Normal; ds-audit TỔNG 0; popup VI/EN + dự đoán 3 mức FDV đúng; không lỗi JS.

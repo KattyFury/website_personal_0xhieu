@@ -570,7 +570,11 @@
     .wte-tasks { list-style: none; display: flex; flex-direction: column; }
     .wte-task-item { display: block; margin: 0 0 8px; font-size: 14px; line-height: 20px; color: var(--ink); }
     .wte-task-row { flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 16px; text-decoration: none; }
-    .wte-task-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    /* Task dài xuống tối đa 2 dòng (quá 2 dòng mới "…"), hàng cao theo */
+    .wte-task-text {
+      flex: 1; min-width: 0; overflow: hidden; white-space: normal;
+      display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+    }
 
     /* Thanh lọc rank $ S A B C (nổi đáy màn) */
     #rank-filter-float .lang-toggle {
@@ -768,7 +772,7 @@
       /* Work */
       #wte-cards { gap: 32px; }
       .wte-rank-group { grid-template-columns: 1fr; gap: 16px; }
-      .wte-task-text { white-space: normal; }
+      .wte-task-text { -webkit-line-clamp: unset; }
 
 
       #cat-btn  { right: 16px; bottom: 16px; }
