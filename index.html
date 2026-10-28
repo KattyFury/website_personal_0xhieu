@@ -570,11 +570,8 @@
     .wte-tasks { list-style: none; display: flex; flex-direction: column; }
     .wte-task-item { display: block; margin: 0 0 8px; font-size: 14px; line-height: 20px; color: var(--ink); }
     .wte-task-row { flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 16px; text-decoration: none; }
-    /* Task dài xuống tối đa 2 dòng (quá 2 dòng mới "…"), hàng cao theo */
-    .wte-task-text {
-      flex: 1; min-width: 0; overflow: hidden; white-space: normal;
-      display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
-    }
+    /* Task luôn hiện đủ chữ: xuống dòng bao nhiêu cũng được, hàng cao theo — KHÔNG cắt "…" (user chốt 2026-10-28) */
+    .wte-task-text { flex: 1; min-width: 0; white-space: normal; overflow-wrap: anywhere; }
 
     /* Thanh lọc rank $ S A B C (nổi đáy màn) */
     #rank-filter-float .lang-toggle {
@@ -772,7 +769,6 @@
       /* Work */
       #wte-cards { gap: 32px; }
       .wte-rank-group { grid-template-columns: 1fr; gap: 16px; }
-      .wte-task-text { -webkit-line-clamp: unset; }
 
 
       #cat-btn  { right: 16px; bottom: 16px; }
@@ -1182,9 +1178,15 @@
             <input type="text" id="pt-twitter" placeholder="Ví dụ: x.com/binance" />
           </div>
         </div>
-        <div class="calc-field">
-          <label>Discord</label>
-          <input type="text" id="pt-discord" placeholder="Ví dụ: https://discord.gg/binance" />
+        <div class="ptask-row">
+          <div class="calc-field">
+            <label>Link dự án</label>
+            <input type="text" id="pt-website" placeholder="Ví dụ: binance.com" />
+          </div>
+          <div class="calc-field">
+            <label>Discord</label>
+            <input type="text" id="pt-discord" placeholder="Ví dụ: https://discord.gg/binance" />
+          </div>
         </div>
         <div class="ptask-row">
           <div class="calc-field">
@@ -2485,8 +2487,9 @@
         const logoHtml = handle
           ? `<img class="wte-logo" src="https://unavatar.io/twitter/${handle}" alt="${p.name}" loading="lazy" />`
           : '';
-        const nameHtml = p.twitter
-          ? `<a class="wte-name" href="${p.twitter}" target="_blank" rel="noopener">${p.name}</a>`
+        // Tên dự án mở link dự án (X đã có icon riêng bên phải)
+        const nameHtml = p.website
+          ? `<a class="wte-name" href="${p.website}" target="_blank" rel="noopener">${p.name}</a>`
           : `<span class="wte-name">${p.name}</span>`;
         const cardId = personal
           ? 'wte-personal-' + p.id
@@ -2708,6 +2711,7 @@
       $('pt-name').value      = task?.name || '';
       $('pt-twitter').value   = task?.twitter || '';
       $('pt-discord').value   = task?.discord || '';
+      $('pt-website').value   = task?.website || '';
       $('pt-potential').value = potLevel(task?.potential);
       $('pt-rank').value       = task?.rank === 'SS' ? 'S' : (task?.rank || '');   // rank cũ SS → S (như groupOf)
       $('pt-type').value      = task?.type || '';
@@ -2734,6 +2738,7 @@
         name:       $('pt-name').value,
         twitter:    $('pt-twitter').value,
         discord:    $('pt-discord').value,
+        website:    $('pt-website').value,
         potential:  $('pt-potential').value,
         type:       $('pt-type').value,
         rank:       income ? '' : $('pt-rank').value,   // nhóm $ không có rank

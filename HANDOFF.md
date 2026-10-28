@@ -102,7 +102,8 @@ vcFDV = fundraising / (vcAlloc/100)
 
 ## 5. Work — luật rank
 
-- Card có `twitter` + `discord` (link http/https, `private.js` lọc). Header: icon X/Discord bên phải hàng 1; dự án chưa nhập Discord thì ẩn icon. Nhập Discord ở popup admin task.
+- Card có `twitter` + `discord` + `website` (link http/https, `private.js` lọc, gõ thiếu `https://` thì tự thêm). Header: icon X/Discord bên phải hàng 1; dự án chưa nhập Discord thì ẩn icon. **Bấm tên dự án → `website`** (không phải X); chưa nhập Link dự án thì tên không bấm được. Nhập ở popup admin task.
+- Chữ task (`.wte-task-text`) luôn hiện đủ, xuống dòng bao nhiêu cũng được — **cấm cắt "…"** (user chốt 10-28).
 
 - **Form task (admin):** ô Rank bắt buộc trừ Work-to-Earn — dòng đầu chỉ là gợi ý "Chọn rank" (không chọn được, KHÔNG có lựa chọn "—"); chọn phân loại Work-to-Earn thì ô Rank ẩn hẳn. Card Work-to-Earn không hiện thẻ rank.
 - Thang: **`$` (INCOME) · S · A · B · C**. `$` không phải rank — suy từ thẻ `Work-to-Earn` qua `groupOf()`. `groupOf()` còn map rank cũ `SS` → `S`.
@@ -149,7 +150,7 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 
 ## Nhật ký
 
-- 2026-10-28: **Task tab Work trên desktop xuống tối đa 2 dòng** (user: "spacing trống nhiều mà ko xuống 2 dòng lại …"). Trước: `.wte-task-text` ép 1 dòng + "…". Nay desktop clamp 2 dòng (quá 2 mới "…"), mobile vẫn xuống dòng hết như cũ. Verify: chụp `/airdrop` desktop 1440 + mobile 390, desktop 0 dòng bị cắt; ds-audit TỔNG 0.
+- 2026-10-28: **Task tab Work luôn hiện đủ chữ** (user: "buộc phải hiển thị đủ, mở box ra là được"). Trước: desktop ép 1 dòng + "…". Nay hàng cao theo chữ ở mọi màn. Cùng ngày: **thêm trường `website` (ô "Link dự án" trong popup Sửa task)** — bấm tên dự án mở link này thay vì X; `cleanLink` trong `private.js` tự thêm `https://` khi gõ thiếu (trước đó bỏ âm thầm, VD "x.com/binance" bị mất). Data cũ chưa có `website` → phải nhập tay. Verify: chụp `/airdrop` desktop + mobile 0 dòng bị cắt, form 2 cột đúng; ds-audit TỔNG 0; chưa test lưu thật (local không có KV).
 
 - 2026-10-27: **Mức phạt FDV cao đổi sang theo điều kiện thị trường** (user: "market khởi sắc rồi, đâu thể lấy thời WEAK để đo khi hiện tại là NORMAL" — đúng). Đo: k lúc Weak ×0.25, Normal ×0.61, Strong ×0.60 → Weak riêng, Normal+Strong gộp, toàn lịch sử, so với dự án nhỏ cùng điều kiện. Hiện tại Normal → ×0.38 thành **×0.60**. Sửa `fdvPenalty()` + popup (ghi nhóm điều kiện) ở `index.html`, mirror ở `functions/valuation.js`. Verify: server data thật ×4.06 / ×0.60 / Normal (hệ số ×5.22 → ×4.06 là do user vừa nhập RITUAL ×1.18, không phải do sửa); ds-audit TỔNG 0; popup VI/EN đúng; không lỗi JS.
 

@@ -24,7 +24,12 @@ function safeEqual(a, b) {
 // Cắt độ dài + bỏ < > để nội dung không phá HTML khi render bằng innerHTML
 const clean = (v, max) => String(v ?? '').replace(/[<>]/g, '').trim().slice(0, max);
 // Chỉ nhận link http/https — chặn javascript: nhét vào thuộc tính href
-const cleanLink = v => { const s = clean(v, 500); return /^https?:\/\//i.test(s) ? s : ''; };
+// Gõ thiếu https:// (VD "binance.com", "x.com/binance") thì tự thêm; không giống link thì bỏ
+const cleanLink = v => {
+  let s = clean(v, 500);
+  if (s && !/^[a-z][a-z0-9+.-]*:/i.test(s) && /^[^\s/]+\.[^\s]+$/.test(s)) s = 'https://' + s;
+  return /^https?:\/\/\S+$/i.test(s) ? s : '';
+};
 // Mỗi mục Get Started / Daily / Weekly là danh sách {text, link} — form cho thêm dòng bằng nút +.
 // Dòng không có chữ thì bỏ; cắt tối đa 20 dòng để 1 request không nhồi được data khổng lồ vào KV.
 const itemList = v => (Array.isArray(v) ? v : [])
@@ -51,6 +56,7 @@ const sanitize = t => ({
   name:       clean(t.name, 120) || 'Không tên',
   twitter:    cleanLink(t.twitter),
   discord:    cleanLink(t.discord),
+  website:    cleanLink(t.website),
   potential:  cleanPotential(t.potential),
   type:       clean(t.type, 60),
   rank:       t.type === 'Work-to-Earn' ? '' : cleanRank(t.rank),   // nhóm $ không có rank (WTE_INCOME_TYPE)
