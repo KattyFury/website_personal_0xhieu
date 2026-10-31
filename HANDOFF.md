@@ -1,6 +1,6 @@
 # HANDOFF — 0xhieu.xyz (repo `website_personal_0xhieu`, tên cũ `cv`)
 
-**Chốt trạng thái:** 2026-10-27
+**Chốt trạng thái:** 2026-10-31
 **Repo:** https://github.com/KattyFury/website_personal_0xhieu · **Local:** `D:\Files\Claude\website_personal_0xhieu` (thư mục đổi tên từ `cv` 10-05; máy khác còn tên cũ thì đổi theo)
 **Live:** Cloudflare Pages, project **`0xhieu-xyz`** (khác tên repo) — auto-deploy từ `main`.
 
@@ -150,6 +150,7 @@ Account `f9df99b7751b7dc3c80a22b6911c6f2b`, project Pages `0xhieu-xyz`. API toke
 
 ## Nhật ký
 
+- 2026-10-31: **Bảng Quan sát altcoin hiện 5 token mỗi khung**: giảm chiều cao tối đa 440 → 328px (header 48 + 5 dòng × 56), giữ cuộn để xem toàn bộ token; 3 box phân tích bên dưới lên cao hơn 112px.
 - 2026-10-28: **Task tab Work luôn hiện đủ chữ** (user: "buộc phải hiển thị đủ, mở box ra là được"). Trước: desktop ép 1 dòng + "…". Nay hàng cao theo chữ ở mọi màn. Cùng ngày: **thêm trường `website` (ô "Link dự án" trong popup Sửa task)** — bấm tên dự án mở link này thay vì X; `cleanLink` trong `private.js` tự thêm `https://` khi gõ thiếu (trước đó bỏ âm thầm, VD "x.com/binance" bị mất). Data cũ chưa có `website` → phải nhập tay. Verify: chụp `/airdrop` desktop + mobile 0 dòng bị cắt, form 2 cột đúng; ds-audit TỔNG 0; chưa test lưu thật (local không có KV).
 
 - 2026-10-27: **Mức phạt FDV cao đổi sang theo điều kiện thị trường** (user: "market khởi sắc rồi, đâu thể lấy thời WEAK để đo khi hiện tại là NORMAL" — đúng). Đo: k lúc Weak ×0.25, Normal ×0.61, Strong ×0.60 → Weak riêng, Normal+Strong gộp, toàn lịch sử, so với dự án nhỏ cùng điều kiện. Hiện tại Normal → ×0.38 thành **×0.60**. Sửa `fdvPenalty()` + popup (ghi nhóm điều kiện) ở `index.html`, mirror ở `functions/valuation.js`. Verify: server data thật ×4.06 / ×0.60 / Normal (hệ số ×5.22 → ×4.06 là do user vừa nhập RITUAL ×1.18, không phải do sửa); ds-audit TỔNG 0; popup VI/EN đúng; không lỗi JS.
